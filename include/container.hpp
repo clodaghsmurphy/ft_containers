@@ -5,23 +5,21 @@
 # include <memory>
 # include <string>
 # include <numeric>
-#include<limits>
+# include <limits>
 # include <cmath>
 # include <exception>
 # include <stdexcept>
 
 namespace ft{
-    template< bool B, class T = void >
+    template< bool Cond, class T = void >
         struct enable_if {};
 
-    template<bool B>
-        struct bool_type {
-            static const bool = B;
+    template<class T>
+        struct enable_if <true, T> {
+            typedef T type;
         };
 
-    typedef bool_type<true>     true_type;
-    typedef bool_type<false> false_type;
-
+    
 }
 
-# endif
+#endif

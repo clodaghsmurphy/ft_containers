@@ -2,41 +2,44 @@
 # define VECTOR_HPP
 
 # include "container.hpp"
+# include "iterator.hpp"
 
-namespace ft{
-
+namespace ft
+{
     template<typename T>
-    class iterator {
+    class Vectoriterator
+    {
               
                     public:
-                        typedef typename T::value_type value_type;
-                        typedef value_type* pointer_type;
-                        typedef value_type& reference_type;
+                        typedef typename T::value_type  value_type;
+                        typedef value_type*             pointer_type;
+                        typedef value_type&             reference_type;
+                   
                     public:
-                        iterator(pointer_type ptr) : _ptr(ptr) {}
-                        iterator &operator++()
+                        Vectoriterator(pointer_type ptr) : _ptr(ptr) {}
+                        Vectoriterator &operator++()
                         {
                             _ptr++;
                             return *this;
                         }
-                        iterator operator++(int)
+                        Vectoriterator operator++(int)
                         {
-                            iterator it = *this;
+                            Vectoriterator it = *this;
                             ++(*this);
                             return it;
                         }
-                        iterator &operator--()
+                        Vectoriterator &operator--()
                         {
                             _ptr++;
                             return *this;
                         }
-                        iterator operator--(int)
+                        Vectoriterator operator--(int)
                         {
-                            iterator it = *this;
+                            Vectoriterator it = *this;
                             --(*this);
                             return it;
                         }
-                        iterator &operator->()
+                        Vectoriterator &operator->()
                         {
                             return _ptr;
                         }
@@ -44,14 +47,13 @@ namespace ft{
                         {
                             return *_ptr;
                         }
-                        bool operator!=(iterator &other){
+                        bool operator!=(Vectoriterator &other){
                             return this->_ptr != other._ptr;
                         } 
                     private:
                         pointer_type    _ptr;
 
-                };
-
+    };
 
     template < class T, class Allocator = std::allocator<T> >
     class vector
@@ -70,7 +72,7 @@ namespace ft{
             typedef std::size_t     size_type;
             typedef std::ptrdiff_t  difference_type;
 
-            typedef iterator<vector<T> > iterator;
+            typedef Vectoriterator<vector<T> > iterator;
 
             T*              _data;
             size_t           _size;
