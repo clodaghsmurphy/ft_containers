@@ -50,6 +50,9 @@ namespace ft
                         bool operator!=(Vectoriterator &other){
                             return this->_ptr != other._ptr;
                         } 
+                        bool operator-(Vectoriterator &other){
+                            return (this->_ptr - other._ptr);
+                        }
                     private:
                         pointer_type    _ptr;
 
@@ -105,11 +108,16 @@ namespace ft
                            _alloc.construct(_data + i, value);
                     }
 
-                /* template< class InputIt >
+                template< class InputIt >
                     vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
                     {
                         _data = _alloc.allocate(last - first);
-                    } */
+                        while (first != last)
+                        {
+                            _alloc.construct(_data, (*first));
+                            first++;
+                        }
+                    } 
                 vector( const vector& other )
                 {
                     _data = other._data;

@@ -47,8 +47,11 @@ void test2()
     std::vector<int> vec(5, 5);
     ft::vector<int> vec1(5, 5);
 
+    ft::vector<int> vec2(vec1.begin(), vec1.end());
+
      print_vec(vec1); 
      print_vec(vec); 
+     print_vec(vec2); 
 
 }
 
