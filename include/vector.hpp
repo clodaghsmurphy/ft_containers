@@ -108,13 +108,14 @@ namespace ft
                            _alloc.construct(_data + i, value);
                     }
 
-                template< class InputIt >
+                template< class InputIt, \
+                typename = typename ft::enable_if<!ft::is_integral<InputIt>::value >::type >
                     vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
                     {
                         _data = _alloc.allocate(last - first);
                         while (first != last)
                         {
-                            _alloc.construct(_data, (*first));
+                            _alloc.construct(_data, *first);
                             first++;
                         }
                     } 
@@ -144,7 +145,7 @@ namespace ft
                         throw std::length_error("vector");
                     ReAlloc(new_cap);
                 }
-                size_type           capacity() const { return _capacity; };
+                size_type           capacity() const { return _capacity; }
                 /*------------------ELEMENT ACCESSORS --------------*/
                /*  reference at( size_type pos );
                 const_reference at( size_type pos ) const;
@@ -196,7 +197,11 @@ namespace ft
                 void                insert (iterator position, size_type n, const value_type& val);
                 template <class InputIterator>    
                     void               insert (iterator position, InputIterator first, InputIterator last);
-                iterator            erase (iterator position);iterator erase (iterator first, iterator last);
+                iterator            erase (iterator position)
+                {
+                    _alloc.destroy(_alloc, position);
+                }
+                iterator erase (iterator first, iterator last);
                 void                swap (vector& x);
                 void                clear();
     };

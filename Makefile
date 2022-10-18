@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/13 11:04:35 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/18 16:58:11 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ CC		= c++
 
 INCLUDE = -Iinclude/
 
-CFLAGS	= -Wall -Werror -Wextra -std=c++98 ${INCLUDE} -g #-fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra ${INCLUDE} -g  #-std=c++98 #-fsanitize=address
 
 NAME	= ft_containers
 
