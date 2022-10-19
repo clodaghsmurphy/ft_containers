@@ -6,5 +6,7 @@
 int main()
 {
     //test_vector_size();
-    vector_constructors();
+    //vector_constructors();
+    iterator_category();
+
 }

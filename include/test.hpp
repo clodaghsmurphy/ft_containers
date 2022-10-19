@@ -2,7 +2,14 @@
 # define TEST_HPP
 
 #include "container.hpp"
-
+# include <stdio.h>
+/* 
+template<class IteratorType> 
+void myFunction(const IteratorType& myIterator)
+{
+    IteratorType _ptr = &(*myIterator);
+    std::cout << _ptr << std::endl;
+} */
 template<class T>
 void    print_container(T container)
 {
@@ -13,8 +20,7 @@ void    print_container(T container)
 
     while (it != ite)
     {
-        int t = *it;
-        std::cout << &t << " : " << *it << std::endl;
+        std::cout << *it << std::endl;
         it++;
     }   
 }

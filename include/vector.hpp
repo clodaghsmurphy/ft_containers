@@ -75,16 +75,18 @@ namespace ft
             typedef T                           value_type;
             typedef Allocator                   allocator_type;
 
-            typedef typename allocator_type::pointer            pointer;
-            typedef typename allocator_type::const_pointer      const_pointer;
+            typedef T*                          pointer;
+            typedef const T*                    const_pointer;
 
-            typedef typename allocator_type::reference          reference;
-            typedef typename allocator_type::const_reference    const_reference;
+            typedef T&                          reference;
+            typedef const T&                    const_reference;
 
-            typedef std::size_t     size_type;
-            typedef std::ptrdiff_t  difference_type;
+            typedef std::size_t                 size_type;
+            typedef std::ptrdiff_t              difference_type;
 
-            typedef Vectoriterator<vector<T> > iterator;
+            typedef Vectoriterator<vector<T> >          iterator;
+            typedef Vectoriterator<vector<const T> > const_iterator;
+            typedef reverse_iterator<Vectoriterator<T> >     reverse_iterator;
 
             T*              _data;
             size_t           _size;
@@ -121,12 +123,13 @@ namespace ft
                 typename = typename ft::enable_if<!ft::is_integral<InputIt>::value >::type >
                     vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
                     {
+                        int i = 0;
                         _data = _alloc.allocate(last - first);
                         while (first != last)
                         {
-                            _alloc.construct(_data, *first);
+                            _alloc.construct(_data + i, *first);
                             first++;
-                            _data++;
+                            i++;
                         }
                     } 
                 vector( const vector& other )
@@ -177,16 +180,22 @@ namespace ft
                 {
                     return iterator(_data);
                 }
-                //const_iterator begin() const;
+                const_iterator cbegin() const { return const_iterator(_data); }
 
                 iterator end(){
                     return iterator(_data + _size);
                 }
-                // const_iterator end() const;
+                const_iterator cend() const { return const_iterator(_data + _size); }
 
-                // reverse_iterator rbegin();
-                // reverse_iterator rend();
-                /*----------------- MODIFIERS ---------------------*/
+                reverse_iterator rbegin() 
+                { 
+                    return reverse_iterator(end());
+                }
+                reverse_iterator rend() 
+                { 
+                    return reverse_iterator(begin()); 
+                }
+                                /*----------------- MODIFIERS ---------------------*/
                 template <class InputIterator>  
                     void            assign (InputIterator first, InputIterator last);
                 void                assign (size_type n, const value_type& val);
