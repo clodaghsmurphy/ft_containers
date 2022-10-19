@@ -11,12 +11,21 @@ namespace ft
     {
               
                     public:
-                        typedef typename T::value_type  value_type;
-                        typedef value_type*             pointer_type;
-                        typedef value_type&             reference_type;
+                        typedef typename T::value_type          value_type;
+                        typedef value_type*                     pointer;
+                        typedef value_type&                     reference;
+                        typedef value_type                      difference_type;
+                        typedef random_access_iterator_tag      iterator_category;
                    
                     public:
-                        Vectoriterator(pointer_type ptr) : _ptr(ptr) {}
+                        Vectoriterator(pointer ptr) : _ptr(ptr) {}
+                        Vectoriterator() : _ptr(NULL) {}
+                        Vectoriterator(const Vectoriterator& obj) : _ptr(obj._ptr) {}
+                        Vectoriterator &operator=(const Vectoriterator& rhs)
+                        {
+                            this->_ptr = rhs._ptr;
+                            return *this;
+                        }
                         Vectoriterator &operator++()
                         {
                             _ptr++;
@@ -54,7 +63,7 @@ namespace ft
                             return (this->_ptr - other._ptr);
                         }
                     private:
-                        pointer_type    _ptr;
+                        pointer    _ptr;
 
     };
 
@@ -117,6 +126,7 @@ namespace ft
                         {
                             _alloc.construct(_data, *first);
                             first++;
+                            _data++;
                         }
                     } 
                 vector( const vector& other )

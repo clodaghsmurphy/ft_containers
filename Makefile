@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/18 16:58:11 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/19 13:45:24 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,10 @@ BOLDWHITE="\033[1m\033[37m"
 
 SRC =	$(addsuffix .cpp, 	\
 		$(addprefix src/,	\
-		main 				\
+		main				\
+		iterator_category				\
+		test_vector_size	\
+		vector_constructors \
 		))
 
 

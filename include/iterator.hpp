@@ -3,14 +3,16 @@
 
 # include "container.hpp"
 
-template <class Iter >
-    struct iterator_traits;
+    //////////////////////ITERATOR TRAITS //////////////////////////////////
 
-template< class T >
-    struct iterator_traits<T*>;
-    
-template<typename _Iterator>
-    struct iterator_traits
+    template <class Iter >
+        struct iterator_traits;
+
+    template< class T >
+        struct iterator_traits<T*>;
+        
+    template<typename _Iterator>
+        struct iterator_traits
      {
         typedef typename _Iterator::iterator_category iterator_category;
         typedef typename _Iterator::value_type        value_type;

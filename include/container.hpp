@@ -2,6 +2,7 @@
 # define CONTAINER_HPP
 
 # include <iostream>
+# include "iterator.hpp"
 # include <memory>
 # include <string>
 # include <numeric>
@@ -13,7 +14,9 @@
 #include <iomanip>
 #include <type_traits>
 
-namespace ft{
+namespace ft
+{
+    //////////////////////ENABLE IF //////////////////////////////////
     template< bool Cond, class T = void >
         struct enable_if {};
 
@@ -26,6 +29,8 @@ namespace ft{
         struct bool_type {
             static const bool value = B;
         };
+
+    //////////////////////IS_INTEGRAL //////////////////////////////////
 
     typedef bool_type<true> true_type;
     typedef bool_type<false> false_type;

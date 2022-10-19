@@ -1,9 +1,9 @@
+# include <vector>
+# include "vector.hpp"
 
-int main()
+void test_vector_size()
 {
-    //std::vector<int> vec(5, 5);
-
-    std::vector<int> vec2;
+     std::vector<int> vec2;
     ft::vector<int> vec;
 
     std::cout << "\033[1m\033[34mMY VEC MAX SIZE : \033[1m\033[37m" << vec.max_size() << std::endl;
@@ -63,5 +63,5 @@ int main()
      std::cout << "\033[1m\033[33mREAL VEC SIZE : \033[1m\033[37m" << vec2.size() << std::endl;
     std::cout << "\033[1m\033[33mREAL VEC CAPACITY \033[1m\033[37m" <<vec2.capacity() << std::endl;
     //print_vec(vec);
-    return 0;
+    return ;
 }
