@@ -41,7 +41,7 @@ std::string get_iterator_type(T it)
 
 void ft_reverse_iterator()
 {
-    {
+ /*    {
         std::vector<int> vec;
 
         vec.push_back(2);
@@ -68,14 +68,14 @@ void ft_reverse_iterator()
             std::cout << *rit2 << std::endl;
             rit2++;
         }
-    }
+    } */
 
 }
 
 
 void    iterator_category()
 {
-    ft::vector<int> vec(5, 5);
+   /*  ft::vector<int> vec(5, 5);
 
     ft::vector<int>::iterator it;
     it = vec.begin();
@@ -85,5 +85,5 @@ void    iterator_category()
     ft::vector<int>::const_iterator it2;
     it2 = vec2.cbegin();
     std::cout << get_iterator_type(it) << std::endl;
-    ft_reverse_iterator();
+    ft_reverse_iterator(); */
 }

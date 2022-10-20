@@ -37,6 +37,8 @@
     template <class Iterator>
     class reverse_iterator
     {
+        protected:
+        Iterator m_iterator;
         public:
         reverse_iterator() {}
         explicit reverse_iterator(Iterator x) : m_iterator(x) {}
@@ -55,8 +57,9 @@
         iterator_type base() const { return m_iterator; }
         reference operator*() const
         {
-            Iterator tmp = m_iterator;
-            return *--tmp;
+            Iterator tmp(m_iterator);
+            tmp--;
+            return *tmp;
         }
         pointer operator->() const{
             return &(operator*());
@@ -105,23 +108,15 @@
         {
             return *(*this + n);
         }
-        template<typename Iter>
+        
+        
+    };
+
+    template<typename Iter>
         inline bool
             operator==(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
             {
                 return x.base() == y.base();
-            }
-         template<typename Iter>
-         inline bool
-            operator<(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
-            {
-                return y.base() < x.base() ;
-            }
-        template<typename Iter>
-         inline bool
-            operator<(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
-            {
-                return x.base() < y.base();
             }
         template <typename Iter>
         inline bool
@@ -154,9 +149,4 @@
                 return !(x.base() < y.base());
             }
 
-        private:
-        Iterator m_iterator;
-    };
-
-    
 #endif

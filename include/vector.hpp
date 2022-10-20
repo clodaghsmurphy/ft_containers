@@ -11,7 +11,7 @@ namespace ft
     {
               
                     public:
-                        typedef typename T::value_type          value_type;
+                        typedef T                      value_type;
                         typedef value_type*                     pointer;
                         typedef value_type&                     reference;
                         typedef value_type                      difference_type;
@@ -86,7 +86,7 @@ namespace ft
 
             typedef Vectoriterator<vector<T> >          iterator;
             typedef Vectoriterator<vector<const T> > const_iterator;
-            typedef reverse_iterator<Vectoriterator<T> >     reverse_iterator;
+            typedef reverse_iterator<iterator >     reverse_iterator;
 
             T*              _data;
             size_t           _size;
