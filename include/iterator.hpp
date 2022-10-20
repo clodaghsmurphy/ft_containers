@@ -123,6 +123,37 @@
             {
                 return x.base() < y.base();
             }
+        template <typename Iter>
+        inline bool
+            operator<(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
+            {
+                return x.base() < y.base();
+            }
+        template <typename Iter>
+        inline bool
+            operator>(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
+            {
+                return x.base() > y.base();
+            }
+        template <typename Iter>
+        inline bool
+            operator!=(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
+            {
+                return !(x.base() == y.base());
+            }
+        template <typename Iter>
+        inline bool
+            operator<=(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
+            {
+                return !(y.base() < x.base() );
+            }
+        template <typename Iter>
+        inline bool
+            operator>=(const reverse_iterator<Iter> x, const reverse_iterator<Iter> y)
+            {
+                return !(x.base() < y.base());
+            }
+
         private:
         Iterator m_iterator;
     };
