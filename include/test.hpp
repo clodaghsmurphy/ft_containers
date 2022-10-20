@@ -1,8 +1,9 @@
 # ifndef TEST_HPP
 # define TEST_HPP
 
-#include "container.hpp"
-# include <stdio.h>
+#include <stdio.h>
+#include "iterator.hpp"
+#include "vector.hpp"
 /* 
 template<class IteratorType> 
 void myFunction(const IteratorType& myIterator)
@@ -29,5 +30,6 @@ void    print_container(T container)
 void    vector_constructors();
 int     test_vector_size();
 void    iterator_category();
+void    modifiers();
 
 #endif

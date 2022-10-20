@@ -8,7 +8,7 @@
 template <class T>
 std::string get_iterator_type(T it)
 {
-    std::cout << typeid(it).name() << std::endl;
+    std::cout << "TYPE : " << typeid(it).name() << "TAG : " << std::endl;
 
     // if the iterator category of (it) matches input
     if (typeid(typename iterator_traits<T>::iterator_category)
@@ -41,41 +41,79 @@ std::string get_iterator_type(T it)
 
 void ft_reverse_iterator()
 {
- /*    {
+     {
         std::vector<int> vec;
 
         vec.push_back(2);
         vec.push_back(3);
         vec.push_back(4);
-        std::vector<int>::reverse_iterator rit = vec.rbegin();
+        vec.push_back(5);
+        std::vector<int>::reverse_iterator ritb = vec.rbegin();
+        std::vector<int>::reverse_iterator rite = vec.rend();
+        std::vector<int>::iterator itb = vec.begin();
+        std::vector<int>::iterator ite = vec.end();
+        std::cout << get_iterator_type(ritb) << std::endl;
+        std::cout << get_iterator_type(rite) << std::endl;
 
-        while(rit != vec.rend())
+        std::cout << "iterator end :" << *ite << std::endl;
+        std::cout << "iterator begin :" << *itb << std::endl;
+        std::cout << "reverse iterator end :" << *rite << std::endl;
+        std::cout << "reverse iterator begin :" << *ritb << std::endl;
+         std::cout << "REVERSE" << std::endl;
+        while (ritb != rite)
         {
-            std::cout << *rit << std::endl;
-            rit++;
+            std::cout << *ritb << std::endl;
+            ritb++;
         }
+        std::cout << "FORWARD" << std::endl;
+
+        std::cout << std::endl;
+        while (itb != ite)
+        {
+            std::cout << *itb << std::endl;
+            itb++;
+        }
+        (void)ritb;
     }
     {
-         ft::vector<int> vec;
+        ft::vector<int> vec;
 
         vec.push_back(2);
         vec.push_back(3);
         vec.push_back(4);
-        ft::vector<int>::reverse_iterator rit2 = vec.rbegin();
+        vec.push_back(5);
+        ft::vector<int>::reverse_iterator ritb = vec.rbegin();
+        ft::vector<int>::reverse_iterator rite = vec.rend();
+        ft::vector<int>::iterator itb = vec.begin();
+        ft::vector<int>::iterator ite = vec.end();
+        std::cout <<  get_iterator_type(ritb) << std::endl;
+        std::cout <<  get_iterator_type(rite) << std::endl;
 
-        while(rit2 != vec.rend())
+        std::cout << "iterator end :" << *ite << std::endl;
+        std::cout << "iterator begin :" << *itb << std::endl;
+        std::cout << "reverse iterator end : " << *rite << std::endl;
+        std::cout << "reverse iterator begin : " << *ritb << std::endl;
+        std::cout << std::endl << "FORWARD" << std::endl;
+        while (itb != ite)
         {
-            std::cout << *rit2 << std::endl;
-            rit2++;
+            std::cout << *itb << std::endl;
+            itb++;
         }
-    } */
+       
+        std::cout << std::endl << "REVERSE" << std::endl;
+        while (ritb != rite)
+        {
+            std::cout << *ritb << std::endl;
+            ritb++;
+        }
+    }
 
 }
 
 
 void    iterator_category()
 {
-   /*  ft::vector<int> vec(5, 5);
+    ft::vector<int> vec(5, 5);
 
     ft::vector<int>::iterator it;
     it = vec.begin();
@@ -85,5 +123,5 @@ void    iterator_category()
     ft::vector<int>::const_iterator it2;
     it2 = vec2.cbegin();
     std::cout << get_iterator_type(it) << std::endl;
-    ft_reverse_iterator(); */
+    ft_reverse_iterator();
 }

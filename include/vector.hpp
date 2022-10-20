@@ -11,61 +11,110 @@ namespace ft
     {
               
                     public:
-                        typedef T                      value_type;
+                        typedef T                               value_type;
                         typedef value_type*                     pointer;
-                        typedef value_type&                     reference;
-                        typedef value_type                      difference_type;
+                        typedef value_type                      &reference;
+                        typedef T const                        &const_reference;
+                        typedef std::ptrdiff_t                  difference_type;
                         typedef random_access_iterator_tag      iterator_category;
-                   
+
+                    private:
+                        pointer _ptr;
+
                     public:
                         Vectoriterator(pointer ptr) : _ptr(ptr) {}
                         Vectoriterator() : _ptr(NULL) {}
                         Vectoriterator(const Vectoriterator& obj) : _ptr(obj._ptr) {}
-                        Vectoriterator &operator=(const Vectoriterator& rhs)
+                        Vectoriterator<T> &operator=(const Vectoriterator& rhs)
                         {
                             this->_ptr = rhs._ptr;
                             return *this;
                         }
-                        Vectoriterator &operator++()
+                        Vectoriterator<T> &operator++()
                         {
                             _ptr++;
                             return *this;
                         }
-                        Vectoriterator operator++(int)
+                        Vectoriterator<T> operator++(int)
                         {
                             Vectoriterator it = *this;
                             ++(*this);
                             return it;
                         }
-                        Vectoriterator &operator--()
+                        Vectoriterator<T> &operator--()
                         {
-                            _ptr++;
+                            _ptr--;
                             return *this;
                         }
-                        Vectoriterator operator--(int)
+                        Vectoriterator<T> operator--(int)
                         {
                             Vectoriterator it = *this;
                             --(*this);
                             return it;
                         }
-                        Vectoriterator &operator->()
+                        value_type  *operator->()
                         {
                             return _ptr;
                         }
-                        value_type operator*()
+                        reference operator*()
+                        {
+                            return *(this->_ptr);
+                        }
+                        const_reference operator*() const
                         {
                             return *_ptr;
                         }
-                        bool operator!=(Vectoriterator &other){
-                            return this->_ptr != other._ptr;
-                        } 
-                        bool operator-(Vectoriterator &other){
-                            return (this->_ptr - other._ptr);
+                        reference operator[](difference_type n) const
+                        {
+                            return this->_ptr[n];
                         }
-                    private:
-                        pointer    _ptr;
+                        Vectoriterator  &operator+=(difference_type n)
+                        {
+                            this->_ptr += n;
+                            return *this;
+                        }
+                        Vectoriterator operator+(difference_type n)
+                        {
+                            this->_ptr += n;
+                            return Vectoriterator(this->ptr + n);
+                        }
+                        Vectoriterator &operator-=(difference_type n)
+                        {
+                            this->_ptr -= n;
+                            return *this;
+                        }
+                        Vectoriterator operator-(difference_type n)
+                        {
+                            this->_ptr - n;
+                            return Vectoriterator(this->ptr - n);
+                        }
+                        difference_type operator-(const Vectoriterator<T> &right) const
+                        {
+                            return this->_ptr - right._ptr;
+                        }
 
+                        bool operator==(const Vectoriterator<T> &y) const
+                        {
+                            return _ptr == y._ptr;
+                        }
+                        bool operator!=(const Vectoriterator<T> &y) const
+                        {
+                            return (_ptr != y._ptr);
+                        }
+                        /*friend bool operator==(const Vectoriterator<T> &x, const Vectoriterator<T> &y);
+                        friend bool operator!=(const Vectoriterator<T> &x, const Vectoriterator<T> &y);*/
     };
+
+   /* template <typename T>
+    bool operator==(const Vectoriterator<T> &x, const Vectoriterator<T> &y) const
+    {
+        return x._ptr == y._ptr;
+    }
+    template<typename T>
+    bool operator!=(const Vectoriterator<T> &x, const Vectoriterator<T> &y)
+    {
+        return !(x._ptr == y._ptr);
+    }*/
 
     template < class T, class Allocator = std::allocator<T> >
     class vector
@@ -84,9 +133,9 @@ namespace ft
             typedef std::size_t                 size_type;
             typedef std::ptrdiff_t              difference_type;
 
-            typedef Vectoriterator<vector<T> >          iterator;
-            typedef Vectoriterator<vector<const T> > const_iterator;
-            typedef reverse_iterator<iterator >     reverse_iterator;
+            typedef Vectoriterator<T >          iterator;
+            typedef Vectoriterator<const T > const_iterator;
+            typedef Reverse_iterator<iterator >     reverse_iterator;
 
             T*              _data;
             size_t           _size;
@@ -119,9 +168,8 @@ namespace ft
                            _alloc.construct(_data + i, value);
                     }
 
-                template< class InputIt, \
-                typename = typename ft::enable_if<!ft::is_integral<InputIt>::value >::type >
-                    vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
+            
+                    vector( iterator first, iterator last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
                     {
                         int i = 0;
                         _data = _alloc.allocate(last - first);
@@ -189,11 +237,11 @@ namespace ft
 
                 reverse_iterator rbegin() 
                 { 
-                    return reverse_iterator(end());
+                    return Reverse_iterator<Vectoriterator<T> >(this->end());
                 }
                 reverse_iterator rend() 
                 { 
-                    return reverse_iterator(begin()); 
+                    return Reverse_iterator<Vectoriterator<T> >(this->begin()); 
                 }
                                 /*----------------- MODIFIERS ---------------------*/
                 template <class InputIterator>  
