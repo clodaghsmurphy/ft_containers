@@ -105,8 +105,6 @@ namespace ft
             {
                 return (_ptr != y._ptr);
             }
-            /*friend bool operator==(const Vectoriterator<T> &x, const Vectoriterator<T> &y);
-            friend bool operator!=(const Vectoriterator<T> &x, const Vectoriterator<T> &y);*/
     };
 
    /* template <typename T>
@@ -194,15 +192,8 @@ namespace ft
                 // vector( const vector& other, const Allocator& alloc );
 
                 ~vector() {
-                    size_type i;
-                     for (i = 0; i < _capacity; i++)
-                     {
-                        _alloc.destroy((_data + i));
-
-                     }
-                    _alloc.destroy((_data + i));
-
-                     _alloc.deallocate(_data, sizeof(vector));
+                        clear();
+                    // _alloc.deallocate(_data, _capacity);
                     
 
                     return ;
@@ -336,7 +327,11 @@ namespace ft
                 void                swap (vector& x);
                 void                clear()
                 {
-                    erase(begin(), end());
+                    for (size_type i; i < _size; i++)
+                    {
+                        _alloc.destroy(_data + (_capacity - i));
+                        _alloc.deallocate(_data + (_capacity - i), 1);
+                    }
                 }
     };
 }
