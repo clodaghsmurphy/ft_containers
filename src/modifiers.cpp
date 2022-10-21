@@ -2,17 +2,177 @@
 #include "vector.hpp"
 #include "test.hpp"
 
-void test1()
+
+template <typename T, typename U>
+int    vectors_equal(T vec, U vec2)
 {
-    std::vector<int> vec(5, 5);
+    typename T::iterator it = vec.begin();
+    typename T::iterator ite = vec.end();
+    typename U::iterator it2 = vec2.begin();
+    typename U::iterator ite2 = vec2.end();
 
-    print_container(vec);
-    vec.assign(2, 3);
-    print_container(vec);
 
+    if (vec.size() != vec2.size() || vec.capacity() != vec2.capacity())
+    {
+        return (0);
+    }
+    while (it !=ite || it2 != ite2)
+    {
+        if(*it != *it2)
+            return (0);
+        it++;
+        it2++;
+    }
+    return (1);
+}
+void pop_back_test()
+{
+    std::cout <<std::endl << "\033[1m\033[33mVECTOR POP_BACK : \033[0m\033[37m" << std::endl;
+
+    std::vector<int> vec;
+    ft::vector<int> my_vec;
+
+
+
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.pop_back();
+
+    my_vec.push_back(1);
+    my_vec.push_back(2);
+    my_vec.push_back(3);
+    my_vec.push_back(4);
+
+    my_vec.pop_back();
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+}
+
+
+void    insert_test()
+{
+    std::cout <<std::endl << "\033[1m\033[33mVECTOR INSERT : \033[0m\033[37m" << std::endl;
+
+    std::vector<int> vec;
+    ft::vector<int> my_vec;
+
+    std::vector<int>::iterator it;
+    ft::vector<int>::iterator my_it;
+
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.pop_back();
+    vec.insert(it, 5);
+    my_vec.push_back(1);
+    my_vec.push_back(2);
+    my_vec.push_back(3);
+    my_vec.push_back(4);
+
+    my_vec.insert(my_it, 5);
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+}
+
+void    erase_test()
+{
+    std::cout <<std::endl << "\033[1m\033[33mVECTOR ERASE : \033[0m\033[37m" << std::endl;
+
+    {
+    std::vector<int> vec;
+    ft::vector<int> my_vec;
+
+
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    std::vector<int>::iterator it = vec.begin();
+    
+    vec.erase(it);
+
+    my_vec.push_back(1);
+    my_vec.push_back(2);
+    my_vec.push_back(3);
+    my_vec.push_back(4);
+
+    ft::vector<int>::iterator my_it = my_vec.begin();
+    
+    my_vec.erase(my_it);
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
+    {
+         std::vector<int> vec;
+    ft::vector<int> my_vec;
+
+
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    std::vector<int>::iterator it = vec.begin();
+    
+    vec.erase(it + 1, it + 2);
+
+    my_vec.push_back(1);
+    my_vec.push_back(2);
+    my_vec.push_back(3);
+    my_vec.push_back(4);
+
+    ft::vector<int>::iterator my_it = my_vec.begin();
+    
+    my_vec.erase(my_it + 1, my_it +2);
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
+     {
+         std::vector<int> vec;
+    ft::vector<int> my_vec;
+
+
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    std::vector<int>::iterator it = vec.end();
+    
+    vec.erase(it - 1, it);
+
+    my_vec.push_back(1);
+    my_vec.push_back(2);
+    my_vec.push_back(3);
+    my_vec.push_back(4);
+
+    ft::vector<int>::iterator my_it = my_vec.end();
+    
+    my_vec.erase(my_it - 1, my_it);
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
 }
 
 void modifiers()
 {
-    test1();
+    pop_back_test();
+    //insert_test();
+    //erase_test();
 }

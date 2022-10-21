@@ -6,6 +6,18 @@
 
 //////////////////////ITERATOR TRAITS //////////////////////////////////
 
+    struct input_iterator_tag {};
+    ///  Marking output iterators.
+    struct output_iterator_tag {};
+    /// Forward iterators support a superset of input iterator operations.
+    struct forward_iterator_tag : public input_iterator_tag {};
+    /// Bidirectional iterators support a superset of forward iterator
+    /// operations.
+    struct bidirectional_iterator_tag : public forward_iterator_tag {};
+    /// Random-access iterators support a superset of bidirectional iterator
+    /// operations.
+    struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+
 template <class Iter>
 struct iterator_traits;
 
@@ -20,19 +32,46 @@ struct iterator_traits
     typedef typename _Iterator::difference_type difference_type;
     typedef typename _Iterator::pointer pointer;
     typedef typename _Iterator::reference reference;
-     };
+};
 
-       struct input_iterator_tag {};
-        ///  Marking output iterators.
-        struct output_iterator_tag {};
-        /// Forward iterators support a superset of input iterator operations.
-        struct forward_iterator_tag : public input_iterator_tag {};
-        /// Bidirectional iterators support a superset of forward iterator
-        /// operations.
-        struct bidirectional_iterator_tag : public forward_iterator_tag {};
-        /// Random-access iterators support a superset of bidirectional iterator
-        /// operations.
-        struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+template <typename _Iterator>
+struct iterator_traits<_Iterator*>
+{
+    typedef  random_access_iterator_tag iterator_category;
+    typedef  _Iterator                  value_type;
+    typedef  std::ptrdiff_t              difference_type;
+    typedef  _Iterator*                 pointer;
+    typedef  _Iterator&                reference;
+};
+
+ 
+
+    template<typename Iterator>
+    typename iterator_traits<Iterator>::difference_type
+    distance (Iterator first, Iterator last)
+    {
+        return distance (first, last, typename iterator_traits<Iterator>::iterator_category());
+    }
+
+    template<typename RandomAccessIterator>
+    typename iterator_traits<RandomAccessIterator>::difference_type
+    distance (RandomAccessIterator first, RandomAccessIterator last, random_access_iterator_tag)
+    {
+        return (last - first);
+    }
+
+    template<typename InputIterator>
+    typename iterator_traits<InputIterator>::difference_type
+    distance (InputIterator first, InputIterator last, input_iterator_tag)
+    {
+        typename iterator_traits<InputIterator>::difference_type result;
+        for (result = 0; first != last; first++, result++)
+        {
+            ;
+        }
+        return result;
+        
+    }
 
     ////////////////////// REVERSE ITERATOR //////////////////////////////////
     template <class Iterator>
