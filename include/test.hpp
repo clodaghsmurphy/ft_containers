@@ -12,7 +12,7 @@ void myFunction(const IteratorType& myIterator)
     std::cout << _ptr << std::endl;
 } */
 template<class T>
-void    print_container(T container)
+void    print_container(T &container)
 {
     typename T::iterator it = container.begin();
     typename T::iterator ite = container.end();

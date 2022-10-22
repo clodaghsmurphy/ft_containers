@@ -146,14 +146,21 @@ namespace ft
             
             void ReAlloc(size_t n)
             {
-                T* new_block = new T[n];
+                T* new_block = 0;
+
+                new_block = _alloc.allocate( n);
+                size_type i = 0;
                 if (n < _size)
                 {
                     _size = n;
                 }
-                for (size_t i = 0; i < _size; i++)
-                    new_block[i] = _data[i];
-                delete[] _data;
+                for (i = 0; i < _size; i++)
+                {
+                     new_block[i] = _data[i];
+                    _alloc.destroy(_data + i);
+                }
+                _alloc.deallocate(_data, _size);
+                _data = 0;
                 _data = new_block;
                 _capacity = n;
             }
@@ -184,18 +191,18 @@ namespace ft
                     } 
                 vector( const vector& other )
                 {
-                    _data = other._data;
+                    _data = _alloc.allocate(other._capacity);
+                    for (size_type i = 0; i < other._size; i++)
+                    {
+                        _alloc.construct(_data + i, *(&other._data[i]));
+                    }
                     _alloc = other._alloc;
                     _capacity = other._size;
                     _size = other._size;
                 }
-                // vector( const vector& other, const Allocator& alloc );
-
                 ~vector() {
-                        clear();
-                    // _alloc.deallocate(_data, _capacity);
-                    
-
+                    clear();
+                    _alloc.deallocate(_data, 1);
                     return ;
                 }
                 /*-----------------CAPACITY -----------------------*/
@@ -272,14 +279,59 @@ namespace ft
                         return ;
                     _alloc.destroy(_data + _size - 1);
                     _size--;
+               
                 }
 
                 iterator            insert (iterator position, const value_type& val)
                 {
-                    reserve(1);
-                    _alloc.construct((_data + 1) + 1, val);
+                    size_type index = position - begin();
+                    T               tmp;
+                    //T               tmp2;
+                    if (_size + 1 >= _capacity)
+                    {
+                        if (_size == 0)
+                            ReAlloc(1);
+                        else
+                            ReAlloc(_capacity * 2);
+                    }
+                    if (position == end())
+                    {
+                        push_back(val);
+                        return position ;
+                    }
+                    else if (index == 0)
+                    {
+          
+                        size_type i = index;  
+                        tmp = (*_data);
+                        while (i < _size)
+                        {
+                             
+                            _alloc.construct(_data + i + 1, tmp);
+                            i++;
+                            tmp = (*_data + i);
+                            _alloc.destroy(_data + i);
+
+                        }
+                        *_data = val;
+                    }
+                    else
+                    {
+                        size_type i = index;  
+                        tmp = (*_data + index);
+                        while (i < _size)
+                        {
+                             
+                            _alloc.construct(_data + i + 1, tmp);
+                            i++;
+                            tmp = (*_data + i);
+                            _alloc.destroy(_data + i);
+
+                        }
+                        *(_data + index) = val;
+                    }
+                    
                     _size++;
-                    (void)position;
                     return iterator(_data);
                 }
                 void                insert (iterator position, size_type n, const value_type& val);
@@ -327,11 +379,12 @@ namespace ft
                 void                swap (vector& x);
                 void                clear()
                 {
-                    for (size_type i; i < _size; i++)
+                    for (size_type i = 0; i < _size; i++)
                     {
                         _alloc.destroy(_data + (_capacity - i));
-                        _alloc.deallocate(_data + (_capacity - i), 1);
+
                     }
+
                 }
     };
 }
