@@ -12,7 +12,6 @@
 # include <stdexcept>
 # include <iterator>
 #include <iomanip>
-#include <type_traits>
 
 namespace ft
 {

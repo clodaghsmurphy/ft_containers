@@ -160,7 +160,7 @@ void    insert_test()
         vec.push_back(4);
         std::vector<int>::iterator it = vec.begin();
 
-        it = vec.insert(it, 3, 0);
+        vec.insert(it, 3, 0);
         std::cout << "in main and container is : " << std::endl;
         print_container(vec);
 

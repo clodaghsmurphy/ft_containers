@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/24 10:51:04 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/24 11:00:41 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ SHELL := /bin/zsh
 
 OBJ		= ${SRC:src/%.cpp=obj/%.o}
 
-DEP		= ${SRC:src/%.cpp=dep/%.d}
+DEP		= ${SRC:src/.cpp=./dep/.d}
 
 OBJ_FILE = ./obj
 
