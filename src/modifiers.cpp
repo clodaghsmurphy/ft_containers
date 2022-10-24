@@ -17,13 +17,22 @@ int    vectors_equal(T &vec, U &vec2)
         std::cout << "VEC SIZE : " << vec.size() << " MY VEC : " << vec2.size() << std::endl;
         return (0);
     }
+    /* std::cout << "in print coantiners OG VEC IS : " << std::endl;
+
     print_container(vec);
     std::cout << std::endl;
-    print_container(vec2);
+    std::cout << "in print coantiners MY VEC IS : " << std::endl;
+    print_container(vec2); 
+    std::cout << std::endl; */
+
     while (it !=ite || it2 != ite2)
     {
         if(*it != *it2)
+        {
+            std::cout << *it << " != " << *it2 << std::endl;
             return (0);
+
+        }
         it++;
         it2++;
     }
@@ -88,7 +97,6 @@ void    insert_test()
             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     }
     {
-        std::cout <<std::endl << "\033[1m\033[33mVECTOR INSERT : \033[0m\033[37m" << std::endl;
 
         std::vector<int> vec;
         ft::vector<int> my_vec;
@@ -115,7 +123,6 @@ void    insert_test()
             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     }
     {
-        std::cout <<std::endl << "\033[1m\033[33mVECTOR INSERT : \033[0m\033[37m" << std::endl;
 
         std::vector<int> vec;
         ft::vector<int> my_vec;
@@ -135,6 +142,37 @@ void    insert_test()
         ft::vector<int>::iterator my_it = my_vec.end();
 
         my_vec.insert(my_it, 5);
+
+        if (vectors_equal(vec, my_vec))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
+    {
+
+        std::vector<int> vec;
+        ft::vector<int> my_vec;
+
+
+        vec.push_back(1);
+        vec.push_back(2);
+        vec.push_back(3);
+        vec.push_back(4);
+        std::vector<int>::iterator it = vec.begin();
+
+        it = vec.insert(it, 3, 0);
+        std::cout << "in main and container is : " << std::endl;
+        print_container(vec);
+
+        my_vec.push_back(1);
+        my_vec.push_back(2);
+        my_vec.push_back(3);
+        my_vec.push_back(4);
+        ft::vector<int>::iterator my_it = my_vec.begin();
+
+        my_vec.insert(my_it, (size_t)3, 0);
+        std::cout << "in main and my container is : " << std::endl;
+        print_container(my_vec);
 
         if (vectors_equal(vec, my_vec))
             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;

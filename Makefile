@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/21 11:47:42 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/24 10:51:04 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,13 +35,17 @@ SHELL := /bin/zsh
 
 OBJ		= ${SRC:src/%.cpp=obj/%.o}
 
+DEP		= ${SRC:src/%.cpp=dep/%.d}
+
 OBJ_FILE = ./obj
+
+DEP_FILE = ./dep
 
 CC		= c++
 
 INCLUDE = -Iinclude/
 
-CFLAGS	= -Wall -Werror -Wextra ${INCLUDE} -g  #-std=c++98 #-fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra -MMD ${INCLUDE} -g  -std=c++98 #-fsanitize=address
 
 NAME	= ft_containers
 
@@ -72,6 +76,7 @@ obj/%.o: src/%.cpp
 	@printf "\033[10;2H                                                  \033[10;3H%s" $< ${<:.c=⠀⠀}
 	@echo -ne "\033[16;H"
 	@mkdir -p $(OBJ_FILE)
+	@mkdir -p $(DEP_FILE)
 	@${CC} ${CFLAGS} -c $< -o ${<:src/%.cpp=obj/%.o}	
 	@$(eval percent=$(shell expr ${current} "*" 100 / ${total}))
 	@echo -ne "\033[11;3H"
@@ -123,9 +128,9 @@ end_make:
 re: fclean all
 
 fclean:
-	@rm -rf ${OBJ} $(OBJ_FILE)
+	@rm -rf ${OBJ} $(OBJ_FILE) $(DEP) $(DEP_FILE)
 
 clean:
-	@rm -rf ${OBJ} $(OBJ_FILE)
+	@rm -rf ${OBJ} $(OBJ_FILE) $(DEP) $(DEP_FILE)
 
 .PHONY: clean fclean re end_make all setup

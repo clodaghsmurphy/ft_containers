@@ -286,7 +286,7 @@ namespace ft
                 {
                     size_type index = position - begin();
                     T               tmp;
-                    //T               tmp2;
+
                     if (_size + 1 >= _capacity)
                     {
                         if (_size == 0)
@@ -334,7 +334,48 @@ namespace ft
                     _size++;
                     return iterator(_data);
                 }
-                void                insert (iterator position, size_type n, const value_type& val);
+
+                void    insert(iterator position, size_type n, const value_type& val)
+                {
+                    size_type index = position - begin();
+                    T         tmp;
+                    int        i;
+
+
+                    if (_size + n >= _capacity)
+                    {                 
+                        if (_size == 0)
+                            ReAlloc(1);
+                        else
+                        {
+                            for (i = 2; (_size + n >= _capacity * i); i++)
+                                ;
+                            ReAlloc(_capacity * i);
+                        }
+                    }
+                    if (position == end())
+                    {
+                        for (size_type i = 0; i < n; i++)
+                            push_back(val);
+                    }
+                    else if (index == 0)
+                    {
+                        size_type i = index;
+                        tmp = (*_data);
+                        for (size_type j = 0; j < n; j++)
+                        {
+                            while (i < _size)
+                            {
+                                _alloc.construct(_data + i + 1, tmp);
+                                i++;
+                                tmp = (*_data + i);
+                                _alloc.destroy(_data + i);
+                            }
+                        }
+                        _size += n;
+                    }
+
+                }
                 template <class InputIterator>    
                     void               insert (iterator position, InputIterator first, InputIterator last);
                 iterator            erase (iterator position)
