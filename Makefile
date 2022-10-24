@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/24 11:00:41 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/24 11:42:27 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,6 @@ SHELL := /bin/zsh
 
 OBJ		= ${SRC:src/%.cpp=obj/%.o}
 
-DEP		= ${SRC:src/.cpp=./dep/.d}
 
 OBJ_FILE = ./obj
 
@@ -44,6 +43,8 @@ DEP_FILE = ./dep
 CC		= c++
 
 INCLUDE = -Iinclude/
+
+DEP		= ${SRC:%.cpp=%.d}
 
 CFLAGS	= -Wall -Werror -Wextra -MMD ${INCLUDE} -g  -std=c++98 #-fsanitize=address
 
@@ -122,15 +123,18 @@ define loading
 	@true
 endef
 
+-include $(DEP)
+
 end_make:
 	echo -ne "\033[16;H\033[?25h"
 
 re: fclean all
 
 fclean:
-	@rm -rf ${OBJ} $(OBJ_FILE) $(DEP) $(DEP_FILE)
+	@rm -rf ${OBJ} $(OBJ_FILE)  $(DEP_FILE)
 
 clean:
-	@rm -rf ${OBJ} $(OBJ_FILE) $(DEP) $(DEP_FILE)
+	@rm -rf ${OBJ} $(OBJ_FILE) $(DEP_FILE)
 
 .PHONY: clean fclean re end_make all setup
+
