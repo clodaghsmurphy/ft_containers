@@ -18,7 +18,7 @@ namespace ft
             typedef std::ptrdiff_t                  difference_type;
             typedef random_access_iterator_tag      iterator_category;
 
-        private:
+        protected:
             pointer _ptr;
 
         public:
@@ -31,6 +31,7 @@ namespace ft
             }
             Vectoriterator<T> &operator=(const Vectoriterator& rhs)
             {
+
                 this->_ptr = rhs._ptr;
                 return *this;
             }
@@ -96,34 +97,86 @@ namespace ft
                 //this->_ptr - n;
                 return Vectoriterator(this->_ptr - n);
             }
-            difference_type operator-(const Vectoriterator<T> &right) const
-            {
-                return this->_ptr - right._ptr;
-            }
+            // difference_type operator-(const Vectoriterator<T> &right) const
+            // {
+            //     return this->_ptr - right._ptr;
+            // }
 
-            bool operator==(const Vectoriterator<T> &y) const
-            {
-                return _ptr == y._ptr;
-            }
-            bool operator!=(const Vectoriterator<T> &y) const
-            {
-                return (_ptr != y._ptr);
-            }
-            pointer getPointer() { return _ptr; }
+            // bool operator==(const Vectoriterator<T> &y) const
+            // {
+            //     return _ptr == y._ptr;
+            // }
+            // bool operator!=(const Vectoriterator<T> &y) const
+            // {
+            //     return (_ptr != y._ptr);
+            // }
+            template <typename _T>
+                friend std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator!=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator==(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator>=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator<=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator>(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend bool operator<(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template <typename _T>
+                friend std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
+            template<typename IteratorL, typename IteratorR>
+                friend bool operator!=(const IteratorL &x, const IteratorR &y);
+
+            // template <typename _T, class Allocator = std::allocator<_T> >
+            //     friend class vector;
+            pointer base() const { return _ptr; } 
             void setPointer(pointer ptr) {  _ptr = ptr; }
     };
 
 
-   /* template <typename T>
-    diiffence_type operator-(const Vectoriterator<T> &x, const Vectoriterator<T> &y) const
+    template <typename _T>
+    std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
     {
-        return x._ptr == y._ptr;
+        return x._ptr - y._ptr;
     }
-    template<typename T>
-    bool operator!=(const Vectoriterator<T> &x, const Vectoriterator<T> &y)
+    template<typename _T>
+    bool operator!=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
     {
         return !(x._ptr == y._ptr);
-    }*/
+    }
+
+    template<typename IteratorL, typename IteratorR>
+    bool operator!=(const IteratorL &x, const IteratorR &y)
+    {
+        return !(x._ptr == y._ptr);
+    }
+    template<typename _T>
+    bool operator==(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    {
+        return (x._ptr == y._ptr);
+    }
+    template<typename _T>
+    bool operator>=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    {
+        return !(x._ptr < y._ptr);
+    }
+    template<typename _T>
+    bool operator<=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    {
+        return !(x._ptr > y._ptr);
+    }
+    template<typename _T>
+    bool operator<(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    {
+        return (x._ptr < y._ptr);
+    }
+    template<typename _T>
+    bool operator>(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    {
+        return (x._ptr > y._ptr);
+    }
 
     template < class T, class Allocator = std::allocator<T> >
     class vector
@@ -153,6 +206,8 @@ namespace ft
             
             void ReAlloc(size_t n)
             {
+                if (n < _capacity || !n)
+                    return ;
                 T* new_block = 0;
 
                 new_block = _alloc.allocate( n);
@@ -163,10 +218,11 @@ namespace ft
                 }
                 for (i = 0; i < _size; i++)
                 {
-                     new_block[i] = _data[i];
+                    _alloc.construct(new_block + i, *(_data + i));
                     _alloc.destroy(_data + i);
                 }
-                _alloc.deallocate(_data, _size);
+               
+                _alloc.deallocate(_data, _capacity);
                 _data = 0;
                 _data = new_block;
                 _capacity = n;
@@ -177,7 +233,7 @@ namespace ft
                     _data = _alloc.allocate(_capacity);   
                 }
                 
-                 explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()) :  _size(count), _capacity(count), _alloc(alloc)
+                 explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()) : _data(NULL), _size(count), _capacity(count), _alloc(alloc)
                     {
                         _data = _alloc.allocate( count );
                         for (size_t i = 0; i < count; i++)
@@ -185,32 +241,27 @@ namespace ft
                     }
 
             
-                    vector( iterator first, iterator last, const Allocator& alloc = Allocator() ) : _alloc(alloc)
+                    vector( iterator first, iterator last, const Allocator& alloc = Allocator() ) :  _data(NULL), _size(0), _capacity(0), _alloc(alloc)
                     {
-                        int i = 0;
-                        _data = _alloc.allocate(last - first);
-                        while (first != last)
-                        {
-                            _alloc.construct(_data + i, *first);
-                            first++;
-                            i++;
-                        }
+                        _data = _alloc.allocate(_capacity); 
+                        insert(begin(), first, last);
+            
                     } 
-                vector( const vector& other )
+                vector( const vector& other ) : _data(0), _size(0), _capacity(0)
                 {
-                    _data = _alloc.allocate(other._capacity);
-                    for (size_type i = 0; i < other._size; i++)
-                    {
-                        _alloc.construct(_data + i, *(&other._data[i]));
-                    }
-                    _alloc = other._alloc;
-                    _capacity = other._size;
-                    _size = other._size;
+                    this->insert(begin(), other.begin(), other.end());
+
                 }
                 ~vector() {
                     clear();
                     _alloc.deallocate(_data, 1);
                     return ;
+                }
+                vector<T>   operator=(const vector<T> &rhs)
+                {
+                    clear();
+                    this->insert(begin(), rhs.begin(), rhs.end());
+                    return *this;
                 }
                 /*-----------------CAPACITY -----------------------*/
                 bool                empty() const { return _size == 0; }
@@ -239,7 +290,7 @@ namespace ft
                         throw std::out_of_range("value out fo range\n");
                     return _data + pos; }
 
-                reference operator[]( size_type pos ) { return _data + pos; }
+                reference operator[]( size_type pos ) { return *(_data + pos); }
                 const_reference operator[]( size_type pos ) const { return _data + pos; }
 
                 reference front() { return *(begin()); }
@@ -248,17 +299,17 @@ namespace ft
                 reference back() { return *(end()); }
                 const_reference back() const { return *(end()); }
 
-                T* data() {return begin().getPointer(); }
-                const T* data() const {return begin().getPointer(); }
+                T* data() {return begin().base(); }
+                const T* data() const {return begin().base(); }
                 /*------------------ITERATORS----------------------*/
                 
-                iterator begin()
+                iterator begin() const
                 {
                     return iterator(_data);
                 }
                 const_iterator cbegin() const { return const_iterator(_data); }
 
-                iterator end(){
+                iterator end() const {
                     return iterator(_data + _size);
                 }
                 const_iterator cend() const { return const_iterator(_data + _size); }
@@ -279,11 +330,11 @@ namespace ft
                     pointer     cpy = 0;
 
                     
-                    if (_data == first.getPointer())
+                    if (_data == first.base())
                     {
                         cpy = _alloc.allocate(_size);
                         for (size_type i = 0; i < _size; i++)
-                            cpy[i] = *(first.getPointer() + i);
+                            cpy[i] = *(first.base() + i);
                         first.setPointer(cpy);
                     }   
                     clear();
@@ -351,7 +402,7 @@ namespace ft
                 iterator            insert (iterator position, const value_type& val)
                 {
                     size_type index = position - begin();
-                    T               tmp;
+                    T                   tmp;
 
                     if (_size + 1 >= _capacity)
                     {
@@ -383,7 +434,7 @@ namespace ft
                     }
                     else
                     {
-                        size_type i = index;  
+                        size_type i = index + 1;  
                         tmp = (*_data + index);
                         while (i < _size)
                         {
@@ -408,6 +459,11 @@ namespace ft
                     int        i;
 
 
+                    if (position == end())
+                    {
+                        for (size_type i = 0; i < n; i++)
+                            push_back(val);
+                    }
                     if (_size + n >= _capacity)
                     {                 
                         if (_size == 0)
@@ -419,11 +475,7 @@ namespace ft
                             ReAlloc(_capacity * i);
                         }
                     }
-                    if (position == end())
-                    {
-                        for (size_type i = 0; i < n; i++)
-                            push_back(val);
-                    }
+                    
                     _size += n;
                     if (index == 0)
                     {
@@ -433,8 +485,8 @@ namespace ft
                         while (i < _size - n)
                         {
                             _alloc.construct(_data + i + n, tmp);
-                            // std::cout << "ADDRESS :  " << _data + i + n << std::endl;
-                            // std::cout << "i+ n = " << i + n << std::endl;
+                            std::cout << "ADDRESS :  " << _data + i + n << std::endl;
+                            std::cout << "i+ n = " << i + n << std::endl;
                             i++;
                             tmp = (*_data + i);
                             _alloc.destroy(_data + i);
@@ -462,61 +514,25 @@ namespace ft
                     void               insert (iterator position, iterator first, iterator last)
                     {
                     size_type index = position - begin();
-                    T           tmp;
                     size_type    n = last - first;
-                    int             i;
 
-                    if (n == 0)
-                        return ;
-                    if (_size + n >= _capacity)
-                    {                 
-                        if (_size == 0)
-                            ReAlloc(n);
-                        else
-                        {
-                            for (i = 2; (_size + n >= _capacity * i); i++)
-                                ;
-                            ReAlloc(_capacity * i);
-                        }
-                    }
-                    if (position == end())
-                    {
-                        for (size_type i = 0; i < n; i++)
-                            push_back(*first + i);
-                        return ;
-                    }
+                    ReAlloc(_size + n); 
                     _size += n;
-                    if (index == 0)
+                    size_type i = index;
+        
+                    
+                    while (i < _size - n)
                     {
-                        size_type i = index;
-            
-                        tmp = (*_data);
-                        while (i < _size - n)
-                        {
-                            std::cout<< "PUTTING " << tmp << " AT THE " << i + 1 << " POSITION  REPALCING "<< *(_data + i + 1) << std::endl;
-                            _alloc.construct(_data + i + n, tmp);
-                            i++;
-                            tmp = (*_data + i);
-                            _alloc.destroy(_data + i);
-                        }
-                        for (size_type k = 0; k < n; k++)
-                            *(_data + k) = *(first + k);
+                        _alloc.construct(_data + i + n, *(_data + i));
+                        i++;
+                        _alloc.destroy(_data + i);
                     }
-                    else
+                    for (size_type k = 0; k < n; k++)
                     {
-                        size_type i = index;
-            
-                        tmp = (*_data);
-                        while (i < _size - n)
-                        {
-                            _alloc.construct(_data + i + n, tmp);
-                            i++;
-                            tmp = (*_data + i);
-                            _alloc.destroy(_data + i);
-                        }
-                        for (size_type k = 0; k < n; k++)
-                            *(_data + index + k) = *first + k;
+                        _alloc.construct(_data + k, *(first + k));
+
                     }
+               
                     }
                 iterator            erase (iterator position)
                 {
@@ -561,9 +577,9 @@ namespace ft
                 void                swap (vector& x);
                 void                clear()
                 {
-                    for (size_type i = 0; i < _size; i++)
+                    for (size_type i = 0; i < _capacity; i++)
                     {
-                        _alloc.destroy(_data + (_capacity - i));
+                        _alloc.destroy(_data + i);
 
                     }
                     _size = 0;
