@@ -818,8 +818,66 @@ void copy_test()
         std::vector<std::string> v4(10, "zzz");
         v3 = v3_duplicated;
         v4 = v4_duplicated;
-        vectors_equal(v3, v4);
+        if(vectors_equal(v3, v4))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     }
+}
+
+    void    iterator_test()
+    {
+        {
+            std::string                     arr2[3] = {"bonjour", "je", "suis"};
+
+            ft::vector<std::string>         v1_duplicated(arr2, arr2 + 3);
+            std::vector<std::string>         v2_duplicated(arr2, arr2 + 3);
+
+
+            ft::vector<std::string> v1;
+            std::vector<std::string> v2;
+            v1 = v1_duplicated;
+            v2 = v2_duplicated;
+
+            std::vector<std::string>::iterator it1= v2.begin();
+            ft::vector<std::string>::iterator it2 = v1.begin();
+
+            while (it1 != v2.end() && it2 != v1.end())
+            {
+                std::cout << *it1 << " | ";
+                std::cout << *it2 << std::endl;
+                it1++;
+                it2++;
+            }
+            std::cout << std::endl;
+        }
+        {
+            std::string                     arr2[3] = {"bonjour", "je", "suis"};
+
+            ft::vector<std::string>         v1_duplicated(arr2, arr2 + 3);
+            std::vector<std::string>         v2_duplicated(arr2, arr2 + 3);
+
+
+            ft::vector<std::string> v1;
+            std::vector<std::string> v2;
+            v1 = v1_duplicated;
+            v2 = v2_duplicated;
+
+            std::vector<std::string>::reverse_iterator it1= v2.rbegin();
+            ft::vector<std::string>::reverse_iterator it2 = v1.rbegin();
+
+            while (it1 != v2.rend() && it2 != v1.rend())
+            {
+                std::cout << *it1 << " | ";
+                std::cout << *it2 << std::endl;
+                it1++;
+                it2++;
+            }
+            std::cout << std::endl;
+        }
+        
+    }
+
     // {
     //     std::string                     arr1[3] = {"bonjour", "je", "suis"};
     //     ft::vector<std::string>                 v1_copied(arr1, arr1 + 3);
@@ -853,13 +911,14 @@ void copy_test()
     // (v4.empty() == v4_copied.empty());
     // (v4.size() == v4_copied.size());
     // (v4.capacity() == v4_copied.capacity());
-}
+//}
 
 void modifiers()
 {
     // pop_back_test();
     //insert_test();
-    copy_test();
+    //copy_test();
+    iterator_test();
     // erase_test();
    // assign_test();
 }

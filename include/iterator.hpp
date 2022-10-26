@@ -183,17 +183,13 @@ struct iterator_traits<_Iterator*>
         //     friend bool operator<=(const Reverse_iterator<_Iterator> &x, const Reverse_iterator<_Iterator> &y);
         };
 
-    //     template<typename IteratorL, typename IteratorR>
-    //     bool operator==(const IteratorL x, const IteratorR y)
-    //         {
-    //             return x.base() == y.base();
-    //         }
+        template<typename IteratorL, typename IteratorR>
+        bool operator==(const IteratorL x, const IteratorR y)
+        {
+            return x.base() == y.base();
+        }
 
-    // //    template<typename Iterator, typename container>
-    // //     bool operator==(const Reverse_iterator<Iterator> &x, const Iterator &y)
-    // //         {
-    // //             return x.base() == y.base();
-    // //         }
+
     //     template<typename IteratorL, typename IteratorR>
     //     bool operator!=(const IteratorL &x, const IteratorR &y)
     //     {

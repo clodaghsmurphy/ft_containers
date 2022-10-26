@@ -284,7 +284,7 @@ namespace ft
                 reference at( size_type pos ) { 
                     if (pos >= _size)
                         throw std::out_of_range("value out of range\n"); 
-                    return _data + pos; }
+                    return *(_data + pos); }
                 const_reference at( size_type pos ) const { 
                     if (pos >= _size)
                         throw std::out_of_range("value out fo range\n");
@@ -296,7 +296,7 @@ namespace ft
                 reference front() { return *(begin()); }
                 const_reference front() const {return *(begin()); }
 
-                reference back() { return *(end()); }
+                reference back() { return *(end() -  1); }
                 const_reference back() const { return *(end()); }
 
                 T* data() {return begin().base(); }
@@ -574,7 +574,22 @@ namespace ft
                     }
                     return first;
                 }
-                void                swap (vector& x);
+                void                swap (vector& x)
+                {
+                    pointer tmp_ptr = this->_data;
+                    size_type     tmp_cap = this->_capacity;
+                    size_type     tmp_size = this->_size;
+
+                    this->_data = x._data;
+                    this->_capacity = x._capacity;
+                    this->_size = x._size;
+
+                     x._data = tmp_ptr;
+                     x._capacity = tmp_cap;
+                     x._size = tmp_size;
+
+
+                }
                 void                clear()
                 {
                     for (size_type i = 0; i < _capacity; i++)
@@ -585,6 +600,32 @@ namespace ft
                     _size = 0;
                 }
     };
+
+    template< class T, class Alloc >
+        bool operator==( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return (lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+        }
+     template< class T, class Alloc >
+        bool operator!=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return !(lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()));
+        }
+     template< class T, class Alloc >
+        bool operator<( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+     template< class T, class Alloc >
+        bool operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return !(lhs < rhs);
+        }
+     template< class T, class Alloc >
+        bool operator>=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return !(lhs > rhs);
+        }
 }
 
 # endif
