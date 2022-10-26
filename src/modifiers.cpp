@@ -10,9 +10,14 @@ int    vectors_equal(T &vec, U &vec2)
     typename T::iterator ite = vec.end();
     typename U::iterator it2 = vec2.begin();
     typename U::iterator ite2 = vec2.end();
-
+   
     if (vec.size() != vec2.size() || vec.capacity() != vec2.capacity() || vec.empty() != vec2.empty())
     {
+         std::cout << "REAL VEC IS : " << std::endl;
+            print_container(vec);
+            std::cout << std::endl;
+            std::cout << "MY VEC IS : " << std::endl;
+            print_container(vec2);
         std::cout << "VEC CAP : " << vec.capacity() << " MY VEC : " << vec2.capacity() << std::endl;
         std::cout << "VEC SIZE : " << vec.size() << " MY VEC : " << vec2.size() << std::endl;
         return (0);
@@ -417,7 +422,42 @@ void    insert_test()
         else
             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     }
-    
+    {
+        int             arr1[5] = {1, 2, 3, 4, 5};
+        ft::vector<int> v1;
+        ft::vector<int>::iterator it;
+        std::vector<int> v2;
+        std::vector<int>::iterator it2;
+
+        it = v1.insert(v1.end(), 1);
+        it2 = v2.insert(v2.end(), 1);
+        if (vectors_equal(v2, v1))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        it = v1.insert(v1.end(), 2);
+        it2 = v2.insert(v2.end(), 2);
+        if (vectors_equal(v2, v1))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        it = v1.insert(v1.begin(), 0);
+        it2 = v2.insert(v2.begin(), 0);
+        if (vectors_equal(v2, v1))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        print_container(v1);
+        v1.insert(v1.begin() + 1, arr1 + 1, arr1 + 4);
+        v2.insert(v2.begin() + 1, arr1 + 1, arr1 + 4);
+        if (vectors_equal(v2, v1))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
 }
 
 
@@ -785,43 +825,53 @@ void    erase_test()
 
 void copy_test()
 {
-   {
-        int                             arr1[5] = {1, 2, 3, 4, 5};
-        ft::vector<int>                 v1_copied(arr1, arr1 + 5);
-        std::vector<int>                 v2_copied(arr1, arr1 + 5);
+//    {
+//         int                             arr1[5] = {1, 2, 3, 4, 5};
+//         ft::vector<int>                 v1_copied(arr1, arr1 + 5);
+//         std::vector<int>                 v2_copied(arr1, arr1 + 5);
 
-        ft::vector<int> v1(v1_copied);
-        std::vector<int> v2(v2_copied);
-         if (vectors_equal(v2, v1))
-            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-        else
-            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    }
+//         ft::vector<int> v1(v1_copied);
+//         std::vector<int> v2(v2_copied);
+//          if (vectors_equal(v2, v1))
+//             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+//         else
+//             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+//     }
+//     {
+//         std::string                     arr2[3] = {"bonjour", "je", "suis"};
+//         ft::vector<std::string>         v1_duplicated(arr2, arr2 + 3);
+//         std::vector<std::string>         v2_duplicated(arr2, arr2 + 3);
+
+//         ft::vector<std::string> v1(10, "zzz");
+//         std::vector<std::string> v2(10, "zzz");
+
+//         v1 = v1_duplicated;
+//         v2 = v2_duplicated;
+//         vectors_equal(v1, v2);
+//         v1[0] = "aaa";
+//         v2[0] = "aaa";
+//         v1[1] = "bbb";
+//         v2[1] = "bbb";
+//         v1[2] = "ccc";
+//         v2[2] = "ccc";
+       
+      
+//         if(vectors_equal(v1, v2))
+//             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+//         else
+//             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+//     }
     {
-        int                             arr1[5] = {1, 2, 3, 4, 5};
-        std::string                     arr2[3] = {"bonjour", "je", "suis"};
-        ft::vector<int>                 v1_duplicated(arr1, arr1 + 5);
-        std::vector<int>                 v2_duplicated(arr1, arr1 + 5);
-        ft::vector<std::string>         v3_duplicated(arr2, arr2 + 3);
-        std::vector<std::string>         v4_duplicated(arr2, arr2 + 3);
+        ft::vector< ft::vector<char*> > v4_duplicated;
+        std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
 
-
-        ft::vector<int> v1;
-        std::vector<int> v2;
-        v1 = v1_duplicated;
-        v2 = v2_duplicated;
-        vectors_equal(v1, v2);
-        v1[0] = 0;
-    
-
-        ft::vector<std::string> v3(10, "zzz");
-        std::vector<std::string> v4(10, "zzz");
-        v3 = v3_duplicated;
+        ft::vector< ft::vector<char*> > v4(2, ft::vector<char*>(2, NULL));
+        std::cout << "v4 after copy initializiation is : " << &v4 << std::endl;
         v4 = v4_duplicated;
-        if(vectors_equal(v3, v4))
-            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-        else
-            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        std::cout << "v4 after copy assignment is : " << &v4 << std::endl;
+        std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
+
+
     }
 }
 
@@ -913,12 +963,66 @@ void copy_test()
     // (v4.capacity() == v4_copied.capacity());
 //}
 
+void resize_test()
+{
+    int             arr1[5] = {1, 2, 3, 4, 5};
+    ft::vector<int> v1(arr1, arr1 + 5);
+    std::vector<int> v2(arr1, arr1 + 5);
+
+    std::cout << "VEC CAP : " << v2.capacity() << " MY VEC : " << v1.capacity() << std::endl;
+        std::cout << "VEC SIZE : " << v2.size() << " MY VEC : " << v1.size() << std::endl;
+    v1.resize(7);
+    v2.resize(7);
+    
+    if (vectors_equal(v2, v1))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    // v1.resize(10, 42);
+    // ASSERT(v1.size() == 10);
+    // ASSERT(v1.capacity() >= 10);
+    // for (size_t i = 0; i < 5; i++)
+    //     ASSERT(v1[i] == arr1[i]);
+    // for (size_t i = 5; i < 7; i++)
+    //     ASSERT(v1[i] == int());
+    // for (size_t i = 7; i < v1.size(); i++)
+    //     ASSERT(v1[i] == 42);
+
+    // size_t prev_capacity = v1.capacity();
+    // v1.resize(10);
+    // ASSERT(v1.size() == 10);
+    // ASSERT(v1.capacity() == prev_capacity);
+    // for (size_t i = 0; i < 5; i++)
+    //     ASSERT(v1[i] == arr1[i]);
+    // for (size_t i = 5; i < 7; i++)
+    //     ASSERT(v1[i] == int());
+    // for (size_t i = 7; i < v1.size(); i++)
+    //     ASSERT(v1[i] == 42);
+
+    // v1.resize(6);
+    // ASSERT(v1.size() == 6);
+    // ASSERT(v1.capacity() >= 6);
+    // for (size_t i = 0; i < 5; i++)
+    //     ASSERT(v1[i] == arr1[i]);
+    // ASSERT(v1[5] == int());
+
+    // v1.resize(1);
+    // ASSERT(v1.size() == 1);
+    // ASSERT(v1.capacity() >= 1);
+    // ASSERT(v1[0] == arr1[0]);
+
+    // v1.resize(0);
+    // ASSERT(v1.size() == 0);
+    // ASSERT(v1.capacity() >= 0);
+}
+
 void modifiers()
 {
     // pop_back_test();
-    //insert_test();
+    insert_test();
     //copy_test();
-    iterator_test();
+    //resize_test();
+    //iterator_test();
     // erase_test();
    // assign_test();
 }

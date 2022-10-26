@@ -28,6 +28,7 @@ namespace ft
             Vectoriterator() : _ptr(NULL) {}
             Vectoriterator(const Vectoriterator& obj) : _ptr(obj._ptr) {
                 *this = obj;
+
             }
             Vectoriterator<T> &operator=(const Vectoriterator& rhs)
             {
@@ -206,8 +207,8 @@ namespace ft
             
             void ReAlloc(size_t n)
             {
-                if (n < _capacity || !n)
-                    return ;
+                // if (n < _capacity || !n)
+                //     return ;
                 T* new_block = 0;
 
                 new_block = _alloc.allocate( n);
@@ -254,7 +255,7 @@ namespace ft
                 }
                 ~vector() {
                     clear();
-                    _alloc.deallocate(_data, 1);
+                    _alloc.deallocate(_data, _capacity);
                     return ;
                 }
                 vector<T>   operator=(const vector<T> &rhs)
@@ -270,14 +271,26 @@ namespace ft
                     size_type res = _alloc.max_size();
                     return (res);
                 }
-                void                resize(size_type n, value_type vale = value_type()) {
-                    std::cout << sizeof(vale) << std::endl;
-                    std::cout << n << std::endl;
+                void                resize(size_type n, value_type val = value_type()) {
+                    if (n > _size)
+                        insert(end(),n -_size, val);
+                    else
+                    {
+                        for (size_type i = 0; i < n; i++)
+                        {
+                            _alloc.destroy(_data + (_size - i));
+                        }
+                        this->_size = n;
+                    }
+
+                
+                    
                 }
                 void                reserve (size_type new_cap){
                     if (new_cap > max_size())
                         throw std::length_error("vector");
-                    ReAlloc(new_cap);
+                    if (new_cap > _capacity)
+                        ReAlloc(new_cap);
                 }
                 size_type           capacity() const { return _capacity; }
                 /*------------------ELEMENT ACCESSORS --------------*/
@@ -463,6 +476,7 @@ namespace ft
                     {
                         for (size_type i = 0; i < n; i++)
                             push_back(val);
+                        return ;
                     }
                     if (_size + n >= _capacity)
                     {                 
@@ -518,18 +532,19 @@ namespace ft
 
                     ReAlloc(_size + n); 
                     _size += n;
-                    size_type i = index;
+                    size_type i = _size - 1;
         
                     
-                    while (i < _size - n)
+                    while (i >= index)
                     {
-                        _alloc.construct(_data + i + n, *(_data + i));
-                        i++;
-                        _alloc.destroy(_data + i);
+                        _alloc.construct(_data + i, *(_data + i - 1));
+                        _alloc.destroy(_data + i - 1);
+                        i--;
+
                     }
                     for (size_type k = 0; k < n; k++)
                     {
-                        _alloc.construct(_data + k, *(first + k));
+                        _alloc.construct(_data + k + index, *(first + k + index));
 
                     }
                
