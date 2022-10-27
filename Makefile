@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/24 11:42:27 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/10/27 14:58:52 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ INCLUDE = -Iinclude/
 
 DEP		= ${SRC:%.cpp=%.d}
 
-CFLAGS	= -Wall -Werror -Wextra -MMD ${INCLUDE} -g  -std=c++98 #-fsanitize=address
+CFLAGS	= -Wall -Werror -Wextra -MMD ${INCLUDE} -g  #-std=c++98 #-fsanitize=address
 
 NAME	= ft_containers
 

@@ -14,6 +14,7 @@
 # include <iterator>
 # include <algorithm>
 #include <iomanip>
+# include <type_traits>
 
 namespace ft
 {
@@ -47,15 +48,20 @@ namespace ft
     template<typename T>
         struct is_integral<volatile T> : is_integral<T> {};
     template<> 
-        struct is_integral<bool> : true_type { };
+        struct is_integral<bool> : public true_type { };
     template<> 
-        struct is_integral<char> : true_type { };
+        struct is_integral<char> : public true_type { };
     template<>
-        struct is_integral<int> : true_type { };
+        struct is_integral<int> : public true_type { };
     template<>
-        struct is_integral<unsigned char> : true_type { };
+        struct is_integral<unsigned int> : public true_type { };
     template<>
-        struct is_integral<signed char> : true_type { };
+        struct is_integral<unsigned long> : public true_type { };
+    
+    template<>
+        struct is_integral<unsigned char> : public true_type { };
+    template<>
+        struct is_integral<signed char> : public true_type { };
 
 
 
