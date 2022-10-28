@@ -417,52 +417,115 @@ namespace ft
                
                 iterator            insert (iterator position, const value_type& val)
                 {
-                    insert(position, 1, val);
-                    return position;
-                }
-                 
-                //template<typename InputIt>
-                void    insert(iterator position, size_type n, const value_type& val)
-                {
                     size_type index = position - begin();
-                    size_type        i;
+                    size_type n = 1;
+                    size_type i = _size - 1;
+                    size_type end = (_size + 1) - 1;
 
 
                     if (n == 0)
-                        return ;
-                     if (_size + n >= _capacity)
+                        return position;
+                     if (_size + n > _capacity)
                     {                 
                         if (_size == 0)
                             ReAlloc(n);
                         else
                         {
                             size_type j;
-                            for (j = 2; (_size + n >= _capacity * j); i++)
+                            for (j = 2; (_size + n > _capacity * j); j++)
                                 ;
                             ReAlloc(_capacity * j);
                         }
                     }
-                    if (index == 0)
+                    if (position == this->end() || _size == 0)
                     {
-                        while (i < _size)
-                        {
-                            std::cout << "PUTting " << *(_data + i) << " IN " << _data + i + n;
-                            _alloc.construct(_data + i + n, *(_data + i));
-                            _alloc.destroy(_data + i);
-                            i++;
-                        }
+    
+                        *(_data + _size) = val;
+                        _size++;
+                        return iterator(_data + index);
                     }
-                    if (position == end())
+                    std::cout << "end : " << end << std::endl;
+                    std::cout << "i is: " << i << std::endl;
+                    std::cout << "_index : " << index << std::endl;
+                    while (end != index)
                     {
-                        for (size_type i = 0; i < n; i++)
-                            _alloc.construct(_data + i + _size, val);
-                        _size += n; 
+                        for (size_type j= 0; j < _size; j++)
+                            std::cout << *(_data +  j) << " ";
+                        std::cout << std::endl;
+                        std::cout << "i is: " << i << std::endl;
+
+                        std::cout << "INSERTING [" << *(_data + i) << "](Index : " << i <<") AT POS " << end << std::endl;
+                        _alloc.construct( _data + end, *(_data + i));
+                        _alloc.destroy(_data + i);
+                        i--;
+                        end--;
+
+                    }
+                    _size++;
+                    *(_data + index) = val;
+                    return iterator(_data + index);
+                }
+                 
+                //template<typename InputIt>
+                void    insert(iterator position, size_type n, const value_type& val)
+                {
+                    size_type index = position - begin();
+                    size_type        i = 0;
+
+
+                    if (n == 0)
+                        return ;
+                    if (position == this->end() || !_size)
+                    {
+                        for (size_type k = 0; k < n; k++)
+                        {
+                            *(_data + k) = val;
+                        }
+                        _size++;
                         return ;
                     }
+                     if (_size + n > _capacity)
+                    {                 
+                        if (_size == 0)
+                            ReAlloc(n);
+                        else
+                        {
+                            size_type j;
+                            for (j = 2; (_size + n > _capacity * j); j++)
+                                ;
+                            ReAlloc(_capacity * j);
+                        }
+                    }
+                    // if (index == 0)
+                    // {
+                    //     while (i < _size)
+                    //     {
+                    //         std::cout << "PUTting " << *(_data + i) << " IN " << _data + i + n;
+                    //         _alloc.construct(_data + i + n, *(_data + i));
+                    //         _alloc.destroy(_data + i);
+                    //         i++;
+                    //     }
+                    // }
+                    // if (position == end())
+                    // {
+                    //     for (size_type i = 0; i < n; i++)
+                    //         _alloc.construct(_data + i + _size, val);
+                    //     _size += n; 
+                    //     return ;
+                    // }
                     i = _size - 1;
-                    size_type end = _size + (n - 1);
-                    while (i >= index && i != 0)
+                    size_type end = (_size + n) - 1;
+                    // std::cout << "end : " << end << std::endl;
+                    // std::cout << "i is: " << i << std::endl;
+                    // std::cout << "_index : " << index << std::endl;
+                    while (end != index)
                     {
+                        // for (size_type j= 0; j < _size; j++)
+                        //     std::cout << *(_data +  j) << " ";
+                        // std::cout << std::endl;
+                        // std::cout << "i is: " << i << std::endl;
+
+                        //std::cout << "INSERTING [" << *(_data + i) << "](Index : " << i <<") AT POS " << end << std::endl;
                         _alloc.construct( _data + end, *(_data + i));
                         _alloc.destroy(_data + i);
                         i--;
@@ -470,6 +533,7 @@ namespace ft
 
                     }
                     _size += n;
+
                     for (size_type k = 0; k < n; k++)
                     {
                         _alloc.construct(_data + k + index, val);
@@ -477,7 +541,7 @@ namespace ft
 
                 }
                    // template <typename InputIt>
-                        void               insert (iterator position, iterator first, iterator last, typename std::enable_if<!std::is_integral<iterator>::value, iterator>::type* = NULL )
+                    void               insert (iterator position, iterator first, iterator last)
                     {
                     size_type index = position - begin();
                     size_type    n = last - first;
@@ -487,19 +551,29 @@ namespace ft
                         return ;
                     if (_size + n >= _capacity)
                         ReAlloc(_size + n);
-                    if (index == 0 && !_size)
-                    {
-                        for (size_type k = 0; k < n; k++)
-                        {
-                            _alloc.construct(_data + k + index, *(first + k));
-                        }
-                        _size += n;
-                        return ;
-                    }
+                    // if (index == 0 && !_size)
+                    // {
+                    //     for (size_type k = 0; k < n; k++)
+                    //     {
+                    //         _alloc.construct(_data + k + index, *(first + k));
+                    //     }
+                    //     _size += n;
+                    //     return ;
+                    // }
+                    
                     i = _size - 1;
-                    size_type end = _size + (n - 1);
-                    while (i >= index)
+                    size_type end = (_size + n) - 1;
+                    // std::cout << "end : " << end << std::endl;
+                    // std::cout << "i is: " << i << std::endl;
+                    // std::cout << "_index : " << index << std::endl;
+                    while (end != index)
                     {
+                        // for (size_type j= 0; j < _size; j++)
+                        //     std::cout << *(_data +  j) << " ";
+                        // std::cout << std::endl;
+                        // std::cout << "i is: " << i << std::endl;
+
+                        //std::cout << "INSERTING [" << *(_data + i) << "](Index : " << i <<") AT POS " << end << std::endl;
                         _alloc.construct( _data + end, *(_data + i));
                         _alloc.destroy(_data + i);
                         i--;
@@ -597,5 +671,6 @@ namespace ft
             return !(lhs > rhs);
         }
 }
+
 
 # endif
