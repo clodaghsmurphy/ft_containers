@@ -144,7 +144,7 @@ struct iterator_traits<_Iterator*>
         }
         reference operator[](difference_type n) const
         {
-            return (*(m_iterator.base() + n));
+            return (*(*this + n));
         }
         bool operator==(const Reverse_iterator<Iterator> y)
         {
@@ -215,12 +215,12 @@ struct iterator_traits<_Iterator*>
         template <typename Iter>
        bool operator<(const Reverse_iterator<Iter> x, const Reverse_iterator<Iter> y)
             {
-                return x.base() < y.base();
+                return y.base() < x.base();
             }
         template <typename Iter>
         bool operator>(const Reverse_iterator<Iter> x, const Reverse_iterator<Iter> y)
             {
-                return x.base() > y.base();
+                return x.base() < y.base();
             }
         template <typename Iterator>
         bool operator!=(const Reverse_iterator<Iterator> &x, const Reverse_iterator<Iterator> &y)

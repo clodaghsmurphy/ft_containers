@@ -37,7 +37,7 @@ int    vectors_equal(T &vec, U &vec2)
             std::cout << std::endl;
             std::cout << "MY VEC IS : " << std::endl;
             print_container(vec2);
-            //std::cout << *it << " != " << *it2 << std::endl;
+            std::cout << *it << " != " << *it2 << std::endl;
             return (0);
 
         }
@@ -78,278 +78,278 @@ void pop_back_test()
 
 void    insert_test()
 {
-    //  {
-    //      std::cout <<std::endl << "\033[1m\033[33mVECTOR INSERT : \033[0m\033[37m" << std::endl;
+      {
+          std::cout <<std::endl << "\033[1m\033[33mVECTOR INSERT : \033[0m\033[37m" << std::endl;
 
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
-
-
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator it = vec.begin();
-
-    //      it = vec.insert(it, 5);
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_it = my_vec.begin();
-
-    //      my_vec.insert(my_it, 5);
-
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
-
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      for (int i = 0; i < 100; i++)
-    //          vec.push_back(i);
-    //      std::vector<int>::iterator it = vec.begin();
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator it = vec.begin();
 
-    //      it = vec.insert(it, 5);
-    //      for (int i = 0; i < 100; i++)
-    //          my_vec.push_back(i);
-    //      ft::vector<int>::iterator my_it = my_vec.begin();
+          it = vec.insert(it, 5);
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_it = my_vec.begin();
 
-    //      my_vec.insert(my_it, 5);
+          my_vec.insert(my_it, 5);
 
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
 
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
-
-
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator it = vec.begin();
-
-    //      it = vec.insert(it + 2, 5);
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_it = my_vec.begin();
-
-    //      my_vec.insert(my_it + 2, 5);
-
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
-
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator it = vec.end();
+          for (int i = 0; i < 100; i++)
+              vec.push_back(i);
+          std::vector<int>::iterator it = vec.begin();
 
-    //      it = vec.insert(it, 5);
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_it = my_vec.end();
+          it = vec.insert(it, 5);
+          for (int i = 0; i < 100; i++)
+              my_vec.push_back(i);
+          ft::vector<int>::iterator my_it = my_vec.begin();
 
-    //      my_vec.insert(my_it, 5);
+          my_vec.insert(my_it, 5);
 
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
 
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator it = vec.begin();
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator it = vec.begin();
 
-    //      vec.insert(it, 3, 0);
-    //      /* std::cout << "in main and container is : " << std::endl;
-    //      print_container(vec); */
+          it = vec.insert(it + 2, 5);
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_it = my_vec.begin();
 
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_it = my_vec.begin();
+          my_vec.insert(my_it + 2, 5);
 
-    //      my_vec.insert(my_it, 3, 0);
-    //      /* std::cout << "in main and my container is : " << std::endl;
-    //      print_container(my_vec); */
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
 
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //    {
-
-    //      std::vector<int> vec;
-    //      ft::vector<int> my_vec;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator it = vec.end();
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator it = vec.end();
 
-    //      vec.insert(it, 3, 0);
-    //      /* std::cout << "in main and container is : " << std::endl;
-    //      print_container(vec); */
+          it = vec.insert(it, 5);
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_it = my_vec.end();
 
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_it = my_vec.end();
+          my_vec.insert(my_it, 5);
 
-    //      my_vec.insert(my_it, 3, 0);
-    //      /* std::cout << "in main and my container is : " << std::endl;
-    //      print_container(my_vec); */
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
 
-    //      if (vectors_equal(vec, my_vec))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //    {
-
-    //      std::vector<int> vec;
-    //      std::vector<int> vec2;
-    //      ft::vector<int> my_vec;
-    //      ft::vector<int> my_vec2;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
-    //      std::vector<int>::iterator itb = vec.begin();
-    //      std::vector<int>::iterator itb2 = vec2.begin();
-    //      std::vector<int>::iterator ite = vec.end();
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator it = vec.begin();
 
-    //      vec2.insert(itb2 , itb, ite);
-    //     //   std::cout << "in main and container is : " << std::endl;
-    //     //   print_container(vec);
+          vec.insert(it, 3, 0);
+          /* std::cout << "in main and container is : " << std::endl;
+          print_container(vec); */
 
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_itb = my_vec.begin();
-    //      ft::vector<int>::iterator my_itb2 = my_vec2.begin();
-    //      ft::vector<int>::iterator my_ite = my_vec.end();
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_it = my_vec.begin();
 
-    //      my_vec2.insert(my_itb2, my_itb, my_ite);
-    //     //   std::cout << "in main and my container is : " << std::endl;
-    //     //   print_container(my_vec);
+          my_vec.insert(my_it, 3, 0);
+          /* std::cout << "in main and my container is : " << std::endl;
+          print_container(my_vec); */
 
-    //      if (vectors_equal(vec2, my_vec2))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+        {
 
-    //      std::vector<int> vec;
-    //      std::vector<int> vec2;
-    //      ft::vector<int> my_vec;
-    //      ft::vector<int> my_vec2;
+          std::vector<int> vec;
+          ft::vector<int> my_vec;
 
 
-    //      for (int i = 0; i < 100; i++)
-    //          vec.push_back(1);
-    //      std::vector<int>::iterator itb = vec.begin();
-    //      std::vector<int>::iterator itb2 = vec2.begin();
-    //      std::vector<int>::iterator ite = vec.end();
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator it = vec.end();
 
-    //      vec2.insert(itb2 , itb, ite);
-    //     //   std::cout << "in main and container is : " << std::endl;
-    //     //   print_container(vec);
+          vec.insert(it, 3, 0);
+          /* std::cout << "in main and container is : " << std::endl;
+          print_container(vec); */
 
-    //      for (int i = 0; i < 100; i++)
-    //          my_vec.push_back(1);
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_it = my_vec.end();
+
+          my_vec.insert(my_it, 3, 0);
+          /* std::cout << "in main and my container is : " << std::endl;
+          print_container(my_vec); */
+
+          if (vectors_equal(vec, my_vec))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+        {
+
+          std::vector<int> vec;
+          std::vector<int> vec2;
+          ft::vector<int> my_vec;
+          ft::vector<int> my_vec2;
+
+
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
+          std::vector<int>::iterator itb = vec.begin();
+          std::vector<int>::iterator itb2 = vec2.begin();
+          std::vector<int>::iterator ite = vec.end();
+
+          vec2.insert(itb2 , itb, ite);
+            // std::cout << "in main and container is : " << std::endl;
+            // print_container(vec);
+
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_itb = my_vec.begin();
+          ft::vector<int>::iterator my_itb2 = my_vec2.begin();
+          ft::vector<int>::iterator my_ite = my_vec.end();
+
+          my_vec2.insert(my_itb2, my_itb, my_ite);
+            //std::cout << "in main and my container is : " << std::endl;
+            //print_container(my_vec);
+
+          if (vectors_equal(vec2, my_vec2))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
+
+          std::vector<int> vec;
+          std::vector<int> vec2;
+          ft::vector<int> my_vec;
+          ft::vector<int> my_vec2;
+
+
+          for (int i = 0; i < 100; i++)
+              vec.push_back(1);
+          std::vector<int>::iterator itb = vec.begin();
+          std::vector<int>::iterator itb2 = vec2.begin();
+          std::vector<int>::iterator ite = vec.end();
+
+          vec2.insert(itb2 , itb, ite);
+            // std::cout << "in main and container is : " << std::endl;
+            // print_container(vec);
+
+          for (int i = 0; i < 100; i++)
+              my_vec.push_back(1);
   
-    //      ft::vector<int>::iterator my_itb = my_vec.begin();
-    //      ft::vector<int>::iterator my_itb2 = my_vec2.begin();
-    //      ft::vector<int>::iterator my_ite = my_vec.end();
+          ft::vector<int>::iterator my_itb = my_vec.begin();
+          ft::vector<int>::iterator my_itb2 = my_vec2.begin();
+          ft::vector<int>::iterator my_ite = my_vec.end();
 
-    //      my_vec2.insert(my_itb2, my_itb, my_ite);
-    //     //   std::cout << "in main and my container is : " << std::endl;
-    //     //   print_container(my_vec);
+          my_vec2.insert(my_itb2, my_itb, my_ite);
+            //std::cout << "in main and my container is : " << std::endl;
+            //print_container(my_vec);
 
-    //      if (vectors_equal(vec2, my_vec2))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
-    //  {
+          if (vectors_equal(vec2, my_vec2))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
+      {
 
-    //      std::vector<int> vec;
-    //      std::vector<int> vec2;
-    //      ft::vector<int> my_vec;
-    //      ft::vector<int> my_vec2;
+          std::vector<int> vec;
+          std::vector<int> vec2;
+          ft::vector<int> my_vec;
+          ft::vector<int> my_vec2;
 
 
-    //      vec.push_back(1);
-    //      vec.push_back(2);
-    //      vec.push_back(3);
-    //      vec.push_back(4);
+          vec.push_back(1);
+          vec.push_back(2);
+          vec.push_back(3);
+          vec.push_back(4);
 
-    //      std::vector<int>::iterator itb = vec.end();
-    //      std::vector<int>::iterator itb2 = vec2.begin();
-    //      std::vector<int>::iterator ite = vec.end();
+          std::vector<int>::iterator itb = vec.end();
+          std::vector<int>::iterator itb2 = vec2.begin();
+          std::vector<int>::iterator ite = vec.end();
 
-    //      vec2.insert(itb2 , itb, ite);
-    //     //   std::cout << "in main and container is : " << std::endl;
-    //     //   print_container(vec);
+          vec2.insert(itb2 , itb, ite);
+            // std::cout << "in main and container is : " << std::endl;
+            // print_container(vec);
 
-    //      my_vec.push_back(1);
-    //      my_vec.push_back(2);
-    //      my_vec.push_back(3);
-    //      my_vec.push_back(4);
-    //      ft::vector<int>::iterator my_itb = my_vec.end();
-    //      ft::vector<int>::iterator my_itb2 = my_vec2.begin();
-    //      ft::vector<int>::iterator my_ite = my_vec.end();
+          my_vec.push_back(1);
+          my_vec.push_back(2);
+          my_vec.push_back(3);
+          my_vec.push_back(4);
+          ft::vector<int>::iterator my_itb = my_vec.end();
+          ft::vector<int>::iterator my_itb2 = my_vec2.begin();
+          ft::vector<int>::iterator my_ite = my_vec.end();
 
-    //      my_vec2.insert(my_itb2, my_itb, my_ite);
-    //     //   std::cout << "in main and my container is : " << std::endl;
-    //     //   print_container(my_vec);
+          my_vec2.insert(my_itb2, my_itb, my_ite);
+            //std::cout << "in main and my container is : " << std::endl;
+            //print_container(my_vec);
 
-    //      if (vectors_equal(vec2, my_vec2))
-    //          std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //      else
-    //          std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    //  }
+          if (vectors_equal(vec2, my_vec2))
+              std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+          else
+              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+      }
     {
         int             arr1[5] = {1, 2, 3, 4, 5};
         std::vector<int> v1;
@@ -395,146 +395,145 @@ void    insert_test()
         else
             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     }
-    //  {
-    //     std::vector<int> vec;
-    //     std::vector<int> vec2;
-    //     ft::vector<int> my_vec;
-    //     ft::vector<int> my_vec2;
+      {
+         std::vector<int> vec;
+         std::vector<int> vec2;
+         ft::vector<int> my_vec;
+         ft::vector<int> my_vec2;
 
 
   
-    //     //std::vector<int>::iterator itb = vec.begin();
-    //     std::vector<int>::iterator itb2 = vec2.end();
-    //     //std::vector<int>::iterator ite = vec.end();
+         //std::vector<int>::iterator itb = vec.begin();
+         std::vector<int>::iterator itb2 = vec2.end();
+         //std::vector<int>::iterator ite = vec.end();
 
-    //     itb2 = vec2.insert(itb2 , 1);
-    //     itb2 = vec2.insert(itb2 , 2);
-    //     //  std::cout << "in main and container is : " << std::endl;
-    //     //  print_container(vec);
+         itb2 = vec2.insert(itb2 , 1);
+         itb2 = vec2.insert(itb2 , 2);
+        //    std::cout << "in main and container is : " << std::endl;
+        //    print_container(vec);
 
     
-    //     //ft::vector<int>::iterator my_itb = my_vec.begin();
-    //     ft::vector<int>::iterator my_itb2 = my_vec2.end();
-    //     //ft::vector<int>::iterator my_ite = my_vec.end();
+         //ft::vector<int>::iterator my_itb = my_vec.begin();
+         ft::vector<int>::iterator my_itb2 = my_vec2.end();
+         //ft::vector<int>::iterator my_ite = my_vec.end();
 
-    //     my_itb2 = my_vec2.insert(my_itb2, 1);
-    //     my_itb2 =my_vec2.insert(my_itb2, 2);
-    //      std::cout << "in main and my container is : " << std::endl;
-    //      print_container(my_vec);
+         my_itb2 = my_vec2.insert(my_itb2, 1);
+         my_itb2 =my_vec2.insert(my_itb2, 2);
+        //   std::cout << "in main and my container is : " << std::endl;
+        //   print_container(my_vec);
 
-    //     if (vectors_equal(vec2, my_vec2))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    // }
-    // {
+         if (vectors_equal(vec2, my_vec2))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
+     {
 
-    //     std::vector<int> vec;
-    //     std::vector<int> vec2;
-    //     ft::vector<int> my_vec;
-    //     ft::vector<int> my_vec2;
+         std::vector<int> vec;
+         std::vector<int> vec2;
+         ft::vector<int> my_vec;
+         ft::vector<int> my_vec2;
 
 
-    //     vec.push_back(1);
-    //     vec.push_back(2);
-    //     vec.push_back(3);
-    //     vec.push_back(4);
+         vec.push_back(1);
+         vec.push_back(2);
+         vec.push_back(3);
+         vec.push_back(4);
     
-    //     std::vector<int>::iterator itb = vec.begin();
-    //     std::vector<int>::iterator itb2 = vec2.end();
-    //     std::vector<int>::iterator ite = vec.end();
+         std::vector<int>::iterator itb = vec.begin();
+         std::vector<int>::iterator itb2 = vec2.end();
+         std::vector<int>::iterator ite = vec.end();
 
-    //     vec2.insert(itb2 , itb, ite);
-    //     //  std::cout << "in main and container is : " << std::endl;
-    //     //  print_container(vec);
+         vec2.insert(itb2 , itb, ite);
+        //    std::cout << "in main and container is : " << std::endl;
+        //    print_container(vec);
 
-    //     my_vec.push_back(1);
-    //     my_vec.push_back(2);
-    //     my_vec.push_back(3);
-    //     my_vec.push_back(4);
-    //     ft::vector<int>::iterator my_itb = my_vec.begin();
-    //     ft::vector<int>::iterator my_itb2 = my_vec2.end();
-    //     ft::vector<int>::iterator my_ite = my_vec.end();
+         my_vec.push_back(1);
+         my_vec.push_back(2);
+         my_vec.push_back(3);
+         my_vec.push_back(4);
+         ft::vector<int>::iterator my_itb = my_vec.begin();
+         ft::vector<int>::iterator my_itb2 = my_vec2.end();
+         ft::vector<int>::iterator my_ite = my_vec.end();
 
-    //     my_vec2.insert(my_itb2, my_itb, my_ite);
-    //     //  std::cout << "in main and my container is : " << std::endl;
-    //     //  print_container(my_vec);
+         my_vec2.insert(my_itb2, my_itb, my_ite);
+        //    std::cout << "in main and my container is : " << std::endl;
+        //    print_container(my_vec);
 
-    //     if (vectors_equal(vec2, my_vec2))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    // }
-    // {
-    //     int         arr1[5] = {1, 2, 3, 4, 5};
-    //     std::string arr2[3] = {"bonjour", "je", "suis"};
-    //    // float       arr3[4] = {42.1, 42.2, 42.3, 42.4};
+         if (vectors_equal(vec2, my_vec2))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
+     {
+         int         arr1[5] = {1, 2, 3, 4, 5};
+         std::string arr2[3] = {"bonjour", "je", "suis"};
+         //float       arr3[4] = {42.1, 42.2, 42.3, 42.4};
 
-    //     ft::vector<int> v1(arr1, arr1 + 5);
-    //     std::vector<int> v2(arr1, arr1 + 5);
+         ft::vector<int> v1(arr1, arr1 + 5);
+         std::vector<int> v2(arr1, arr1 + 5);
     
-    // std::cout << v2.size() << " vs " << v1.size() << std::endl;
-    // if (vectors_equal(v2, v1))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    // }
-    // {
-    //     std::string arr2[3] = {"bonjour", "je", "suis"};
+     if (vectors_equal(v2, v1))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
+     {
+         std::string arr2[3] = {"bonjour", "je", "suis"};
 
-    //     ft::vector<std::string> v2(arr2, arr2 + 3);
-    //     std::vector<std::string> v3(arr2, arr2 + 3);
+         ft::vector<std::string> v2(arr2, arr2 + 3);
+         std::vector<std::string> v3(arr2, arr2 + 3);
 
-    //     for (size_t i = 0; i < v2.size(); i++)
-    //     {
-    //         if (!(v2[i] == arr2[i]))
-    //         {
-    //             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl; 
-    //             std::cout << "MINE : " << v2[i] << std::endl;
-    //             std::cout << "ARRAY : " << arr2[i] << std::endl;
-    //         }
-    //     }
+         for (size_t i = 0; i < v2.size(); i++)
+         {
+             if (!(v2[i] == arr2[i]))
+             {
+                 std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl; 
+                 std::cout << "MINE : " << v2[i] << std::endl;
+                 std::cout << "ARRAY : " << arr2[i] << std::endl;
+             }
+         }
         
-    //     if (vectors_equal(v3, v2))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    // }
-    // {
-    //     int             arr1[5] = {1, 2, 3, 4, 5};
-    //     ft::vector<int> v1;
-    //     ft::vector<int>::iterator it;
-    //     std::vector<int> v2;
-    //     std::vector<int>::iterator it2;
+         if (vectors_equal(v3, v2))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
+     {
+         int             arr1[5] = {1, 2, 3, 4, 5};
+         ft::vector<int> v1;
+         ft::vector<int>::iterator it;
+         std::vector<int> v2;
+         std::vector<int>::iterator it2;
 
-    //     it = v1.insert(v1.end(), 1);
-    //     it2 = v2.insert(v2.end(), 1);
-    //     if (vectors_equal(v2, v1))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+         it = v1.insert(v1.end(), 1);
+         it2 = v2.insert(v2.end(), 1);
+         if (vectors_equal(v2, v1))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
 
-    //     it = v1.insert(v1.end(), 2);
-    //     it2 = v2.insert(v2.end(), 2);
-    //     if (vectors_equal(v2, v1))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+         it = v1.insert(v1.end(), 2);
+         it2 = v2.insert(v2.end(), 2);
+         if (vectors_equal(v2, v1))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
 
-    //     it = v1.insert(v1.begin(), 0);
-    //     it2 = v2.insert(v2.begin(), 0);
-    //     if (vectors_equal(v2, v1))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+         it = v1.insert(v1.begin(), 0);
+         it2 = v2.insert(v2.begin(), 0);
+         if (vectors_equal(v2, v1))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
 
-    //     v1.insert(v1.begin() + 1, arr1 + 1, arr1 + 4);
-    //     v2.insert(v2.begin() + 1, arr1 + 1, arr1 + 4);
-    //     if (vectors_equal(v2, v1))
-    //         std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    //     else
-    //         std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-    // }
+         v1.insert(v1.begin() + 1, arr1 + 1, arr1 + 4);
+         v2.insert(v2.begin() + 1, arr1 + 1, arr1 + 4);
+         if (vectors_equal(v2, v1))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
 }
 
 
@@ -637,14 +636,14 @@ void    assign_test()
         vec.push_back(2);
         vec.push_back(3);
         vec.push_back(4);
-       // std::vector<int>::iterator it = vec.begin();
+        //std::vector<int>::iterator it = vec.begin();
 
         vec2.assign(vec.end(), vec.end());
         my_vec.push_back(1);
         my_vec.push_back(2);
         my_vec.push_back(3);
         my_vec.push_back(4);
-        //ft::vector<int>::iterator my_it = my_vec.begin();
+ //       ft::vector<int>::iterator my_it = my_vec.begin();
 
         my_vec2.assign(my_vec.end(), my_vec.end());
 
@@ -976,18 +975,16 @@ void copy_test()
          else
              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
      }
-    //  {
-    //      ft::vector< ft::vector<char*> > v4_duplicated;
-    //      std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
+      {
+        //   ft::vector< ft::vector<char*> > v4_duplicated;
+        //   std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
 
-    //      ft::vector< ft::vector<char*> > v4(2, ft::vector<char*>(2, NULL));
-    //      std::cout << "v4 after copy initializiation is : " << &v4 << std::endl;
-    //      v4 = v4_duplicated;
-    //      std::cout << "v4 after copy assignment is : " << &v4 << std::endl;
-    //      std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
-
-
-    //  }
+        //   ft::vector< ft::vector<char*> > v4(2, ft::vector<char*>(2, NULL));
+        //   std::cout << "v4 after copy initializiation is : " << &v4 << std::endl;
+        //   v4 = v4_duplicated;
+        //   std::cout << "v4 after copy assignment is : " << &v4 << std::endl;
+        //   std::cout << "v4 duplicated empty is : " << &v4_duplicated << std::endl;
+      }
     {
         std::string                     arr2[3] = {"bonjour", "je", "suis"};
 
@@ -1031,8 +1028,7 @@ void copy_test()
 
             while (it1 != v2.end() && it2 != v1.end())
             {
-                std::cout << *it1 << " | ";
-                std::cout << *it2 << std::endl;
+                
                 it1++;
                 it2++;
             }
@@ -1055,8 +1051,7 @@ void copy_test()
 
             while (it1 != v2.rend() && it2 != v1.rend())
             {
-                std::cout << *it1 << " | ";
-                std::cout << *it2 << std::endl;
+                
                 it1++;
                 it2++;
             }
@@ -1085,8 +1080,7 @@ void resize_test()
     ft::vector<int> v1(arr1, arr1 + 5);
     std::vector<int> v2(arr1, arr1 + 5);
 
-    std::cout << "VEC CAP : " << v2.capacity() << " MY VEC : " << v1.capacity() << std::endl;
-        std::cout << "VEC SIZE : " << v2.size() << " MY VEC : " << v1.size() << std::endl;
+    
     v1.resize(7);
     v2.resize(7);
     
@@ -1099,7 +1093,6 @@ void resize_test()
      for (size_t i = 5; i < 7; i++)
      for (size_t i = 7; i < v1.size(); i++)
 
-     //size_t prev_capacity = v1.capacity();
      v1.resize(10);
      for (size_t i = 0; i < 5; i++)
      for (size_t i = 5; i < 7; i++)
@@ -1117,9 +1110,9 @@ void modifiers()
 {
      pop_back_test();
     insert_test();
-    // copy_test();
-    // resize_test();
-    // iterator_test();
-    //  erase_test();
-    // assign_test();
+     copy_test();
+    resize_test();
+     iterator_test();
+      erase_test();
+     assign_test();
 }

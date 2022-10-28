@@ -242,9 +242,9 @@ namespace ft
                     }
 
                     template <typename InputIt>
-                    vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename std::enable_if<!std::is_integral<InputIt>::value, InputIt>::type* = NULL ) :  _data(NULL), _size(0), _capacity(0), _alloc(alloc)
+                    vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ) :  _data(NULL), _size(0), _capacity(0), _alloc(alloc)
                     {
-                        _data = _alloc.allocate(_capacity); 
+                        //_data = _alloc.allocate(_capacity); 
                         insert(begin(), first, last);
             
                     } 
@@ -274,8 +274,26 @@ namespace ft
                     return (res);
                 }
                 void                resize(size_type n, value_type val = value_type()) {
+                    if (n > _capacity)
+                    {                 
+                        if (_size == 0)
+                            ReAlloc(n);
+                        else
+                        {
+                            size_type j;
+                            for (j = 2; (n > _capacity * j); j++)
+                                ;
+                            ReAlloc(_capacity * j);
+                        }
+                    }
                     if (n > _size)
-                        insert(end(), n -_size, val);
+                    {
+                        for (size_type i = _size; i < n; i++)
+                        {
+                            _alloc.construct(_data + i, val);
+                        }
+                        _size = n;
+                    }
                     else
                     {
                         for (size_type i = 0; i < n; i++)
@@ -444,17 +462,17 @@ namespace ft
                         _size++;
                         return iterator(_data + index);
                     }
-                    std::cout << "end : " << end << std::endl;
-                    std::cout << "i is: " << i << std::endl;
-                    std::cout << "_index : " << index << std::endl;
+                    // std::cout << "end : " << end << std::endl;
+                    // std::cout << "i is: " << i << std::endl;
+                    // std::cout << "_index : " << index << std::endl;
                     while (end != index)
                     {
-                        for (size_type j= 0; j < _size; j++)
-                            std::cout << *(_data +  j) << " ";
-                        std::cout << std::endl;
-                        std::cout << "i is: " << i << std::endl;
+                        // for (size_type j= 0; j < _size; j++)
+                        //     std::cout << *(_data +  j) << " ";
+                        // std::cout << std::endl;
+                        // std::cout << "i is: " << i << std::endl;
 
-                        std::cout << "INSERTING [" << *(_data + i) << "](Index : " << i <<") AT POS " << end << std::endl;
+                        // std::cout << "INSERTING [" << *(_data + i) << "](Index : " << i <<") AT POS " << end << std::endl;
                         _alloc.construct( _data + end, *(_data + i));
                         _alloc.destroy(_data + i);
                         i--;
@@ -475,16 +493,7 @@ namespace ft
 
                     if (n == 0)
                         return ;
-                    if (position == this->end() || !_size)
-                    {
-                        for (size_type k = 0; k < n; k++)
-                        {
-                            *(_data + k) = val;
-                        }
-                        _size++;
-                        return ;
-                    }
-                     if (_size + n > _capacity)
+                    if (_size + n > _capacity)
                     {                 
                         if (_size == 0)
                             ReAlloc(n);
@@ -496,6 +505,16 @@ namespace ft
                             ReAlloc(_capacity * j);
                         }
                     }
+                    if (position == this->end() || !_size)
+                    {
+                        for (size_type k = 0; k < n; k++)
+                        {
+                            *(_data + k) = val;
+                        }
+                        _size++;
+                        return ;
+                    }
+                     
                     // if (index == 0)
                     // {
                     //     while (i < _size)
@@ -540,26 +559,29 @@ namespace ft
                     }
 
                 }
-                   // template <typename InputIt>
-                    void               insert (iterator position, iterator first, iterator last)
+                   template <typename InputIt>
+                   
+                    void               insert (iterator position, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value>::type * = nullptr )
                     {
                     size_type index = position - begin();
                     size_type    n = last - first;
                     size_type       i = 0;
 
                     if (n == 0)
+
+
                         return ;
-                    if (_size + n >= _capacity)
+                    if (_size + n > _capacity)
                         ReAlloc(_size + n);
-                    // if (index == 0 && !_size)
-                    // {
-                    //     for (size_type k = 0; k < n; k++)
-                    //     {
-                    //         _alloc.construct(_data + k + index, *(first + k));
-                    //     }
-                    //     _size += n;
-                    //     return ;
-                    // }
+                    if (index == 0 && !_size)
+                    {
+                        for (size_type k = 0; k < n; k++)
+                        {
+                            _alloc.construct((_data +  k + index), *(first + k));
+                        }
+                        _size += n;
+                        return ;
+                    }
                     
                     i = _size - 1;
                     size_type end = (_size + n) - 1;
@@ -590,7 +612,7 @@ namespace ft
                 template<typename InputIt>
                 InputIt            erase (InputIt position, typename std::enable_if<!std::is_integral<InputIt>::value, InputIt>::type* = NULL )
                 {
-
+                    
                     return erase(position, position + 1);
                 }
                 template<typename InputIt>
@@ -658,17 +680,22 @@ namespace ft
      template< class T, class Alloc >
         bool operator<( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
         {
-            return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+            return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
         }
-     template< class T, class Alloc >
-        bool operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+    template< class T, class Alloc >
+        bool operator>( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
         {
             return !(lhs < rhs);
         }
      template< class T, class Alloc >
+        bool operator<=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
+        {
+            return (lhs < rhs || lhs == rhs);
+        }
+     template< class T, class Alloc >
         bool operator>=( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
         {
-            return !(lhs > rhs);
+            return (lhs > rhs || lhs == rhs);
         }
 }
 
