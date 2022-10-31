@@ -36,6 +36,7 @@ namespace ft
                 this->_ptr = rhs._ptr;
                 return *this;
             }
+            
             Vectoriterator<T> &operator++()
             {
                 _ptr++;
@@ -55,7 +56,8 @@ namespace ft
             Vectoriterator<T> operator--(int)
             {
                 Vectoriterator it = *this;
-                --(*this);
+                operator--();
+                //--(*this);
                 return it;
             }
             value_type  *operator->()
@@ -111,6 +113,7 @@ namespace ft
             // {
             //     return (_ptr != y._ptr);
             // }
+            operator Vectoriterator<const T>() const  {return _ptr;}
             template <typename _T>
                 friend std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
             template <typename _T>
@@ -128,7 +131,8 @@ namespace ft
             template <typename _T>
                 friend std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
             template<typename IteratorL, typename IteratorR>
-                friend bool operator!=(const IteratorL &x, const IteratorR &y);
+                friend bool operator!=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y);
+  
 
             // template <typename _T, class Allocator = std::allocator<_T> >
             //     friend class vector;
@@ -136,7 +140,7 @@ namespace ft
             void setPointer(pointer ptr) {  _ptr = ptr; }
     };
 
-
+   
     template <typename _T>
     std::ptrdiff_t operator-(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
     {
@@ -149,7 +153,7 @@ namespace ft
     }
 
     template<typename IteratorL, typename IteratorR>
-    bool operator!=(const IteratorL &x, const IteratorR &y)
+    bool operator!=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
         return !(x._ptr == y._ptr);
     }
@@ -199,6 +203,7 @@ namespace ft
             typedef Vectoriterator<T >          iterator;
             typedef Vectoriterator<const T > const_iterator;
             typedef Reverse_iterator<iterator >     reverse_iterator;
+            typedef Reverse_iterator<const iterator >     const_reverse_iterator;
 
             T*              _data;
             size_t           _size;

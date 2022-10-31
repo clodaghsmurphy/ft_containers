@@ -102,16 +102,15 @@ struct iterator_traits<_Iterator*>
         }
         reference operator*() const
         {
-            Iterator tmp(m_iterator);
-            --tmp;
-            return *tmp;
+            Iterator tmp = m_iterator;
+            return *(--m_iterator());
         }
         pointer operator->() const{
             return &(operator*());
         }
         Reverse_iterator    &operator++()
         {
-            --m_iterator;
+            --m_iterator();
             return *this;
         }
         Reverse_iterator    &operator--()
@@ -150,10 +149,6 @@ struct iterator_traits<_Iterator*>
         {
             return base() == y.base();
         }
-        bool operator!=(const Reverse_iterator<Iterator> &y)
-        {
-            return base() != y.base();
-        }
        
         // template<typename IteratorL, typename IteratorR>
         //     friend bool operator==(const IteratorL &x,  const IteratorR &y);
@@ -184,7 +179,7 @@ struct iterator_traits<_Iterator*>
 
 
         template<typename IteratorL, typename IteratorR>
-        bool operator!=(const IteratorL &x, const IteratorR &y)
+        bool operator!=(const Reverse_iterator<IteratorL> &x, const Reverse_iterator<IteratorR> &y)
         {
             bool res = x.base() != y.base();
             return  res;

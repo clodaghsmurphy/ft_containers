@@ -1106,6 +1106,54 @@ void resize_test()
      v1.resize(0);
 }
 
+template <typename T>
+void    vectorTest_Iterators(T& cont)
+{
+    std::string name("iterators:");
+    std::cout << "\n---------------------";
+        
+    printTestName("53", name, "operator++");
+    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it++)
+        std::cout << *it << " | ";
+
+    printTestName("57", name, "++operator");
+    for (typename T::const_iterator it = cont.begin(); it != cont.end(); ++it)
+        std::cout << *it << " | ";
+
+    if (cont.size())
+    {
+        printTestName("63", name, "operator--");
+        for (typename T::const_iterator it = cont.end(); it != cont.begin() - 1; it--)
+            if (it != cont.end())
+                std::cout << *it << " | ";
+
+        printTestName("68", name, "--operator");
+        for (typename T::const_iterator it = cont.end(); it != cont.begin() - 1; --it)
+            if (it != cont.end())
+                std::cout << *it << " | ";
+    }
+
+    printTestName("74", name, "operator+=");
+    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it += 1)
+        std::cout << *it << " | ";
+        
+    printTestName("78", name, "operator+");
+    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it = it + 1)
+        std::cout << *it << " | ";
+
+    printTestName("82", name, "operator-=");
+    for (typename T::const_iterator it = cont.end() - 1; it != cont.begin() - 1; it -= 1)
+        std::cout << *it << " | ";
+
+    printTestName("86", name, "operator-");
+    for (typename T::const_iterator it = cont.end() - 1; it != cont.begin() - 1; it = it - 1)
+        std::cout << *it << " | ";
+
+    printTestName("90", name, "operator[]");
+    for (std::pair<size_t, typename T::const_iterator> i(0, cont.begin()); i.first < cont.size(); ++i.first)
+        std::cout << i.second[i.first] << " | ";
+}
+
 void modifiers()
 {
      pop_back_test();
