@@ -326,7 +326,7 @@ namespace ft
                 const_reference at( size_type pos ) const { 
                     if (pos >= _size)
                         throw std::out_of_range("value out fo range\n");
-                    return _data + pos; }
+                    return *(_data + pos); }
 
                 reference operator[]( size_type pos ) { return *(_data + pos); }
                 const_reference operator[]( size_type pos ) const { return _data + pos; }
@@ -361,37 +361,24 @@ namespace ft
                     return Reverse_iterator<Vectoriterator<T> >(this->begin()); 
                 }
                 /*----------------- MODIFIERS ---------------------*/
-                //template <class InputIt>
-                void            assign (iterator first, iterator last, typename ft::enable_if<!ft::is_integral<iterator>::value, iterator>::type* = NULL )
+                template <class InputIt>
+                void            assign (InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, iterator>::type* = NULL )
                 {
-                    size_type n = last - first;
-                    //bool        flag;
-                    pointer     cpy = 0;
-
+                    size_type n = ft::distance(first, last);
                     
-                    if (_data == first.base())
-                    {
-                        cpy = _alloc.allocate(_size);
-                        for (size_type i = 0; i < _size; i++)
-                            cpy[i] = *(first.base() + i);
-                        first.setPointer(cpy);
-                    }   
                     clear();
-                    if (n == 0)
+                    if (_capacity >= n)
                     {
-                        _alloc.deallocate(cpy, _capacity);
-                        return ;            
-                        
+                        for (size_type i = 0; first != last; first++, i++)
+                            _alloc.construct(_data + i, *first);
                     }
-                    ReAlloc(n);
-                    _size = n;
-                    for (size_type i = 0; i < _size; i++)
+                    else
                     {
-                       
-                        _alloc.destroy(_data + i);
-                        *(_data + i) = *(first + i);
+                        ReAlloc(n);
+                        for(size_type i = 0; first != last; first++, i++)
+                            _alloc.construct(_data + i, *first);
                     }
-                    _alloc.deallocate(cpy, _capacity);
+                    
 
 
                 }
@@ -719,15 +706,18 @@ namespace ft
                 }
                 void                clear()
                 {
-                    for (size_type i = 0; i < _capacity; i++)
+                    size_type end = size();
+                    for (size_type i = 0; i < _size; i++, end--)
                     {
-                        _alloc.destroy(_data + i);
-
+                        _alloc.destroy(_data + end);
+                    
                     }
                     _size = 0;
                 }
     };
 
+
+    /*-----------------NON MEBER FUNC OVERLOADS-------------------------*/
     template< class T, class Alloc >
         bool operator==( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
         {
