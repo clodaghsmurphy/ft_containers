@@ -77,9 +77,16 @@ namespace ft
             }
             return(true);
         }
+template<class Arg1, class Arg2, class Result>
+    struct binary_function
+    {
+        typedef Arg1    first_argument_type;
+        typedef Arg2   second_argument_type;
+        typedef Result result_type;
+    };
 
 template< class T >
-    struct less
+    struct less : binary_function <T,T,bool>
     {
         bool operator() (const T& lhs, const T& rhs) const
         {
@@ -90,12 +97,15 @@ template< class T >
     template< class InputIt1, class InputIt2 >
         bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2 )
         {
-            for (; first1 != last1 && first2 != last2; first1++, first2++)
-            if (ft::less<InputIt1>(*first1, *first2))
-                return true;
-            if (ft::less<InputIt1>(*first2, *first1))
-                return false;
-                
+            for (; (first1 != last1); ++first1,  ++first2)
+            { 
+                if (*first2 < *first1 || first2 == last2)
+                    return false;
+                else if (*first1 < *first2)
+                    return true;
+               
+            }
+            return(first2 != last2);
         }
 
 

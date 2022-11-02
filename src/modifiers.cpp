@@ -1312,7 +1312,7 @@ void copy_test()
         *(it -= 2) = 42;
         *(it += 2) = 21;
 
-        std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+        std::cout << "const_ite +=/-=: " << *(ite2 += 2) << " | " << *(ite -= 2) << std::endl;
 
         std::cout << "(it == const_it): " << (ite == it) << std::endl;
         std::cout << "(const_ite - it): " << (ite - it) << std::endl;
@@ -1513,6 +1513,14 @@ void copy_test()
 
 
         }
+        {
+            // const int size = 5;
+            // ft::vector<int> const vct(size);
+            // //ft::vector<int>::iterator it = vct.begin(); // <-- error expected
+
+            // for (int i = 0; i < size; ++i)
+            //     it[i] = i;
+        }
     }
 
     void resize_test()
@@ -1547,6 +1555,49 @@ void copy_test()
         v1.resize(0);
 }
 
+template <class T, class Alloc, class T2, class Alloc2>
+void	cmp(const ft::vector<T, Alloc> &lhs, const ft::vector<T, Alloc> &rhs, const std::vector<T2, Alloc2> &lhs2, const std::vector<T2, Alloc2> &rhs2)
+{
+	static int i = 0;
+
+    std::cout << std::boolalpha;
+	std::cout << "############### [" << i++ << "] ###############"  << std::endl;
+	std::cout << "eq: " << ((lhs == rhs) == (lhs2 == rhs2))<< " | ne: " << ((lhs != rhs) == (lhs2 != rhs2))<< std::endl;
+	 std::cout << "lt: " << ((lhs <  rhs) == (lhs2 <  rhs2)) << " | le: " << ((lhs <= rhs) == (lhs2 <= rhs2))<< std::endl;
+	 std::cout << "gt: " << ((lhs >  rhs) == (lhs2 >  rhs2)) << " | ge: " << ((lhs >= rhs) == (lhs2 >= rhs2))<< std::endl;
+}
+
+int		cmp_op(void)
+{
+	ft::vector<int> vct(4);
+	ft::vector<int> vct2(4);
+    std::vector<int> v(4);
+	std::vector<int> v2(4);
+
+	cmp(vct, vct, v, v2);  // 0
+	cmp(vct, vct2, v, v2); // 1
+
+	vct2.resize(10);
+	v2.resize(10);
+
+	cmp(vct, vct2, v, v2); // 2
+	cmp(vct2, vct, v, v2); // 3
+
+	vct[2] = 42;
+	v2[2] = 42;
+
+	cmp(vct, vct2, v, v2); // 4
+	cmp(vct2, vct, v, v2); // 5
+
+	swap(vct, vct2);
+	swap(v, v2);
+
+	cmp(vct, vct2, v, v2); // 6
+	cmp(vct2, vct, v, v2); // 7
+
+	return (0);
+}
+
 
 void modifiers()
 {
@@ -1554,7 +1605,8 @@ void modifiers()
     // insert_test();
     //  copy_test();
     // resize_test();
-      iterator_test();
+    cmp_op();
+      //iterator_test();
      // erase_test();
 //      assign_test();
 }
