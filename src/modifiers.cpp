@@ -2,6 +2,20 @@
 #include "vector.hpp"
 #include "test.hpp"
 
+template <typename Ite_1, typename Ite_2>
+void ft_eq_ope(const Ite_1 &first, const Ite_2 &second)
+{
+	if (!(first < second))
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+	else if (!(first <= second))
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+	else if (!(first > second)) 
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+	else if (!(first >= second)) 
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    else
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+}
 
 template <typename T, typename U>
 int    vectors_equal(T &vec, U &vec2)
@@ -827,14 +841,19 @@ void    erase_test()
     vec.push_back(4);
     std::vector<int>::iterator it = vec.begin();
     
-    vec.erase(it);
 
     my_vec.push_back(1);
     my_vec.push_back(2);
     my_vec.push_back(3);
     my_vec.push_back(4);
 
+
+    if (vectors_equal(vec, my_vec))
+        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
     ft::vector<int>::iterator my_it = my_vec.begin();
+    vec.erase(it);
     
     my_vec.erase(my_it);
 
@@ -931,6 +950,75 @@ void    erase_test()
         it = v1.erase(v1.begin() + 1, v1.begin() + 3);
         it2 = v2.erase(v2.begin()  + 1, v2.begin() + 3);
         if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+    }
+    {
+        std::vector<std::string> v1(10);
+        ft::vector<std::string> v2(10);
+        for (unsigned long int i = 0; i < v1.size(); ++i)
+		    v1[i] = std::string((v1.size() - i), i + 65);
+        for (unsigned long int i = 0; i < v2.size(); ++i)
+		    v2[i] = std::string((v2.size() - i), i + 65);
+        if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.erase(v1.begin() + 2);
+        v2.erase(v2.begin() + 2);
+        if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.erase(v1.begin());
+        v2.erase(v2.begin());
+        if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.erase(v1.end() - 1);
+        v2.erase(v2.end() - 1);
+        if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.erase(v1.begin(), v1.begin() + 3);
+        
+        v2.erase(v2.begin(), v2.begin() + 3);
+            if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.erase(v1.end() - 3, v1.end() - 1);
+        v2.erase(v2.end() - 3, v2.end() - 1);
+        if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        v1.push_back("Hello");
+        v2.push_back("Hello");
+        v1.push_back("Hi there");
+        v2.push_back("Hi there");
+        v1.erase(v1.end() - 3, v1.end());
+        v2.erase(v2.end() - 3, v2.end());
+    if (vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.push_back("ONE");
+        v1.push_back("TWO");
+        v1.push_back("THREE");
+        v1.push_back("FOUR");
+
+        v2.push_back("ONE");
+        v2.push_back("TWO");
+        v2.push_back("THREE");
+        v2.push_back("FOUR");
+        v1.erase(v1.begin(), v1.end());
+        v2.erase(v2.begin(), v2.end());
+            if (vectors_equal(v1, v2))
             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
         else
             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
@@ -1053,11 +1141,135 @@ void copy_test()
             {
                 
                 it1++;
-                it2++;
+                it2++;  
             }
             std::cout << std::endl;
         }
+        {
+            	const int size = 5;
+        ft::vector<int> v2(size);
+        std::vector<int> v1(size);
+        std::vector<int>::iterator it_ = v1.begin();
+        ft::vector<int>::iterator it_2 = v2.begin();
+        ft::vector<int>::reverse_iterator it2(it_2);
+        std::vector<int>::reverse_iterator it(it_);
+
+        for (int i = 0; i < size; ++i)
+            v1[i] = (i + 1) * 5;
+        for (int i = 0; i < size; ++i)
+            v2[i] = (i + 1) * 5;
+        if(vectors_equal(v1, v2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        if ((it_ == it.base()) == (it_2 == it2.base()) )
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        if ((it_ == (it + 3).base()) == (it_ == (it + 3).base())) 
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        std::cout << (it_2 == it2.base()) << std::endl;
+        std::cout << (it_2 == (it2 + 3).base()) << std::endl;
+
+        std::cout << *(it.base() + 1) << std::endl;
+        std::cout << *(it - 3) << std::endl;
+        std::cout << *(it - 3).base() << std::endl;
+        it -= 3;
+        it2 -= 3;
+        std::cout << *it.base() << std::endl;
+
+        std::cout << "TEST OFFSET" << std::endl;
+        if (*(it) == *(it2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
         
+        if (*(it).base() == *(it2).base()) 
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        if (*(it - 0) == *(it2 - 0)) 
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        if (*(it - 0).base() == *(it2 - 0).base()) 
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        if (*(it - 1).base() == *(it - 1).base())
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+        }
+        {
+            std::cout << std::endl;
+            const int size = 5;
+            std::vector<int> v1(size);
+            ft::vector<int> v2(size);
+            std::vector<int>::iterator it = v1.begin();
+            ft::vector<int>::iterator it2 = v2.begin();
+            std::vector<int>::const_iterator ite = v1.begin();
+            ft::vector<int>::const_iterator ite2 = v2.begin();
+
+            for (int i = 0; i < size; ++i)
+                it[i] = (size - i) * 5;
+            for (int i = 0; i < size; ++i)
+                it2[i] = (size - i) * 5;
+            //prepost_incdec(v1);
+            if(vectors_equal(v1, v2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+            it = it + 5;
+            it = 1 + it;
+            it = it - 4;
+
+            it2 = it2 + 5;
+            it2 = 1 + it2;
+            it2 = it2 - 4;
+
+            if (*(it += 2) == *(it2 += 2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+            if (*(it -= 1) == *(it2 -= 1))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;   
+
+            *(it -= 2) = 42;
+            *(it += 2) = 21;
+
+            *(it2 -= 2) = 42;
+            *(it2 += 2) = 21;
+
+            if (*(ite += 2) == *(ite2 += 2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+            if (*(ite -= 2) ==*(ite2 -= 2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+
+            if ((ite == it) == (ite2 == it2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+            if ((ite - it) == (ite2 - it2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+             if ((ite + 3 == it) ==(ite2 + 3 == it2))
+                std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+            else
+                std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        }
 
      {
          std::string                     arr1[3] = {"bonjour", "je", "suis"};
@@ -1072,95 +1284,277 @@ void copy_test()
          else
              std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
      }
-}
+     {
+        const int size = 5;
+        std::vector<int> v1(size);
+        std::vector<int>::reverse_iterator it = v1.rbegin();
+        std::vector<int>::const_reverse_iterator ite = v1.rbegin();
 
-void resize_test()
-{
-    int             arr1[5] = {1, 2, 3, 4, 5};
-    ft::vector<int> v1(arr1, arr1 + 5);
-    std::vector<int> v2(arr1, arr1 + 5);
+        ft::vector<int> v2(size);
+        ft::vector<int>::reverse_iterator it2 = v2.rbegin();
+        ft::vector<int>::const_reverse_iterator ite2 = v2.rbegin();
 
-    
-    v1.resize(7);
-    v2.resize(7);
-    
-    if (vectors_equal(v2, v1))
-        std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
-    else
-        std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
-     v1.resize(10, 42);
-     for (size_t i = 0; i < 5; i++)
-     for (size_t i = 5; i < 7; i++)
-     for (size_t i = 7; i < v1.size(); i++)
+        for (int i = 0; i < size; ++i)
+            it[i] = (size - i) * 5;
+        for (int i = 0; i < size; ++i)
+            it2[i] = (size - i) * 5;
 
-     v1.resize(10);
-     for (size_t i = 0; i < 5; i++)
-     for (size_t i = 5; i < 7; i++)
-     for (size_t i = 7; i < v1.size(); i++)
+        it = it + 5;
+        it = 1 + it;
+        it = it - 4;
 
-     v1.resize(6);
-     for (size_t i = 0; i < 5; i++)
+        it2 = it2 + 5;
+        it2 = 1 + it2;
+        it2 = it2 - 4;
+        std::cout << *(it += 2) << std::endl;
+        std::cout << *(it -= 1) << std::endl;
 
-     v1.resize(1);
+        *(it -= 2) = 42;
+        *(it += 2) = 21;
 
-     v1.resize(0);
-}
+        std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
 
-template <typename T>
-void    vectorTest_Iterators(T& cont)
-{
-    std::string name("iterators:");
-    std::cout << "\n---------------------";
+        std::cout << "(it == const_it): " << (ite == it) << std::endl;
+        std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+        std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+     }
+     {
+        const int size = 5;
+        std::vector<int> v1(size);
+        ft::vector<int> v2(size);
+        std::vector<int>::reverse_iterator it(v1.rbegin());
+        ft::vector<int>::reverse_iterator it2(v2.rbegin());
+        std::vector<int>::const_reverse_iterator ite(v1.rend());
+        ft::vector<int>::const_reverse_iterator ite2(v2.rend());
+
+        for (int i = 1; it != ite; ++i)
+            *it++ = (i * 7);
+        for (int i = 1; it2 != ite2; ++i)
+            *it2++ = (i * 7);
+
+        it = v1.rbegin();
+        ite = v1.rbegin();
+
+       
+        it2 = v2.rbegin();
+        ite2 = v2.rbegin();
+         if (*ite == *ite2)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG " <<  *ite << " | " << *ite2 << std::endl;
         
-    printTestName("53", name, "operator++");
-    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it++)
-        std::cout << *it << " | ";
+        if  (*(++ite) == *(++ite2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG " <<  *ite << " | " << *ite2 << std::endl;
+        if (*(ite++) == *(ite2++))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *ite << " | " << *ite2<< std::endl;
+         if (*ite++ == *ite2++)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *ite << " | " << *ite2<< std::endl;
+        if (*++ite == *++ite2)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *ite << " | " << *ite2<< std::endl;
+         if (*ite == *ite2)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG " <<  *ite << " | " << *ite2 << std::endl;
+        // // if (it->m() == it2->m())
+        // //     std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        // // else
+        // //      std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        // //   if (ite->m() == ite2->m())
+        // //     std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        // // else
+        // //      std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
 
-    printTestName("57", name, "++operator");
-    for (typename T::const_iterator it = cont.begin(); it != cont.end(); ++it)
-        std::cout << *it << " | ";
+        if (*(++it) == *(++it2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
+        if (*(it++) == *(it2++))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
+        if (*it++ == *it2++)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
+        if (*++it == *++it2)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
+        if (*(--it) == *(--it2))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
+        if (*--it == *--it2)
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+             std::cout << "\033[1m\033[31m ❌ WRONG "  <<  *it << " | " << *it2<< std::endl;
 
-    if (cont.size())
-    {
-        printTestName("63", name, "operator--");
-        for (typename T::const_iterator it = cont.end(); it != cont.begin() - 1; it--)
-            if (it != cont.end())
-                std::cout << *it << " | ";
+        // (*it).m();
+        // (*ite).m();
 
-        printTestName("68", name, "--operator");
-        for (typename T::const_iterator it = cont.end(); it != cont.begin() - 1; --it)
-            if (it != cont.end())
-                std::cout << *it << " | ";
+        // std::cout << *(--it) << std::endl;
+        // std::cout << *(it--) << std::endl;
+        // std::cout << *it-- << std::endl;
+        // std::cout << *--it << std::endl;
+     }
+     {
+        std::list<int> lst;
+        std::list<int>::iterator lst_it;
+        for (int i = 1; i < 5; ++i)
+            lst.push_back(i * 3);
+
+        std::vector<int> v1(lst.begin(), lst.end());
+        ft::vector<int> v2(lst.begin(), lst.end());
+
+        lst_it = lst.begin();
+        for (int i = 1; lst_it != lst.end(); ++i)
+            *lst_it++ = i * 5;
+        v1.assign(lst.begin(), lst.end());
+        v2.assign(lst.begin(), lst.end());
+
+        v1.insert(v1.end(), lst.rbegin(), lst.rend());
+        v2.insert(v2.end(), lst.rbegin(), lst.rend());
+        if (vectors_equal(v1, v2))
+             std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+         else
+             std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+     }
+     {
+        const int size = 5;
+        std::vector<int> v1(size);
+        std::vector<int>::iterator it_0(v1.begin());
+        std::vector<int>::iterator it_1(v1.end());
+        std::vector<int>::iterator it_mid;
+
+        std::vector<int>::const_iterator cit_0 = v1.begin();
+        std::vector<int>::const_iterator cit_1;
+        std::vector<int>::const_iterator cit_mid;
+
+        ft::vector<int> v2(size);
+        ft::vector<int>::iterator ft_it_0(v2.begin());
+        ft::vector<int>::iterator ft_it_1(v2.end());
+        ft::vector<int>::iterator ft_it_mid;
+
+        ft::vector<int>::const_iterator ft_cit_0 = v2.begin();
+        ft::vector<int>::const_iterator ft_cit_1;
+        ft::vector<int>::const_iterator ft_cit_mid;
+
+        for (int i = size; it_0 != it_1; --i)
+            *it_0++ = i;
+          for (int i = size; ft_it_0 != ft_it_1; --i)
+            *ft_it_0++ = i;
+        it_0 = v1.begin();
+        ft_it_0 = v2.begin();
+        cit_1 = v1.end();
+        ft_cit_1 = v2.end();
+        it_mid = it_0 + 3;
+        ft_it_mid = ft_it_0 + 3;
+        cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+        ft_cit_mid = ft_it_0 + 3; ft_cit_mid = ft_cit_0 + 3; ft_cit_mid = ft_it_mid;
+
+        std::cout << std::boolalpha;
+        std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << " |  ";
+        
+        std::cout << ((ft_it_0 + 3 == ft_cit_0 + 3) && (ft_cit_0 + 3 == ft_it_mid)) << std::endl;
+        
+
+        std::cout << "\t\tft_eq_ope:" << std::endl;
+        // regular it
+        ft_eq_ope(it_0 + 3, it_mid);
+        // ft_eq_ope(it_0, it_1);
+        // ft_eq_ope(it_1 - 3, it_mid);
+        // // const it
+        // ft_eq_ope(cit_0 + 3, cit_mid);
+        // ft_eq_ope(cit_0, cit_1);
+        // ft_eq_ope(cit_1 - 3, cit_mid);
+        // // both it
+        // ft_eq_ope(it_0 + 3, cit_mid);
+        // ft_eq_ope(it_mid, cit_0 + 3);
+        // ft_eq_ope(it_0, cit_1);
+        // ft_eq_ope(it_1, cit_0);
+        // ft_eq_ope(it_1 - 3, cit_mid);
+        // ft_eq_ope(it_mid, cit_1 - 3);
+        }
+        {
+            ft::vector<int> v1(5);
+            ft::vector<int>::iterator it = v1.begin(), ite = v1.end();
+
+            std::cout << "len: " << (ite - it) << std::endl;
+            for (; it != ite; ++it)
+                *it = (ite - it);
+
+            it = v1.begin();
+            ft::vector<int> v1_range(it, --(--ite));
+            for (int i = 0; it != ite; ++it)
+                *it = ++i * 5;
+
+            it = v1.begin();
+            ft::vector<int> v1_copy(v1);
+            for (int i = 0; it != ite; ++it)
+                *it = ++i * 7;
+            v1_copy.push_back(42);
+            v1_copy.push_back(21);
+
+            std::cout << "\t-- PART ONE --" << std::endl;
+       
+
+            v1 = v1_copy;
+            v1_copy = v1_range;
+            v1_range.clear();
+
+
+        }
     }
 
-    printTestName("74", name, "operator+=");
-    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it += 1)
-        std::cout << *it << " | ";
+    void resize_test()
+    {
+        int             arr1[5] = {1, 2, 3, 4, 5};
+        ft::vector<int> v1(arr1, arr1 + 5);
+        std::vector<int> v2(arr1, arr1 + 5);
+
         
-    printTestName("78", name, "operator+");
-    for (typename T::const_iterator it = cont.begin(); it != cont.end(); it = it + 1)
-        std::cout << *it << " | ";
+        v1.resize(7);
+        v2.resize(7);
+        
+        if (vectors_equal(v2, v1))
+            std::cout << "\033[1m\033[32m ✅ OK " << std::endl;
+        else
+            std::cout << "\033[1m\033[31m ❌ WRONG" << std::endl;
+        v1.resize(10, 42);
+        for (size_t i = 0; i < 5; i++)
+        for (size_t i = 5; i < 7; i++)
+        for (size_t i = 7; i < v1.size(); i++)
 
-    printTestName("82", name, "operator-=");
-    for (typename T::const_iterator it = cont.end() - 1; it != cont.begin() - 1; it -= 1)
-        std::cout << *it << " | ";
+        v1.resize(10);
+        for (size_t i = 0; i < 5; i++)
+        for (size_t i = 5; i < 7; i++)
+        for (size_t i = 7; i < v1.size(); i++)
 
-    printTestName("86", name, "operator-");
-    for (typename T::const_iterator it = cont.end() - 1; it != cont.begin() - 1; it = it - 1)
-        std::cout << *it << " | ";
+        v1.resize(6);
+        for (size_t i = 0; i < 5; i++)
 
-    printTestName("90", name, "operator[]");
-    for (std::pair<size_t, typename T::const_iterator> i(0, cont.begin()); i.first < cont.size(); ++i.first)
-        std::cout << i.second[i.first] << " | ";
+        v1.resize(1);
+
+        v1.resize(0);
 }
+
 
 void modifiers()
 {
-     pop_back_test();
-    insert_test();
-     copy_test();
-    resize_test();
-     iterator_test();
-      erase_test();
-     assign_test();
+    //  pop_back_test();
+    // insert_test();
+    //  copy_test();
+    // resize_test();
+      iterator_test();
+     // erase_test();
+//      assign_test();
 }

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "iterator.hpp"
 #include "vector.hpp"
+# include <list>
 /* 
 template<class IteratorType> 
 void myFunction(const IteratorType& myIterator)
@@ -21,9 +22,10 @@ void    print_container(T &container)
 
     while (it != ite)
     {
-        std::cout << *it << std::endl;
+        std::cout << *it << "  " ;
         it++;
     }   
+    std::cout << std::endl;
 }
 
 
