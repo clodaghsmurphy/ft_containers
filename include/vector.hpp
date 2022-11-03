@@ -107,22 +107,7 @@ namespace ft
                 return _ptr == y._ptr;
             }
             operator Vectoriterator<const T>() const  {return _ptr;}
-            
-            template <typename _T>
-                friend bool operator!=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            template <typename _T>
-                friend bool operator==(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            template <typename _T>
-                friend bool operator>=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            template <typename _T>
-                friend bool operator<=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            template <typename _T>
-                friend bool operator>(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            template <typename _T>
-                friend bool operator<(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y);
-            
-            template<typename IteratorL, typename IteratorR>
-                friend bool operator!=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y);
+
   
 
 
@@ -165,39 +150,40 @@ namespace ft
     template<typename _T>
     bool operator!=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
     {
-        return !(x._ptr == y._ptr);
+        return !(x.base() == y.base());
     }
 
     template<typename IteratorL, typename IteratorR>
     bool operator!=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
-        return !(x._ptr == y._ptr);
+        return !(x.base() == y.base());
     }
     template<typename IteratorL, typename IteratorR>
     bool operator==(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
         return (x.base() == y.base());
     }
-    template<typename _T>
-    bool operator>=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    template<typename IteratorL, typename IteratorR>
+    bool operator>=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
-        return !(x._ptr < y._ptr);
+        return !(x.base() < y.base());
     }
-    template<typename _T>
-    bool operator<=(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+        template<typename IteratorL, typename IteratorR>
+    bool operator<=(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
-        return !(x._ptr > y._ptr);
+        return !(x.base() > y.base());
     }
-    template<typename _T>
-    bool operator<(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    template<typename IteratorL, typename IteratorR>
+    bool operator<(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
-        return (x._ptr < y._ptr);
+        return (x.base() < y.base());
     }
-    template<typename _T>
-    bool operator>(const Vectoriterator<_T> &x, const Vectoriterator<_T> &y)
+    template<typename IteratorL, typename IteratorR>
+    bool operator>(const Vectoriterator<IteratorL> &x, const Vectoriterator<IteratorR> &y)
     {
-        return (x._ptr > y._ptr);
+        return (x.base() > y.base());
     }
+
 
     template < class T, class Allocator = std::allocator<T> >
     class vector
@@ -252,7 +238,7 @@ namespace ft
             /*----------------- MEMBER FUNCTIONS ---------------*/
             public:
                 vector() : _data(NULL), _size(0), _capacity(0) {
-                    _data = _alloc.allocate(_capacity);   
+                    return ;
                 }
                 
                  explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()) : _data(NULL), _size(count), _capacity(count), _alloc(alloc)
@@ -526,11 +512,11 @@ namespace ft
                     }
                     if (position == this->end() || !_size)
                     {
-                        for (size_type k = 0; k < n; k++)
+                        for (size_type k = _size; k < _size + n; k++)
                         {
                             *(_data + k) = val;
                         }
-                        _size++;
+                        _size += n;
                         return ;
                     }
                      
@@ -762,7 +748,7 @@ namespace ft
     template< class T, class Alloc >
         bool operator>( const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs )
         {
-            bool res = !(lhs < rhs);
+            bool res = (rhs < lhs);
             return res;
         }
      template< class T, class Alloc >
