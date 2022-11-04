@@ -33,5 +33,6 @@ void    vector_constructors();
 int     test_vector_size();
 void    iterator_category();
 void    modifiers();
+void    rb_tester();
 
 #endif

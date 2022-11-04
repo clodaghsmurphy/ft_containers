@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/10/28 14:34:48 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/11/04 14:22:20 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC =	$(addsuffix .cpp, 	\
 		$(addprefix src/,	\
 		main				\
 		modifiers				\
+		rb_tree_tester				\
 		iterator_category				\
 		test_vector_size	\
 		vector_constructors \
