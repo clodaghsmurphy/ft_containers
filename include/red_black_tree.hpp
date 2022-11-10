@@ -4,6 +4,7 @@
 //# include "map.hpp"
 # include <iostream>
 # include <iomanip>
+# include <list>
 //# include <iterator.hpp>
 
 
@@ -88,7 +89,7 @@ namespace ft{
                 if (pt_left->right != null_node)
                     pt_left->right->parent = x;
                 pt_left->parent = x->parent;
-                if (x->parent->right == null_node)
+                if (x->parent == null_node)
                    root = pt_left;
                 else if (x->parent->right == x)
                     x->parent->right = pt_left;
@@ -151,60 +152,193 @@ namespace ft{
                                 new_node = new_node->parent;
                                 left_rotate(new_node);
                             }
-                        }
-                
                             new_node->parent->colour = BLACK;
+                            new_node->parent->parent->colour = RED;
                             right_rotate(new_node->parent->parent);
+                        }     
                     }
                     else
                     {
-                        uncle = new_node->parent->parent->right;
+                        uncle = new_node->parent->parent->left;
                         if (uncle != null_node && uncle->colour == RED)
                         {
                             uncle->colour = BLACK;
                             new_node->parent->colour = BLACK;
-                            new_node = new_node->parent->parent;
+                            new_node->parent->parent->colour = RED;
+                            new_node = new_node->parent->parent; //move up the tree to verify that the change we made here doesn't incur double red on the next level
+
                         }
-                        else if (new_node == new_node->parent->left)
+                        else 
                         {
-            
+                            if (new_node == new_node->parent->left)
+                            { 
                                 new_node = new_node->parent;
                                 right_rotate(new_node);
-                        }
-                        else
-                        {
+                            }
                             new_node->parent->colour = BLACK;
                             new_node->parent->parent->colour = RED;
                             left_rotate(new_node->parent->parent);
-                        } 
-                    }
+                               
+                        }
+                    } 
                     if (new_node == root)
                         break ;
-                } 
+                }
                 root->colour = BLACK;
 
             }
 
             void    real_print(NodePtr *ptr, int space)
             {
-                if (!ptr || ptr == null_node)
+                if (!ptr || ptr == null_node )
                     return;
-                space += 4;
-                real_print(ptr->right, space);
-                std::cout
+                //space += 4;
+                if (ptr->right == null_node && ptr->left == null_node)
+                {
+                    std::cout
                     << (ptr->colour == BLACK ? "\033[90m" : "\033[31m") << std::setw(space)
                     << ptr->value << "\033[0m" << std::endl;
+                    return ;
+                }
+                if (ptr->left != null_node)
+                    real_print(ptr->left, space - 4);
+                if (ptr->right != null_node)
+                    real_print(ptr->right, space + 4);
+
+                
+
                 // getwchar();
-                real_print(ptr->left, space);
             }
 
             void    print()
             {
-                real_print(root, 0);
+               //int levels = count_levels() * 2;
+
+                // std::cout
+                //     << (root->colour == BLACK ? "\033[90m" : "\033[31m") << std::setw(levels)
+                //     << root->value << "\033[0m" << std::endl;
+               //real_print(root, levels);
+               prt(root);
+            //    std::cout << "LEVELS  " << levels << std::endl;
+            //    int space  = (levels * 4);
+            //    NodePtr ptr = root;
+            //   std::cout << (ptr->colour == BLACK ? "\033[90m" : "\033[31m");
+            //   std::cout << std::setw(space) << ptr->value << "\033[0m" << std::endl;
+            //   print_left(ptr->left, space - 1, levels);
+            //   print_right(ptr->right, space , levels);
+
             }
-            
-    };
+
+            void print_left(NodePtr *ptr, int space, int levels)
+            {
+                if (!ptr || ptr == null_node)
+                    return;
+                NodePtr *tmp;
+                int         i = 0;
+                
+
+                tmp = ptr;
+                while (i < levels)
+                {
+                    space -= 2;
+                    std::cout << (ptr->colour == BLACK ? "\033[90m" : "\033[31m");
+                    std::cout << std::setw(space) << ptr->value << "\033[0m" << std::endl;
+                    i++;
+                }
+            }
+
+            int count_levels()
+            {
+                NodePtr *ptr = root;
+                int i = 0;
+                int j = 0;
+                int res = 0;
+                //NodePtr *tmp = NULL;
+                
+                while (ptr != null_node)
+                {
+                    //tmp = ptr;
+                    i++;
+                    ptr = ptr->right;
+                }
+                ptr = root;
+                while (ptr != null_node)
+                {
+                    //tmp = ptr;
+                    j++;
+                    ptr = ptr->left;
+                }
+                if (i > j)
+                    res = i;
+                else
+                    res = j;
+                return (res);
+            }
+     
+
+                int max_depth(NodePtr* n)
+                {
+                if (!n) return 0;
+                return 1 + std::max(max_depth(n->left), max_depth(n->right));
+                }
+
+                void prt(NodePtr* n)
+                {
+                    struct node_depth
+                    {
+                        NodePtr* n;
+                        int lvl;
+                        node_depth(NodePtr* n_, int lvl_) : n(n_), lvl(lvl_) {}
+                    };
+
+                    int depth = max_depth(n);
+
+                    char buf[1024];
+                    int last_lvl = 0;
+                    int offset = (1 << depth) - 1;
+
+                    // using a queue means we perform a breadth first iteration through the tree
+                    std::list<node_depth> q;
+
+                    q.push_back(node_depth(n, last_lvl));
+                    while (q.size())
+                    {
+                        const node_depth& nd = *q.begin();
+
+                        // moving to a new level in the tree, output a new line and calculate new offset
+                        if (last_lvl != nd.lvl)
+                        {
+                        std::cout << "\n";
+
+                        last_lvl = nd.lvl;
+                        offset = (1 << (depth - nd.lvl)) - 1;
+                        }
+
+                        // output <offset><data><offset>
+                        if (nd.n)
+                        {
+                            std::cout << (nd.n->colour == BLACK ? "\033[90m" : "\033[31m");
+                        sprintf(buf, " %*s%d%*s", offset, " ", nd.n->key, offset, " ");
+                        }
+                        
+                        else
+                        sprintf(buf, " %*s", offset << 1, " ");
+                        std::cout << buf;
+
+                        if (nd.n)
+                        {
+                        q.push_back(node_depth(nd.n->left, last_lvl + 1));
+                        q.push_back(node_depth(nd.n->right, last_lvl + 1));
+                        }
+
+                        q.pop_front();
+                    }
+                    std::cout << "\n";
+                }
+
+            };
 }
+
 
 
 
