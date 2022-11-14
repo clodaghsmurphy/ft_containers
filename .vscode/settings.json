@@ -76,5 +76,6 @@
         "list": "cpp",
         "map": "cpp",
         "set": "cpp"
-    }
+    },
+    "C_Cpp.dimInactiveRegions": false
 }

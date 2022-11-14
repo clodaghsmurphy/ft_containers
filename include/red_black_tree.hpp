@@ -188,6 +188,49 @@ namespace ft{
 
             }
 
+            void    rb_transplant_node(NodePtr  *original, NodePtr *replace)
+            {
+                if (orginal->parent == null_node)
+                {
+                    root = replace;
+                }
+                else if (original == original->parent->left)
+                {
+                    original->parent->left = replace;
+                }
+                else
+                {
+                    original->parent->right = replace;
+                }
+                replace->parent = original->parent;
+                
+            }
+
+            bool is_empty()
+            {
+                return (root == null_node);
+            }
+
+            size_t  tree_size(NodePtr   *root)
+            {
+                if (!root)
+                    return 0 ;
+                return (1 + count(root->left) + count(root->right));
+            }
+
+            NodePtr *find_node(NodePtr *node, key_type key)
+            {
+                if (node == null_node | key == node->key)
+                {
+                    return node ;
+                }
+                if (key < node->key)
+                    find_node(node->left, key);
+                else
+                    find_node(node->right, key);
+            }
+
+
             void    real_print(NodePtr *ptr, int space)
             {
                 if (!ptr || ptr == null_node )
