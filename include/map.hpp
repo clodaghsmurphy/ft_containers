@@ -8,34 +8,89 @@
 
 namespace ft 
 {
-    template <typename Iterator, typename Compare >
+    template <typename Key, typename T, typename Node >
     class map_iterator : public bidirectional_iterator_tag
     {
-        typedef map_iterator< Iterator, Compare >  Self;
+        typedef map_iterator< Key, T, Node >  iterator;
         private:
-            Iterator current; //the rb tree of map
+           Node *current; //the rb tree of map
         public:
-            typedef ft::iterator_traits<Iterator>       traits;
 
-
-            typedef typename traits::iterator_category iterator_category;
-            typedef typename traits::value_type        value_type;
-            typedef typename traits::difference_type   difference_type;
-            typedef typename traits::reference         reference;
-            typedef typename traits::pointer           pointer;
+            typedef typename ft::bidirectional_iterator_tag iterator_category;
+            typedef pair<const Key, T> value_type;
+            typedef value_type &reference;
+            typedef value_type *pointer;
+            typedef std::ptrdiff_t   difference_type;
+            typedef std::size_t         size_type;
+            
 
         /*--------------CANONICAL--------------------*/
         map_iterator() : current() {}
+        map_iterator(Node *n) : current(n) {}
+        map_iterator(const map_iterator other) : current(other.current) {}
+        ~map_iterator() {}
 
         bool operator== (const map_iterator& rhs) const;
         bool operator!=(const map_iterator& rhs) const;
-        Self    &operator++();
-        Self    operator++(int);
-        Self    operator--();
-        Self    operator--(int);
+        iterator    &operator++()
+        {
+            if (current->right != null)
+            {
+                current = current->right;
+                while (current->left != NULL)
+                    current = current->left
+            }
+            else
+            {
+                Node *y = current->parent;
+                while (current == y->right)
+                {
+                    current = y->parent;
+                    y = y->parent;
+                }
+            }
+            return *this ;
+        }
+        iterator    operator++(int){
+            map_iterator tmp = *this;
+            operator++;
+            return tmp;
+        }
+        iterator    operator--()
+        {
+            if (current->left != null)
+            {
+                current = current->left;
+                while (current->right != NULL)
+                    current = current->right
+            }
+            else
+            {
+                Node *y = current->parent;
+                while (current == y->right)
+                {
+                    current = y->parent;
+                    y = y->parent;
+                }
+            }
+            return *this;
+        }
+        iterator    operator--(int)
+        {
+            map_iterator tmp = *this;
+            operator++;
+            return tmp;
+        }
 
-        private:
-        
+        bool operator==(const iterator& x)
+        {
+            return (current == x.current);
+        }       
+
+        bool operator!=(const iterator& x)
+        {
+            return (current != x.current);
+        }
         
     };
 
@@ -75,10 +130,10 @@ namespace ft
                     key_compare comp;
             };
             /*----------------------------ITERATOR TYPEDEFS-------------------------------*/
-            typedef map_iterator< comp, T >                             iterator;
-            typedef map_iterator< comp, const T >                       const_iterator;
+            typedef map_iterator< Key, T, Node >                             iterator;
+            typedef map_iterator< const Key, const T, const Node >                       const_iterator;
             typedef Reverse_iterator<iterator>                           reverse_iterator;
-            typedef Reverse_iterator< const iterator>                  const_reverse_iterator;
+            typedef Reverse_iterator< const_iterator>                  const_reverse_iterator;
 
             private:
                 RB_tree         rb_tree;
@@ -95,7 +150,7 @@ namespace ft
                 map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
                 _compare(comp), _alloc(alloc)
             {
-                //use insert method to insert
+                
             }
             map (const map& x) : _compare(map._compare), _alloc(map._alloc), rb_tree()
             {
@@ -150,10 +205,17 @@ namespace ft
             /*---------------------INSERT / ERASE -----------------------*/
 
             pair<iterator, bool> insert(const value_type& x);
-            iterator    insert(iterator position, const value_type& x);
+            iterator    insert(iterator position, const value_type& x)
+            {
+                iterator it = iterator(rb_tree.insert(Node(x.first, x.second)));
+            }
 
             template <class InputIterator>
-                void insert(InputIterator first, InputIterator last);
+                void insert(InputIterator first, InputIterator last)
+                {
+                    for(; first != last; first++)
+                        insert(*first.first, *first.second);
+                }
             void    erase(iterator position);
             size_type   erase(const key_type& x);
             void        erase(iterator first, iterator last);

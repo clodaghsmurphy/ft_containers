@@ -99,7 +99,7 @@ namespace ft{
                 x->parent = pt_left;
             }
 
-            void    insert(key_type key, value_type value)
+            NodePtr    *insert(key_type key, value_type value)
             {
                 NodePtr *y = null_node;
                 NodePtr *x = this->root;
@@ -126,10 +126,10 @@ namespace ft{
                     y->right = new_node;
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
                     return ;
-                insertFix(new_node); //let's check if what we inserted follows the RB tree rules
+                return insertFix(new_node); //let's check if what we inserted follows the RB tree rules
             }
 
-            void insertFix(NodePtr *new_node)
+            NodePtr *insertFix(NodePtr *new_node)
             {
                 NodePtr *uncle;
                 
@@ -185,6 +185,7 @@ namespace ft{
                         break ;
                 }
                 root->colour = BLACK;
+                return new_node;
 
             }
 
