@@ -5,50 +5,52 @@
 # include <iostream>
 # include <iomanip>
 # include <list>
-//# include <iterator.hpp>
+# include "container.hpp"
+//# include "iterator.hpp"
 
 
 # define BLACK 0
 # define RED 1
 
 namespace ft{
-    template <typename key_type, typename value_type>
+    template <typename value_type>
     struct Node
     {
         
-        key_type    key;
+        //key_type    key;
         value_type   value;
         Node        *parent;
         Node        *left;
         Node        *right;
         int         colour;
      
-        Node(key_type key, value_type value, Node *null_node)
+        Node(value_type value, Node *null_node) :value(value)
         {
-            this->key = key;
-            this->value = value;
+            //this->key = key;
+            //this->value = value;
             this->parent = NULL;
             this->left = null_node;
             this->right = null_node;
             this->colour = RED;
         }
-        Node(void)
-        {
-            this->key = 0;
-            this->value = 0;
-            this->parent = NULL;
-            this->left = NULL;
-            this->right = NULL;
-            this->colour = BLACK;
-        }
+        // Node(void)
+        // {
+        //     this->key = 0;
+        //     this->value();
+        //     this->parent = NULL;
+        //     this->left = NULL;
+        //     this->right = NULL;
+        //     this->colour = BLACK;
+        // }
 
     };
 
 
-    template <typename key_type, typename value_type>
+    template <typename value_type, typename Compare = ft::less<value_type> >
         class rb_tree
         {
-            typedef Node<key_type, value_type> NodePtr;
+            public:
+            typedef Node<value_type> NodePtr;
 
             private:
             NodePtr *root;
@@ -57,7 +59,7 @@ namespace ft{
 
             rb_tree()
             {
-                null_node = new Node<key_type, value_type>;
+                null_node = new Node<value_type>(value_type(), NULL);
                 null_node->colour = 0;
                 null_node->left = NULL;
                 null_node->right = NULL;
@@ -99,37 +101,42 @@ namespace ft{
                 x->parent = pt_left;
             }
 
-            NodePtr    *insert(key_type key, value_type value)
+
+
+            bool    insert(value_type value)
             {
                 NodePtr *y = null_node;
                 NodePtr *x = this->root;
-                NodePtr *new_node = new Node<key_type, value_type>(key, value, null_node);
+                NodePtr *new_node = new Node<value_type>(value, null_node);
 
+             
                 while (x != null_node)   //Traverse the tree until you reach a null_node pointer
                 {
                     y = x;              //Saving the x parent into y for when we exit the loop when x = null_node
-                    if (key > x->key)
+                    if (value.first > x->value.first)
                         x = x->right;
-                    else
+                    else if (value.first > x->value.first)
                         x = x->left;
+                    else
+                        return 0 ;
                 }
                 new_node->parent = y;   // y is the parent of the last NIL leaf we found be traversing tree
                 if (y == null_node) // parent of root is null_node so set y to Black and declare as root
                 {
                     this->root = new_node;
                     new_node->colour = BLACK;
-                    return new_node;
+                    return 1;
                 }
-                else if (key < y->key)      // if we're not at root, need to assign the new node to either left or right of y
+                else if (value.first < y->value.first)      // if we're not at root, need to assign the new node to either left or right of y
                     y->left = new_node;
                 else
                     y->right = new_node;
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
-                    return new_node;
+                    return 1;
                 return insertFix(new_node); //let's check if what we inserted follows the RB tree rules
             }
 
-            NodePtr *insertFix(NodePtr *new_node)
+            bool insertFix(NodePtr *new_node)
             {
                 NodePtr *uncle;
                 
@@ -185,7 +192,7 @@ namespace ft{
                         break ;
                 }
                 root->colour = BLACK;
-                return new_node;
+                return 1;
 
             }
 
@@ -219,18 +226,43 @@ namespace ft{
                 return (1 + count(root->left) + count(root->right));
             }
 
-            NodePtr *find_node(NodePtr *node, key_type key)
+            NodePtr *find_node(value_type value, Compare comp)
             {
-                if (node == null_node | key == node->key)
+                NodePtr *node = root;
+                while (node != NULL)
                 {
-                    return node ;
+                    int res = comp(value.first, node->value.first);
+                    if (res == 0)
+                        return node;
+                    else if (res < 0)
+                    {
+                        node = node->left ;
+                    }
+                    else
+                    {
+                        node= node->right;
+                    }
                 }
-                if (key < node->key)
-                    find_node(node->left, key);
-                else
-                    find_node(node->right, key);
+                return NULL;
+            } 
+
+            NodePtr *begin()
+            {
+                NodePtr *res = root;
+
+                while (res->left != null_node)
+                    res = res->left;
+                return res;
             }
 
+             NodePtr *end()
+            {
+                NodePtr *res;
+
+                while (res->right != null_node)
+                    res = res->right;
+                return res;
+            }
 
             void    real_print(NodePtr *ptr, int space)
             {
@@ -241,7 +273,7 @@ namespace ft{
                 {
                     std::cout
                     << (ptr->colour == BLACK ? "\033[90m" : "\033[31m") << std::setw(space)
-                    << ptr->value << "\033[0m" << std::endl;
+                    << ptr->value.first << "\033[0m" << std::endl;
                     return ;
                 }
                 if (ptr->left != null_node)
