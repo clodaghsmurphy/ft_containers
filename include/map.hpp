@@ -69,7 +69,7 @@ namespace ft
         }
         iterator    operator++(int){
             map_iterator tmp = *this;
-            operator++;
+            this++;
             return tmp;
         }
         iterator    operator--()
@@ -94,7 +94,7 @@ namespace ft
         iterator    operator--(int)
         {
             map_iterator tmp = *this;
-            operator++;
+            this--;
             return tmp;
         }
 
@@ -167,7 +167,7 @@ namespace ft
                 map(InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value, iterator>::type* = NULL ) :
                 tree(), _compare(comp), _alloc(alloc)
             {
-                
+                insert(first,last);
             }
             map (const map& x) : tree(), _compare(x._compare), _alloc(x._alloc)
             {
@@ -175,7 +175,8 @@ namespace ft
             }
             Self    &operator=(const Self &rhs)
             {
-                //clear everything
+                clear();
+                insert(rhs.begin(), rhs.end());
                 // insert using insert
             }
 
@@ -233,14 +234,16 @@ namespace ft
             }
             iterator    insert(iterator position, const value_type& x)
             {
-                iterator it = iterator(tree.insert(Node(x)));
+                (void)position;
+                //need to finish this
+                iterator it = iterator(tree.insert(Node<value_type>(x)));
             }
 
             template <class InputIterator>
                 void insert(InputIterator first, InputIterator last)
                 {
                     for(; first != last; first++)
-                        insert(ft::pair(*first.first, *first.second));
+                        insert(value_type(*first.first, *first.second));
                 }
             void    erase(iterator position);
             size_type   erase(const key_type& x);
