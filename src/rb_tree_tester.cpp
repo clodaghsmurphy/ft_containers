@@ -1,29 +1,16 @@
 # include "red_black_tree.hpp"
+# include "map.hpp"
 
 void rb_tester()
 {
-    ft::rb_tree<int, int> tree;
+    {
+        ft::map<int, std::string> test;
 
-    tree.insert(4, 4);
-    tree.print();
-    std::cout << std::endl;
-    std::cout << "--------------------------------------" << std::endl;
+        test.insert(ft::pair<int, std::string>(1, "hello"));
+    }
+    {
+         std::map<int, std::string> test;
 
-    tree.insert(1, 1);
-    tree.print();
-    std::cout << std::endl;
-    std::cout << "--------------------------------------" << std::endl;
-
-
-
-    tree.insert(3, 3);
-    tree.print();
-    std::cout << std::endl;
-    std::cout << "--------------------------------------" << std::endl;
-
-
-    tree.insert(2, 2);
-    tree.print();
-
-
+        test.insert(std::pair<int, std::string>(1, "hello"));
+    }
 }

@@ -1,6 +1,6 @@
 
-#ifndef "PAIR_HPP"
-#define "PAIR_HPP"
+#ifndef MY_PAIR_HPP
+# define MY_PAIR_HPP
 
 # include "container.hpp"
 

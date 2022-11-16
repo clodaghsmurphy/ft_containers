@@ -116,16 +116,16 @@ namespace ft{
                 new_node->parent = y;   // y is the parent of the last NIL leaf we found be traversing tree
                 if (y == null_node) // parent of root is null_node so set y to Black and declare as root
                 {
-                this->root = new_node;
-                new_node->colour = BLACK;
-                return ;
+                    this->root = new_node;
+                    new_node->colour = BLACK;
+                    return new_node;
                 }
                 else if (key < y->key)      // if we're not at root, need to assign the new node to either left or right of y
                     y->left = new_node;
                 else
                     y->right = new_node;
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
-                    return ;
+                    return new_node;
                 return insertFix(new_node); //let's check if what we inserted follows the RB tree rules
             }
 
@@ -191,7 +191,7 @@ namespace ft{
 
             void    rb_transplant_node(NodePtr  *original, NodePtr *replace)
             {
-                if (orginal->parent == null_node)
+                if (original->parent == null_node)
                 {
                     root = replace;
                 }
