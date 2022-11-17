@@ -23,47 +23,38 @@ namespace ft{
         Node        *left;
         Node        *right;
         int         colour;
-     
-        Node(value_type value, Node *null_node) :value(value)
-        {
-            //this->key = key;
-            //this->value = value;
-            this->parent = NULL;
-            this->left = null_node;
-            this->right = null_node;
-            this->colour = RED;
-        }
-        // Node(void)
-        // {
-        //     this->key = 0;
-        //     this->value();
-        //     this->parent = NULL;
-        //     this->left = NULL;
-        //     this->right = NULL;
-        //     this->colour = BLACK;
-        // }
 
     };
 
 
-    template <typename value_type, typename Compare = ft::less<value_type> >
+    template <typename value_type, typename Compare = ft::less<value_type>, class Allocator = std::allocator<Node<value_type> > >
         class rb_tree
         {
             public:
             typedef Node<value_type> NodePtr;
 
             private:
+            Allocator   _alloc;
+            Compare     _comp;
             NodePtr *root;
             NodePtr *null_node;
             public:
 
             rb_tree()
             {
-                null_node = new Node<value_type>(value_type(), NULL);
-                null_node->colour = 0;
-                null_node->left = NULL;
-                null_node->right = NULL;
+                null_node = _alloc.allocate(1);
                 root = null_node;
+                null_node->left = NULL;
+                null_node->right = NULL ;
+                null_node->colour = BLACK ;
+            }
+            rb_tree(const Compare comp, const Allocator alloc) : _alloc(alloc), _comp(comp)
+            {
+                null_node = _alloc.allocate(1);
+                root = null_node;
+                null_node->left = NULL;
+                null_node->right = NULL ;
+                null_node->colour = BLACK ;
             }
         void    left_rotate(NodePtr *x)
             {
@@ -106,7 +97,7 @@ namespace ft{
             {
                 NodePtr *y = null_node;
                 NodePtr *x = this->root;
-                NodePtr *new_node = new Node<value_type>(value, null_node);
+                NodePtr *new_node = _alloc.allocate(1);
 
              
                 while (x != null_node)   //Traverse the tree until you reach a null_node pointer
@@ -135,11 +126,13 @@ namespace ft{
                 return insertFix(new_node); //let's check if what we inserted follows the RB tree rules
             }
 
+
+
             bool insertFix(NodePtr *new_node)
             {
                 NodePtr *uncle;
                 
-                while (new_node->parent->colour == RED) // if my parent is red it means double red and we have to fix things
+                while (new_node->parent && new_node->parent->colour == RED) // if my parent is red it means double red and we have to fix things
                 {
                     if (new_node->parent == new_node->parent->parent->left)
                     {
@@ -213,22 +206,45 @@ namespace ft{
                 
             }
 
+            NodePtr *increment_tree(NodePtr *current)
+            {
+                if (current->right != NULL)
+                {
+                    current = current->right;
+                    while (current->left != NULL)
+                        current = current->left;
+                }
+                else
+                {
+                    NodePtr *y = current->parent;
+                    while (current  && current == y->right)
+                    {
+                        current = y->parent;
+                        y = y->parent;
+                    }
+                }
+            }
+
             bool is_empty()
             {
                 return (root == null_node);
             }
 
-            size_t  tree_size(NodePtr   *root)
+            size_t size() const 
+            {
+                return tree_size(root);
+            }
+            size_t  tree_size(const NodePtr   *root) const
             {
                 if (!root)
                     return 0 ;
-                return (1 + count(root->left) + count(root->right));
+                return (1 + tree_size(root->left) + tree_size(root->right));
             }
 
             NodePtr *find_node(value_type value, Compare comp)
             {
                 NodePtr *node = root;
-                while (node != NULL)
+                while (node != null_node)
                 {
                     int res = comp(value.first, node->value.first);
                     if (res == 0)
@@ -245,7 +261,7 @@ namespace ft{
                 return NULL;
             } 
 
-            NodePtr *begin()
+            NodePtr *begin() 
             {
                 NodePtr *res = root;
 
@@ -254,7 +270,7 @@ namespace ft{
                 return res;
             }
 
-             NodePtr *end()
+            NodePtr *end() 
             {
                 NodePtr *res;
 
@@ -263,21 +279,40 @@ namespace ft{
                 return res;
             }
 
+            NodePtr *begin() const
+            {
+                NodePtr *res = root;
+
+                while (res->left != null_node)
+                    res = res->left;
+                return res;
+            }
+
+            NodePtr *end() const
+            {
+                NodePtr *res;
+                res = root;
+
+                while (res->right != null_node)
+                    res = res->right;
+                return res;
+            }
+
             void    real_print(NodePtr *ptr, int space)
             {
-                if (!ptr || ptr == null_node )
+                if (!ptr || ptr == NULL )
                     return;
                 //space += 4;
-                if (ptr->right == null_node && ptr->left == null_node)
+                if (ptr->right == NULL && ptr->left == NULL)
                 {
                     std::cout
                     << (ptr->colour == BLACK ? "\033[90m" : "\033[31m") << std::setw(space)
                     << ptr->value.first << "\033[0m" << std::endl;
                     return ;
                 }
-                if (ptr->left != null_node)
+                if (ptr->left != NULL)
                     real_print(ptr->left, space - 4);
-                if (ptr->right != null_node)
+                if (ptr->right != NULL)
                     real_print(ptr->right, space + 4);
 
                 
@@ -306,7 +341,7 @@ namespace ft{
 
             void print_left(NodePtr *ptr, int space, int levels)
             {
-                if (!ptr || ptr == null_node)
+                if (!ptr || ptr == NULL)
                     return;
                 NodePtr *tmp;
                 int         i = 0;
@@ -330,14 +365,14 @@ namespace ft{
             //     int res = 0;
             //     //NodePtr *tmp = NULL;
                 
-            //     while (ptr != null_node)
+            //     while (ptr != NULL)
             //     {
             //         //tmp = ptr;
             //         i++;
             //         ptr = ptr->right;
             //     }
             //     ptr = root;
-            //     while (ptr != null_node)
+            //     while (ptr != NULL)
             //     {
             //         //tmp = ptr;
             //         j++;

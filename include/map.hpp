@@ -9,30 +9,33 @@
 
 namespace ft 
 {
-    template <typename Key, typename T, typename Node >
+    template <typename value, typename Node, typename Compare >
     class map_iterator : public bidirectional_iterator_tag
     {
         public:
-        typedef map_iterator< Key, T, Node >  iterator;
+        typedef map_iterator< value, Node >  iterator;
         typedef Node    _node;
        
 
             typedef typename ft::bidirectional_iterator_tag iterator_category;
-            typedef pair<const Key, T> value_type;
+            typedef value               value_type;
             typedef value_type          &reference;
             typedef value_type          *pointer;
             typedef std::ptrdiff_t      difference_type;
+            typedef rb_tree<value_type, Compare>    tree_type;
             typedef std::size_t         size_type;
         
          private:
            _node *current; //the rb tree of map
+           _node *null_node;
+             tree_type   _tree;
            //value_type   node_pair;
 
         /*--------------CANONICAL--------------------*/
         public:
-        map_iterator() : current() {}
-        map_iterator(_node *n) : current(n) {}
-        map_iterator<Key, T, Node>(const iterator& other) : current(other.current) {}
+        map_iterator() : current(), _tree() {}
+        map_iterator(_node *n, tree_type base_tree) : current(n), _tree(base_tree) {}
+        map_iterator<value, Node>(const iterator& other) : current(other.current) {}
         ~map_iterator() {}
 
         iterator    &operator=(const iterator &rhs)
@@ -40,10 +43,15 @@ namespace ft
             this->current = rhs.current;
             return *this;
         }
+        // reference   operator[](const Key& key)
+        // {
+        //     return current->value;
+        // }
         reference   operator*() const
         {
             return current->value;
         }
+        
        pointer  operator->() const
         {
             return &(operator*());
@@ -59,17 +67,18 @@ namespace ft
             else
             {
                 _node *y = current->parent;
-                while (current == y->right)
+                while (current  && current == y->right)
                 {
                     current = y->parent;
                     y = y->parent;
                 }
             }
-            return *this ;
+            return iterator(increment_tree()) ;
         }
-        iterator    operator++(int){
+        iterator    operator++(int)
+        {
             map_iterator tmp = *this;
-            this++;
+            operator++();
             return tmp;
         }
         iterator    operator--()
@@ -120,7 +129,7 @@ namespace ft
             typedef pair<const Key, T>                          value_type;
             typedef rb_tree<value_type, Compare>                             RB_tree;
             typedef typename rb_tree<value_type, Compare>::NodePtr                    _node;
-            typedef Key                                         key_type;
+            typedef const Key                                         key_type;
             typedef T                                           mapped_type;
             typedef Compare                                     key_compare;
             typedef Allocator                                   allocator_type;
@@ -132,7 +141,7 @@ namespace ft
             typedef std::size_t                                         size_type;
             typedef std::ptrdiff_t                                      difference_type;
 
-            typedef map< Key, T, Compare, Allocator>                    Self;
+            typedef map< const Key, T, Compare, Allocator>                    Self;
  
 
             class value_compare : public binary_function<value_type, value_type, bool>
@@ -147,8 +156,8 @@ namespace ft
                     key_compare comp;
             };
             /*----------------------------ITERATOR TYPEDEFS-------------------------------*/
-            typedef map_iterator< Key, T, _node >                             iterator;
-            typedef map_iterator< const Key, const T, const _node >                       const_iterator;
+            typedef map_iterator< value_type, _node, Compare >                             iterator;
+            typedef map_iterator< const value_type, const _node, Compare >                       const_iterator;
             typedef Reverse_iterator<iterator>                           reverse_iterator;
             typedef Reverse_iterator< const_iterator>                  const_reverse_iterator;
 
@@ -179,7 +188,7 @@ namespace ft
                 insert(rhs.begin(), rhs.end());
                 // insert using insert
             }
-
+          
             allocator_type  get_allocator() const
             {
                 return this->_alloc;
@@ -190,15 +199,15 @@ namespace ft
             value_compare   value_comp() const;
 
             /*---------------ITERATOR POS------------------*/
-            iterator                begin() { return iterator(tree.begin());}
-            const_iterator          begin() const { return const_iterator(tree.begin());}
-            iterator                end() { return iterator(tree.end());}
-            const_iterator         end() const { return const_iterator(tree.end());}
+            iterator                begin() { return iterator(tree.begin(), tree);}
+            const_iterator          begin() const { return const_iterator(tree.begin(), tree);}
+            iterator                end() { return iterator(tree.end(), tree);}
+            const_iterator         end() const { return const_iterator(tree.end(), tree);}
 
-            reverse_iterator        rbegin() { return reverse_iterator(iterator(tree.end()));  }
-            const_reverse_iterator  rbegin() const { return const_reverse_iterator(const_iterator(tree.end()));}
-            reverse_iterator        rend() { reverse_iterator(iterator(tree.begin()));}
-            const_reverse_iterator  rend() const { const_reverse_iterator(const_iterator(tree.begin()));}
+            reverse_iterator        rbegin() { return reverse_iterator(iterator(tree.end(), tree));  }
+            const_reverse_iterator  rbegin() const { return const_reverse_iterator(const_iterator(tree.end(), tree));}
+            reverse_iterator        rend() { reverse_iterator(iterator(tree.begin(), tree));}
+            const_reverse_iterator  rend() const { const_reverse_iterator(const_iterator(tree.begin(), tree));}
 
             bool    empty()
             {
@@ -207,14 +216,18 @@ namespace ft
 
             size_type   size() const
             {
-                return tree.tree_size(tree);
+                return tree.size();
             }
-            size_type   max_size()
+            size_type   max_size() const
             {
-                return _alloc.max_szie();
+                return _alloc.max_size();
             }
 
-            T&          operator[] (const key_type& k);
+            T&  operator[](const Key& key)
+            {
+                iterator it = find(key);
+                return ((*it).second);
+            }
             T&          at(const    key_type&   k);
             const T&   at(const    key_type&   k) const;
 
@@ -243,7 +256,7 @@ namespace ft
                 void insert(InputIterator first, InputIterator last)
                 {
                     for(; first != last; first++)
-                        insert(value_type(*first.first, *first.second));
+                        insert(value_type((*first).first, (*first).second));
                 }
             void    erase(iterator position);
             size_type   erase(const key_type& x);
@@ -266,79 +279,85 @@ namespace ft
                 return iterator(res);
             }
 
-            size_type   count(const value_type& x)
+            // size_type   count(const value_type& x)
+            // {
+            //     size_t count = 0;
+            //     iterator it = begin();
+            //     iterator ite = end();
+
+            //     while (it != ite)
+            //     {
+            //         if (it.current.first == x)
+            //             count++;
+            //         it++;
+            //     }
+            //     return count;
+            // }
+
+            iterator    lower_bound(const key_type& x)
             {
-                size_t count = 0;
                 iterator it = begin();
                 iterator ite = end();
 
                 while (it != ite)
                 {
-                    if (it.current.first == x)
-                        count++;
-                    it++;
-                }
-                return count;
-            }
-
-            iterator    lower_bound(const value_type& x)
-            {
-                iterator it = begin();
-                iterator ite = end();
-
-                while (it != ite)
-                {
-                    if (it.current.first >= x)
+                    if (!_compare((*it).first, x) || (!_compare((*it).first, x) && !_compare( x, (*it).first)))
                         return it;
                     it++;
                 }
                 return it;
             }
 
-            const_iterator    lower_bound(const value_type& x) const
+            const_iterator    lower_bound(const key_type& x) const
             {
-                iterator it = begin();
-                iterator ite = end();
+                const_iterator it = begin();
+                const_iterator ite = end();
 
                 while (it != ite)
                 {
-                    if (it.current.first >= x)
+                    if (!_compare((*it).first, x) || (!_compare((*it).first, x) && !_compare( x, (*it).first)))
                         return it;
                     it++;
                 }
                 return it;
             }
 
-              iterator    upper_bound(const value_type& x)
+              iterator    upper_bound(const key_type& x)
             {
                 iterator it = begin();
                 iterator ite = end();
 
                 while (it != ite)
                 {
-                    if (!comp(it.current.first, x))
+                    if (!_compare((*it).first, x))
                         return it;
                     it++;
                 }
                 return it;
             }
 
-            const_iterator    upper_bound(const value_type& x) const
+            const_iterator    upper_bound(const key_type& x) const
             {
-                iterator it = begin();
-                iterator ite = end();
+                const_iterator it = begin();
+                const_iterator ite = end();
 
                 while (it != ite)
                 {
-                    if (!comp(it.current.first, x))
+                    if (!_compare((*it).first, x))
                         return it;
                     it++;
                 }
                 return it;
             }
 
-        pair<iterator, iterator> equal_range(const value_type& x);
-        pair<const_iterator, const_iterator>equl_range(const value_type& x);
+        pair<iterator, iterator> equal_range(const key_type& x)
+        {
+            return ft::pair<iterator, iterator>(lower_bound(x), upper_bound(x));
+        }
+        pair<const_iterator, const_iterator>equal_range(const key_type& x) const
+        {
+            return ft::pair<const_iterator, const_iterator>(lower_bound(x), upper_bound(x));
+        }
 
             
     };

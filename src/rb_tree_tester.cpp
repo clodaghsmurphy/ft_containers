@@ -106,7 +106,7 @@ template <typename MAP>
 void ft_bound(MAP &mp, const T1 &param)
 {
     ft_iterator ite = mp.end(), it[2];
-    _pair<ft_iterator, ft_iterator> ft_range;
+    ft::pair<ft_iterator, ft_iterator> ft_range;
 
     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
     std::cout << "with key [" << param << "]:" << std::endl;
@@ -122,7 +122,7 @@ template <typename MAP>
 void ft_const_bound(const MAP &mp, const T1 &param)
 {
     ft_const_iterator ite = mp.end(), it[2];
-    _pair<ft_const_iterator, ft_const_iterator> ft_range;
+    ft::pair<ft_const_iterator, ft_const_iterator> ft_range;
 
     std::cout << "\t-- [" << iter++ << "] (const) --" << std::endl;
     std::cout << "with key [" << param << "]:" << std::endl;
@@ -134,7 +134,8 @@ void ft_const_bound(const MAP &mp, const T1 &param)
     std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
 }
 
-void  bounda(void)
+
+void  bounds(void)
 {
     std::list<T3> lst;
     unsigned int lst_size = 10;
@@ -183,8 +184,15 @@ void rb_tester()
         std::map<const int, std::string>::iterator it;
 
         test.insert(std::pair<int, std::string>(1, "hello"));
+        test.insert(std::pair<int, std::string>(2, "hello"));
+
         it = test.begin();
+        it++;
+        it++;
         std::cout << (*it).first << std::endl;
+        it--;
+        std::cout << (*it).first << std::endl;
+
         it = test.find(1);
         std::cout << (*it).first << std::endl;
          it = test.end();
@@ -193,5 +201,6 @@ void rb_tester()
         std::cout << it->first << std::endl;
 
     }
-    bounds<ft::map, int, int>();
+    
+    bounds();
 }
