@@ -40,7 +40,7 @@ namespace ft{
             NodePtr *null_node;
             public:
 
-            rb_tree()
+            rb_tree() 
             {
                 null_node = _alloc.allocate(1);
                 root = null_node;
@@ -100,7 +100,7 @@ namespace ft{
                 NodePtr *new_node = _alloc.allocate(1);
 
              
-                while (x != null_node)   //Traverse the tree until you reach a null_node pointer
+                while (x && x != null_node)   //Traverse the tree until you reach a null_node pointer
                 {
                     y = x;              //Saving the x parent into y for when we exit the loop when x = null_node
                     if (value.first > x->value.first)
@@ -208,10 +208,10 @@ namespace ft{
 
             NodePtr *increment_tree(NodePtr *current)
             {
-                if (current->right != NULL)
+                if (current->right != null_node)
                 {
                     current = current->right;
-                    while (current->left != NULL)
+                    while (current->left != null_node)
                         current = current->left;
                 }
                 else
@@ -223,6 +223,11 @@ namespace ft{
                         y = y->parent;
                     }
                 }
+            }
+
+            NodePtr *get_null_node() const
+            {
+                return null_node ;
             }
 
             bool is_empty()
@@ -241,12 +246,12 @@ namespace ft{
                 return (1 + tree_size(root->left) + tree_size(root->right));
             }
 
-            NodePtr *find_node(value_type value, Compare comp)
+            NodePtr *find_node(value_type value)
             {
                 NodePtr *node = root;
                 while (node != null_node)
                 {
-                    int res = comp(value.first, node->value.first);
+                    int res = _comp(value, node->value);
                     if (res == 0)
                         return node;
                     else if (res < 0)
@@ -265,16 +270,20 @@ namespace ft{
             {
                 NodePtr *res = root;
 
-                while (res->left != null_node)
+                if (res->left == NULL)
+                    return res ;
+                while (res && res->left != null_node)
                     res = res->left;
                 return res;
             }
 
             NodePtr *end() 
             {
-                NodePtr *res;
+                NodePtr *res= root;
 
-                while (res->right != null_node)
+                if (res->right == NULL)
+                    return res ;
+                while (res && res->right != null_node)
                     res = res->right;
                 return res;
             }
@@ -283,17 +292,21 @@ namespace ft{
             {
                 NodePtr *res = root;
 
-                while (res->left != null_node)
+                if (res->left == NULL)
+                    return res ;
+                while (res && res->left != null_node)
                     res = res->left;
                 return res;
             }
 
-            NodePtr *end() const
+            const NodePtr *end() const
             {
                 NodePtr *res;
                 res = root;
 
-                while (res->right != null_node)
+                if (res->right == NULL)
+                    return res ;
+                while (res && res->right != null_node)
                     res = res->right;
                 return res;
             }

@@ -122,6 +122,7 @@ template <typename MAP>
 void ft_const_bound(const MAP &mp, const T1 &param)
 {
     ft_const_iterator ite = mp.end(), it[2];
+
     ft::pair<ft_const_iterator, ft_const_iterator> ft_range;
 
     std::cout << "\t-- [" << iter++ << "] (const) --" << std::endl;
@@ -152,6 +153,8 @@ void  bounds(void)
 
     //printSize(mp);
 
+    //std::cout << mp.lower_bound(3)->second << std::endl;
+    T2 foo = mp.lower_bound(3)->second
     mp.lower_bound(3)->second = 404;
     mp.upper_bound(7)->second = 842;
     ft_bound(mp, 5);
