@@ -206,6 +206,40 @@ namespace ft{
                 
             }
 
+            void    delete_node(NodePtr *del_node)
+            {
+                NodePtr *del_node = find_node(key_t);
+                NodePtr *x, *y;
+                bool og_colour ;
+                
+                if (del_node == NULL)
+                    return NULL ;
+                bool og_colour = del_node->colour;
+                 if (del_node->left == null_node)
+                {
+                    x = del_node->right;
+                    rb_transplant_node(del_node, del_node->right);
+                }
+                else if (del_node->right == null_node)
+                {
+                    x = del_node->left;
+                    rb_transplant_node(del_node, del_node->left);
+                }
+                else
+                {
+                    y = min(del_node->right);
+                    og_colour = y->colour;
+                }
+                
+            }
+
+            NodePtr *min(NodePtr    *node)
+            {
+                while (node->left   != NULL)
+                    node = node->left;
+                return node;
+            }
+
             NodePtr *increment_tree(NodePtr *current)
             {
                 if (current->right != null_node)

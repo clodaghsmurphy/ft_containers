@@ -154,7 +154,7 @@ void  bounds(void)
     //printSize(mp);
 
     //std::cout << mp.lower_bound(3)->second << std::endl;
-    T2 foo = mp.lower_bound(3)->second
+    T2 foo = mp.lower_bound(3)->second;
     mp.lower_bound(3)->second = 404;
     mp.upper_bound(7)->second = 842;
     ft_bound(mp, 5);
@@ -182,26 +182,26 @@ void rb_tester()
 
     }
     {
-        std::cout << "\n      REAL        \n";
-         std::map<int, std::string> test;
-        std::map<const int, std::string>::iterator it;
+        // std::cout << "\n      REAL        \n";
+        //  std::map<int, std::string> test;
+        // std::map<const int, std::string>::iterator it;
 
-        test.insert(std::pair<int, std::string>(1, "hello"));
-        test.insert(std::pair<int, std::string>(2, "hello"));
+        // test.insert(std::pair<int, std::string>(1, "hello"));
+        // test.insert(std::pair<int, std::string>(2, "hello"));
 
-        it = test.begin();
-        it++;
-        it++;
-        std::cout << (*it).first << std::endl;
-        it--;
-        std::cout << (*it).first << std::endl;
+        // it = test.begin();
+        // it++;
+        // it++;
+        // std::cout << (*it).first << std::endl;
+        // it--;
+        // std::cout << (*it).first << std::endl;
 
-        it = test.find(1);
-        std::cout << (*it).first << std::endl;
-         it = test.end();
-        std::cout << it->first << std::endl;
-          it = test.find(9);
-        std::cout << it->first << std::endl;
+        // it = test.find(1);
+        // std::cout << (*it).first << std::endl;
+        //  it = test.end();
+        // std::cout << it->first << std::endl;
+        //   it = test.find(9);
+        // std::cout << it->first << std::endl;
 
     }
     
