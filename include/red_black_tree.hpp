@@ -27,7 +27,7 @@ namespace ft{
     };
 
 
-    template <typename value_type, typename Compare = ft::less<value_type>, class Allocator = std::allocator<Node<value_type> > >
+    template <typename value_type, typename key_type, typename Compare = ft::less<value_type>, class Allocator = std::allocator<Node<value_type> > >
         class rb_tree
         {
             public:
@@ -38,6 +38,7 @@ namespace ft{
             Compare     _comp;
             NodePtr *root;
             NodePtr *null_node;
+            size_t    _size;
             public:
 
             rb_tree() 
@@ -47,8 +48,9 @@ namespace ft{
                 null_node->left = NULL;
                 null_node->right = NULL ;
                 null_node->colour = BLACK ;
+                _size = 0;
             }
-            rb_tree(const Compare comp, const Allocator alloc) : _alloc(alloc), _comp(comp)
+            rb_tree(const Compare comp, const Allocator alloc) : _alloc(alloc), _comp(comp), _size(0)
             {
                 null_node = _alloc.allocate(1);
                 root = null_node;
@@ -92,12 +94,21 @@ namespace ft{
                 x->parent = pt_left;
             }
 
+            void init_null_node(NodePtr  *node, const value_type &value)
+            {
+                std::allocator<value_type>  val_alloc;
+                node->left = null_node;
+                node->right = null_node;
+                node->parent = null_node;
+                val_alloc.construct(&node->value, value);
+            }
 
             bool    insert(value_type value)
             {
                 NodePtr *y = null_node;
                 NodePtr *x = this->root;
                 NodePtr *new_node = _alloc.allocate(1);
+                init_null_node(new_node, value);
 
              
                 while (x && x != null_node)   //Traverse the tree until you reach a null_node pointer
@@ -115,6 +126,7 @@ namespace ft{
                 {
                     this->root = new_node;
                     new_node->colour = BLACK;
+                    _size++;
                     return 1;
                 }
                 else if (value.first < y->value.first)      // if we're not at root, need to assign the new node to either left or right of y
@@ -122,7 +134,11 @@ namespace ft{
                 else
                     y->right = new_node;
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
+                {
+                    _size++;
                     return 1;
+                }
+                _size++;
                 return insertFix(new_node); //let's check if what we inserted follows the RB tree rules
             }
 
@@ -206,15 +222,15 @@ namespace ft{
                 
             }
 
-            void    delete_node(NodePtr *del_node)
+            void    delete_node(key_type key)
             {
-                NodePtr *del_node = find_node(key_t);
+                NodePtr *del_node = find_node(key);
                 NodePtr *x, *y;
                 bool og_colour ;
                 
                 if (del_node == NULL)
-                    return NULL ;
-                bool og_colour = del_node->colour;
+                    return  ;
+                og_colour = del_node->colour;
                  if (del_node->left == null_node)
                 {
                     x = del_node->right;
@@ -271,7 +287,7 @@ namespace ft{
 
             size_t size() const 
             {
-                return tree_size(root);
+                return _size;
             }
             size_t  tree_size(const NodePtr   *root) const
             {

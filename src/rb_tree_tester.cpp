@@ -143,7 +143,7 @@ void  bounds(void)
     for (unsigned int i = 0; i < lst_size; ++i)
         lst.push_back(T3(i + 1, (i + 1) * 3));
    ft::map<T1, T2> mp(lst.begin(), lst.end());
-   // printSize(mp);
+   printSize(mp);
 
     ft_const_bound(mp, -10);
     ft_const_bound(mp, 1);
@@ -151,10 +151,8 @@ void  bounds(void)
     ft_const_bound(mp, 10);
     ft_const_bound(mp, 50);
 
-    //printSize(mp);
+    printSize(mp);
 
-    //std::cout << mp.lower_bound(3)->second << std::endl;
-    T2 foo = mp.lower_bound(3)->second;
     mp.lower_bound(3)->second = 404;
     mp.upper_bound(7)->second = 842;
     ft_bound(mp, 5);
@@ -204,6 +202,5 @@ void rb_tester()
         // std::cout << it->first << std::endl;
 
     }
-    
     bounds();
 }

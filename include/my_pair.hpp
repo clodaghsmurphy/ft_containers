@@ -24,13 +24,17 @@ namespace ft
                 second = rhs.second;
                 return *this;
             }
+            pair<T1, T2>    operator()() const
+            {
+                return pair(this->first, this->second);
+            }
         };
 
         template <class T1, class T2>
         pair<T1, T2> make_pair(T1 x, T2 y)
         {
             return (pair<T1, T2>(x, y));
-            }
+        }
 
         template <class T1, class T2>
         bool operator==(pair<T1, T2> rhs, pair<T1,T2> lhs)
