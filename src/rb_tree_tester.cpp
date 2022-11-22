@@ -73,9 +73,13 @@ T dec(T it, int n)
 static int iter = 0;
 #define T1 int
 #define T2 foo<int>
+#define T4 char
+#define T5 foo<float>
 typedef ft::map<T1, T2>::value_type T3;
 typedef ft::map<T1, T2>::iterator ft_iterator;
 typedef ft::map<T1, T2>::const_iterator ft_const_iterator;
+typedef ft::map<T4, T5> _map;
+typedef ft::map<T4, T5>::const_iterator ft_const_it;
 
 template <typename T>
 std::string printPair(const T &iterator, bool nl = true, std::ostream &o = std::cout)
@@ -97,7 +101,12 @@ void printSize(T_MAP const &mp, bool print_content = 1)
         std::cout << std::endl
                   << "Content is:" << std::endl;
         for (; it != ite; ++it)
+        {
+            if (it != ite)
+                std::cout << "ITS EQUAL : " << (it != ite) << std::endl;
             std::cout << "- " << printPair(it, false) << std::endl;
+
+        }
     }
     std::cout << "###############################################" << std::endl;
 }
@@ -113,6 +122,7 @@ void ft_bound(MAP &mp, const T1 &param)
     it[0] = mp.lower_bound(param);
     it[1] = mp.upper_bound(param);
     ft_range = mp.equal_range(param);
+    std::cout << (it[0] == ite) << std::endl;
     std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
     std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
     std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
@@ -130,6 +140,8 @@ void ft_const_bound(const MAP &mp, const T1 &param)
     it[0] = mp.lower_bound(param);
     it[1] = mp.upper_bound(param);
     ft_range = mp.equal_range(param);
+    std::cout << (it[0] == ite) << std::endl;
+
     std::cout << "lower_bound: " << (it[0] == ite ? "end()" : printPair(it[0], false)) << std::endl;
     std::cout << "upper_bound: " << (it[1] == ite ? "end()" : printPair(it[1], false)) << std::endl;
     std::cout << "equal_range: " << (ft_range.first == it[0] && ft_range.second == it[1]) << std::endl;
@@ -161,6 +173,40 @@ void  bounds(void)
     printSize(mp);
     return ;
 }
+
+
+
+void	ft_comp(const _map &mp, const ft_const_it &it1, const ft_const_it &it2)
+{
+    static unsigned int i = 0;
+	bool res[2];
+
+	std::cout << "\t-- [" << ++i << "] --" << std::endl;
+	res[0] = mp.key_comp()(it1->first, it2->first);
+	res[1] = mp.value_comp()(*it1, *it2);
+	std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
+	std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
+}
+
+
+void	comp_test(void)
+{
+	_map	mp;
+
+	mp['a'] = 2.3;
+	mp['b'] = 1.4;
+	mp['c'] = 0.3;
+	mp['d'] = 4.2;
+	printSize(mp);
+
+	for (ft_const_it it1 = mp.begin(); it1 != mp.end(); ++it1)
+		for (ft_const_it it2 = mp.begin(); it2 != mp.end(); ++it2)
+			ft_comp(mp, it1, it2);
+
+	printSize(mp);
+	return ;
+}
+
 
 void rb_tester()
 {
@@ -203,4 +249,5 @@ void rb_tester()
 
     }
     bounds();
+    //comp_test();
 }

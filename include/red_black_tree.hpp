@@ -251,8 +251,29 @@ namespace ft{
 
             NodePtr *min(NodePtr    *node)
             {
-                while (node->left   != NULL)
+                if (node == null_node)
+                    return null_node;
+                while (node->left != null_node)
                     node = node->left;
+                return node;
+            }
+
+            NodePtr *max(NodePtr    *node)
+            {
+                if (node == null_node)
+                    return null_node;
+                while (node->right != null_node)
+                    node = node->right;
+                return node;
+            }
+
+            NodePtr *tree_max()
+            {
+                NodePtr    *node = root;
+                if (node == null_node)
+                    return null_node;
+                while (node->right != null_node)
+                    node = node->right;
                 return node;
             }
 
