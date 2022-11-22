@@ -32,6 +32,7 @@ namespace ft{
         {
             public:
             typedef Node<value_type> NodePtr;
+            typedef rb_tree<value_type, key_type, Compare, Allocator>     Self ;    
 
             private:
             Allocator   _alloc;
@@ -57,6 +58,18 @@ namespace ft{
                 null_node->left = NULL;
                 null_node->right = NULL ;
                 null_node->colour = BLACK ;
+            }
+            rb_tree(const  Self &rhs) : _alloc(rhs._alloc), _comp(rhs._comp), root(rhs.root), null_node(rhs.null_node), _size(rhs._size)
+            {}
+            Self    &operator=(const Self &rhs)
+            {
+                this->_alloc = rhs._alloc;
+                this->_comp = rhs._comp;
+                this->root = rhs.root;
+                this->null_node = rhs.null_node;
+                this->_size = rhs._size;
+                return *this;
+
             }
         void    left_rotate(NodePtr *x)
             {
@@ -245,12 +258,43 @@ namespace ft{
                 {
                     y = min(del_node->right);
                     og_colour = y->colour;
+                    x = y->right;
+                    if (y->parent == del_node)
+                        x->parent = y;
+                    else
+                        rb_transplant_node(y, y->right);
+                    rb_transplant_node(y, del_node);
+                    y->colour = og_colour;
                 }
+                if (og_colour == BLACK)
+                    delete_fix(x);
                 
+            }
+
+            void    delete_fix(NodePtr *x)
+            {
+                NodePtr *s;
+
+                (void)s;
+                (void)x;
+                // while (x != root && x->colour == BLACK)
+                // {
+
+                // }
             }
 
             NodePtr *min(NodePtr    *node)
             {
+                if (node == null_node)
+                    return null_node;
+                while (node->left != null_node)
+                    node = node->left;
+                return node;
+            }
+
+            NodePtr *tree_min()
+            {
+                NodePtr    *node = root;
                 if (node == null_node)
                     return null_node;
                 while (node->left != null_node)
@@ -276,7 +320,19 @@ namespace ft{
                     node = node->right;
                 return node;
             }
-
+            void clear(NodePtr  *node)
+            {
+                if (node->left != null_node)
+                    clear(node->left);
+                if (node->right != null_node)
+                    clear(node->right);
+                if (node != tree_max())
+                    _alloc.deallocate(node, 1);
+            }
+            void    tree_clear()
+            {
+                clear(root);
+            }
             NodePtr *increment_tree(NodePtr *current)
             {
                 if (current->right != null_node)
@@ -317,7 +373,7 @@ namespace ft{
                 return (1 + tree_size(root->left) + tree_size(root->right));
             }
 
-            NodePtr *find_node(value_type value)
+            NodePtr *find_node(value_type value) const
             {
                 NodePtr *node = root;
                 while (node != null_node)

@@ -90,31 +90,33 @@ namespace ft
         }
         iterator    operator--()
         {
-            if (*this == null_node)
-                return _tree.end();
-             if (*this == _tree.begin())
-                return ;
+              if (current == null_node)
+                return *this;
+            if (current == _tree.tree_min())
+            {
+                current = _tree.tree_min();
+                return *this;
+            }
             if (current->left != null_node)
             {
                 current = current->left;
-                while (current->right != null_node)
+                while (current && current->right != null_node)
                     current = current->right;
             }
             else
             {
-                _node *y = current->parent;
-                while (current == y->right)
-                {
-                    current = y->parent;
-                    y = y->parent;
-                }
+               _node    *parent = current->parent;
+               if (parent == null_node)
+                    current = null_node ;
+                else if (current == parent->right)
+                     current = parent ;
             }
-            return *this;
+            return *this ;
         }
         iterator    operator--(int)
         {
             map_iterator_base tmp = *this;
-            this--;
+            operator--();
             return tmp;
         }
         bool operator==(const iterator& x)
@@ -193,11 +195,12 @@ namespace ft
         iterator    operator--()
         {
             base--;
+            return *this;
         }
         iterator    operator--(int)
         {
             map_iterator tmp = *this;
-            this--;
+            operator--();
             return tmp;
         }
 
@@ -290,7 +293,7 @@ namespace ft
         iterator    operator--(int)
         {
             const_map_iterator tmp = *this;
-            this--;
+           operator--();
             return tmp;
         }
 
@@ -376,15 +379,17 @@ namespace ft
             {
                 insert(first,last);
             }
-            map (const map& x) : tree(), _compare(x._compare), _alloc(x._alloc)
+            map (const Self& x) : tree(x.tree), _compare(x._compare), _alloc(x._alloc)
             {
-                insert(x.begin(), x.end());
+                
             }
-            Self    &operator=(const Self &rhs)
+           Self   &operator=(const Self &rhs)
             {
                 clear();
-                insert(rhs.begin(), rhs.end());
-                
+               this->tree= rhs.tree;
+               this->_compare = _compare;
+               this->_alloc = _alloc;
+                return *this;
             }
           
             allocator_type  get_allocator() const
@@ -424,18 +429,30 @@ namespace ft
 
             T&  operator[](const Key& key)
             {
-                iterator it = find(key);
-                if (it == end())
-                {
-                    ft::pair<iterator, bool> res = insert(value_type(key,mapped_type()));
-                    return res.first->second;
-                }
-                return ((*it).second);
+         
+                    insert(value_type(key,mapped_type()));
+                    return ((*find(key)).second);
+
             }
             T&          at(const    key_type&   k);
             const T&   at(const    key_type&   k) const;
 
-            void    swap(Self& x);
+            void    swap(Self& x)
+            {
+                Self tmp;
+
+                tmp._alloc = x._alloc;
+                tmp._compare = x._compare;
+                tmp.tree = x.tree;
+
+                x._alloc = _alloc;
+                x._compare = _compare;
+                x.tree = tree;
+
+                _alloc = tmp._alloc;
+                _compare = x._compare;
+                x.tree = x.tree;
+            }
 
             /*---------------------INSERT / ERASE -----------------------*/
 
@@ -463,18 +480,37 @@ namespace ft
                     for(; first != last; first++)
                         insert(value_type((*first).first, (*first).second));
                 }
-            void    erase(iterator position);
-            size_type   erase(const key_type& x);
-            void        erase(iterator first, iterator last);
-            void        clear();
+            void    erase(iterator position)
+            {
+                tree.delete_node((*position).first);
+            }
+            size_type   erase(const key_type& x)
+            {
+                tree.delete_node(x);
+            }
+            void        erase(iterator first, iterator last)
+            {
+                for(; first != last; first++)
+                    tree.delete_node((*first).first);
+            }
+            void        clear()
+            {
+                tree.tree_clear();
+            }
 
             /*-------------------OPERATIONS-------------------*/
             iterator find(const key_type& x)
             {
-                _node *res = tree.find_node( ft::pair<key_type, mapped_type>(x, mapped_type()));
-                if (res == NULL)
-                    return end();
-                return iterator(res, tree);
+                iterator it = begin();
+                iterator ite = end();
+
+                while (it != ite)
+                {
+                    if ((*it).first == x)
+                        return it;
+                    it++;
+                }
+                return it;
             }
             const_iterator find(const key_type& x) const
             {
@@ -531,19 +567,29 @@ namespace ft
 
               iterator    upper_bound(const key_type& x)
             {
-                iterator it = lower_bound(x);
+                iterator it = begin();
+                iterator ite = end();
 
-                if (it == find(k))
+                while (it != ite)
+                {
+                    if (_compare((*it).first, x))
+                        return it;
                     it++;
+                }
                 return it;
             }
 
             const_iterator    upper_bound(const key_type& x) const
             {
-                const_iterator it = lower_bound(x);
+                const_iterator it = begin();
+                const_iterator ite = end();
 
-                if (it == find(k))
+                while (it != ite)
+                {
+                    if (_compare((*it).first, x))
+                        return it;
                     it++;
+                }
                 return it;
             }
 
