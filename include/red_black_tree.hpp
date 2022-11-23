@@ -129,7 +129,7 @@ namespace ft{
                     y = x;              //Saving the x parent into y for when we exit the loop when x = null_node
                     if (value.first > x->value.first)
                         x = x->right;
-                    else if (value.first > x->value.first)
+                    else if (value.first < x->value.first)
                         x = x->left;
                     else
                         return 0 ;
@@ -146,6 +146,11 @@ namespace ft{
                     y->left = new_node;
                 else
                     y->right = new_node;
+                if (new_node->parent == null_node)
+                {
+                    new_node->colour =BLACK;
+                    return 1;
+                }
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
                 {
                     _size++;
@@ -297,21 +302,15 @@ namespace ft{
                         {
                             sibling->colour = RED;
                             x->parent = x;
-                        }
-                        //CASE III :  RIGHT CHILD IS BLACK
-                        else 
+                        } 
+                        else if(sibling->right->colour == BLACK) //CASE III :  RIGHT CHILD IS BLACK
                         {
-                            if(sibling->right->colour == BLACK)
-                            {
-                                sibling->left->colour = BLACK;
-                                sibling->colour = RED;
-                                right_rotate(sibling);
-                                sibling->parent->right = sibling;
-                            }
-
-                        }
-                        //CASE IV LEFT CHILD
-                        else
+                            sibling->left->colour = BLACK;
+                            sibling->colour = RED;
+                            right_rotate(sibling);
+                            sibling->parent->right = sibling;
+                        }                   
+                        else  //CASE IV LEFT CHILD
                         {
                             sibling->colour = x->parent->colour;
                             x->parent->parent = BLACK;
@@ -324,16 +323,39 @@ namespace ft{
                     else // SAME PROCESS BUT IF THE DELETED IS ON THE  RGIHT
                     {
                         sibling = x->parent->left;
-                        if (sibling->colour = BLACK)
+                        // CASE I
+                        if (sibling->colour == BLACK)
                         {
                             sibling->left->colour = BLACK;
                             sibling->colour = RED;
                             right_rotate(x->parent);
                             sibling = x->parent->left;
                         }
+                        //  CASE II
+                        if (sibling->right->colour == BLACK && sibling->left->colour == BLACK)
+                        {
+                            sibling->colour = RED;
+                            x = x->parent;
+                        }
+                        // CASE III
+                        else
+                        {
+                            if (sibling->left->colour == BLACK)
+                            {
+                                sibling->right->colour == BLACK;
+                                sibling->colour == RED;
+                                left_rotate(sibling);
+                                sibling = x->parent->left;
+                            }
+                            sibling->colour = x->parent->colour;
+                            x->parent->colour = BLACK;
+                            right_rotate(x->parent);
+                            x = root;
+                        }
 
                     }
                 }
+                x->colour = BLACK;
             }
 
             NodePtr *min(NodePtr    *node)
@@ -375,6 +397,7 @@ namespace ft{
             }
             void clear(NodePtr  *node)
             {
+                _size = 0;
                 if (node->left != null_node)
                     clear(node->left);
                 if (node->right != null_node)
@@ -550,94 +573,94 @@ namespace ft{
                 }
             }
 
-            // int count_levels()
-            // {
-            //     NodePtr *ptr = root;
-            //     int i = 0;
-            //     int j = 0;
-            //     int res = 0;
-            //     //NodePtr *tmp = NULL;
+            int count_levels()
+            {
+                NodePtr *ptr = root;
+                int i = 0;
+                int j = 0;
+                int res = 0;
+                //NodePtr *tmp = NULL;
                 
-            //     while (ptr != NULL)
-            //     {
-            //         //tmp = ptr;
-            //         i++;
-            //         ptr = ptr->right;
-            //     }
-            //     ptr = root;
-            //     while (ptr != NULL)
-            //     {
-            //         //tmp = ptr;
-            //         j++;
-            //         ptr = ptr->left;
-            //     }
-            //     if (i > j)
-            //         res = i;
-            //     else
-            //         res = j;
-            //     return (res);
-            // }
+                while (ptr != NULL)
+                {
+                    //tmp = ptr;
+                    i++;
+                    ptr = ptr->right;
+                }
+                ptr = root;
+                while (ptr != NULL)
+                {
+                    //tmp = ptr;
+                    j++;
+                    ptr = ptr->left;
+                }
+                if (i > j)
+                    res = i;
+                else
+                    res = j;
+                return (res);
+            }
      
 
-            //     int max_depth(NodePtr* n)
-            //     {
-            //     if (!n) return 0;
-            //     return 1 + std::max(max_depth(n->left), max_depth(n->right));
-            //     }
+                int max_depth(NodePtr* n)
+                {
+                if (!n) return 0;
+                return 1 + std::max(max_depth(n->left), max_depth(n->right));
+                }
 
-            //     void prt(NodePtr* n)
-            //     {
-            //         struct node_depth
-            //         {
-            //             NodePtr* n;
-            //             int lvl;
-            //             node_depth(NodePtr* n_, int lvl_) : n(n_), lvl(lvl_) {}
-            //         };
+                void prt(NodePtr* n)
+                {
+                    struct node_depth
+                    {
+                        NodePtr* n;
+                        int lvl;
+                        node_depth(NodePtr* n_, int lvl_) : n(n_), lvl(lvl_) {}
+                    };
 
-            //         int depth = max_depth(n);
+                    int depth = max_depth(n);
 
-            //         char buf[1024];
-            //         int last_lvl = 0;
-            //         int offset = (1 << depth) - 1;
+                    char buf[1024];
+                    int last_lvl = 0;
+                    int offset = (1 << depth) - 1;
 
-            //         // using a queue means we perform a breadth first iteration through the tree
-            //         std::list<node_depth> q;
+                    // using a queue means we perform a breadth first iteration through the tree
+                    std::list<node_depth> q;
 
-            //         q.push_back(node_depth(n, last_lvl));
-            //         while (q.size())
-            //         {
-            //             const node_depth& nd = *q.begin();
+                    q.push_back(node_depth(n, last_lvl));
+                    while (q.size())
+                    {
+                        const node_depth& nd = *q.begin();
 
-            //             // moving to a new level in the tree, output a new line and calculate new offset
-            //             if (last_lvl != nd.lvl)
-            //             {
-            //             std::cout << "\n";
+                        // moving to a new level in the tree, output a new line and calculate new offset
+                        if (last_lvl != nd.lvl)
+                        {
+                        std::cout << "\n";
 
-            //             last_lvl = nd.lvl;
-            //             offset = (1 << (depth - nd.lvl)) - 1;
-            //             }
+                        last_lvl = nd.lvl;
+                        offset = (1 << (depth - nd.lvl)) - 1;
+                        }
 
-            //             // output <offset><data><offset>
-            //             if (nd.n)
-            //             {
-            //                 std::cout << (nd.n->colour == BLACK ? "\033[90m" : "\033[31m");
-            //             sprintf(buf, " %*s%d%*s", offset, " ", nd.n->key, offset, " ");
-            //             }
+                        // output <offset><data><offset>
+                        if (nd.n)
+                        {
+                            std::cout << (nd.n->colour == BLACK ? "\033[90m" : "\033[31m");
+                        sprintf(buf, " %*s%d%*s", offset, " ", nd.n->value.first, offset, " ");
+                        }
                         
-            //             else
-            //             sprintf(buf, " %*s", offset << 1, " ");
-            //             std::cout << buf;
+                        else
+                        sprintf(buf, " %*s", offset << 1, " ");
+                        std::cout << buf;
 
-            //             if (nd.n)
-            //             {
-            //             q.push_back(node_depth(nd.n->left, last_lvl + 1));
-            //             q.push_back(node_depth(nd.n->right, last_lvl + 1));
-            //             }
+                        if (nd.n)
+                        {
+                        q.push_back(node_depth(nd.n->left, last_lvl + 1));
+                        q.push_back(node_depth(nd.n->right, last_lvl + 1));
+                        }
 
-            //             q.pop_front();
-            //         }
-            //         std::cout << "\n";
-            //     }
+                        q.pop_front();
+                    }
+                    std::cout << "\n";
+                }
 
             };
 }

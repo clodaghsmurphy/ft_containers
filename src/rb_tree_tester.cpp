@@ -207,8 +207,23 @@ void	comp_test(void)
 }
 
 
+
     void		copy_map_test(void)
 {
+    {
+        std::list<std::pair<T1, T2> > lst;
+        unsigned int lst_size = 7;
+        for (unsigned int i = 0; i < lst_size; ++i)
+            lst.push_back(std::pair<T1, T2>(lst_size - i, i));
+
+        std::map<T1, T2> mp(lst.begin(), lst.end());
+        std::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
+        --(--ite);
+        std::cout << (*ite).first << std::endl;
+        (void)it;
+
+    }  
+    
 	std::list<T3> lst;
 	unsigned int lst_size = 7;
 	for (unsigned int i = 0; i < lst_size; ++i)
@@ -216,7 +231,8 @@ void	comp_test(void)
 
 	ft::map<T1, T2> mp(lst.begin(), lst.end());
 	ft::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-
+    
+  
 	ft::map<T1, T2> mp_range(it, --(--ite));
 	for (int i = 0; it != ite; ++it)
 		it->second = ++i * 5;

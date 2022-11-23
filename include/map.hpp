@@ -38,11 +38,13 @@ namespace ft
         ~map_iterator_base() {}
 
 
-        iterator    &operator=(const iterator &rhs)
-        {
-            this->current = rhs.current;
-            return *this;
-        }
+        // iterator    &operator=(const iterator &rhs)
+        // {
+        //     this->current = rhs.current;
+        //     this->null_node = rhs.null_node;
+        //     this->_tree = rhs._tree;
+        //     return *this;
+        // }
         // reference   operator[](const Key& key)
         // {
         //     return current->value;
@@ -88,16 +90,19 @@ namespace ft
             operator++();
             return tmp;
         }
-        iterator    operator--()
+        iterator    &operator--()
         {
-              if (current == null_node)
-                return *this;
-            if (current == _tree.tree_min())
+            if (current == null_node)
+            {
+                current = _tree.tree_max();
+
+            }
+            else if (current == _tree.tree_min())
             {
                 current = _tree.tree_min();
-                return *this;
+  
             }
-            if (current->left != null_node)
+            else if (current->left != null_node)
             {
                 current = current->left;
                 while (current && current->right != null_node)
@@ -115,7 +120,7 @@ namespace ft
         }
         iterator    operator--(int)
         {
-            map_iterator_base tmp = *this;
+            map_iterator_base tmp(*this);
             operator--();
             return tmp;
         }
@@ -192,7 +197,7 @@ namespace ft
             operator++();
             return tmp;
         }
-        iterator    operator--()
+        iterator    &operator--()
         {
             base--;
             return *this;
@@ -378,10 +383,12 @@ namespace ft
                 tree(), _compare(comp), _alloc(alloc)
             {
                 insert(first,last);
+                tree.print();
             }
             map (const Self& x) : tree(x.tree), _compare(x._compare), _alloc(x._alloc)
             {
                 
+               insert(x.begin(), x.end()); 
             }
            Self   &operator=(const Self &rhs)
             {
@@ -477,8 +484,9 @@ namespace ft
             template <class InputIterator>
                 void insert(InputIterator first, InputIterator last)
                 {
-                    for(; first != last; first++)
-                        insert(value_type((*first).first, (*first).second));
+                    InputIterator save_first = first;
+                    for(; save_first != last; save_first++)
+                        insert(value_type((*save_first).first, (*save_first).second));
                 }
             void    erase(iterator position)
             {
