@@ -148,7 +148,7 @@ namespace ft{
                     y->right = new_node;
                 if (new_node->parent == null_node)
                 {
-                    new_node->colour =BLACK;
+                    new_ginode->colour =BLACK;
                     return 1;
                 }
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
