@@ -546,7 +546,7 @@ namespace ft
                         return it;
                     it++;
                 }
-                return it;
+                return end();
             }
 
             const_iterator    lower_bound(const key_type& x) const
@@ -576,7 +576,7 @@ namespace ft
                         return it;
                     it++;
                 }
-                return it;
+                return end();
             }
 
             const_iterator    upper_bound(const key_type& x) const
@@ -590,7 +590,7 @@ namespace ft
                         return it;
                     it++;
                 }
-                return it;
+                return end();
             }
 
         pair<iterator, iterator> equal_range(const key_type& x)

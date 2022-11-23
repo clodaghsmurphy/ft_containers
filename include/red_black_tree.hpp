@@ -273,14 +273,67 @@ namespace ft{
 
             void    delete_fix(NodePtr *x)
             {
-                NodePtr *s;
+                NodePtr *sibling;
 
-                (void)s;
-                (void)x;
-                // while (x != root && x->colour == BLACK)
-                // {
+           
+                while (x != root && x->colour == BLACK)
+                {
+                    // CASE 1 : X is the left child of parent
+                    if (x == x->parent->left)
+                    {
+                        //assign sibling as right of parent
+                        sibling = x->parent->right;
+                        //if the sib is red switch colours with the parent
+                        if (sibling->colour == RED)
+                        {
+                            sibling->colour = 0;
+                            x->parent->colour = RED;
+                            // left rotate and then assign sibling as right child of xs parent to be sure
+                            left_rotate(x->parent);
+                            x->parent->right = sibling ;
+                        }
+                        //CASE II : BOTH CHILDREN OF SIBLING ARE BLACK
+                        if (sibling->left->colour == BLACK && sibling->right->colour == BLACK)
+                        {
+                            sibling->colour = RED;
+                            x->parent = x;
+                        }
+                        //CASE III :  RIGHT CHILD IS BLACK
+                        else 
+                        {
+                            if(sibling->right->colour == BLACK)
+                            {
+                                sibling->left->colour = BLACK;
+                                sibling->colour = RED;
+                                right_rotate(sibling);
+                                sibling->parent->right = sibling;
+                            }
 
-                // }
+                        }
+                        //CASE IV LEFT CHILD
+                        else
+                        {
+                            sibling->colour = x->parent->colour;
+                            x->parent->parent = BLACK;
+                            sibling->right = BLACK;
+                            left_rotate(x->parent);
+                            x = root;
+                        }
+                        
+                    }
+                    else // SAME PROCESS BUT IF THE DELETED IS ON THE  RGIHT
+                    {
+                        sibling = x->parent->left;
+                        if (sibling->colour = BLACK)
+                        {
+                            sibling->left->colour = BLACK;
+                            sibling->colour = RED;
+                            right_rotate(x->parent);
+                            sibling = x->parent->left;
+                        }
+
+                    }
+                }
             }
 
             NodePtr *min(NodePtr    *node)
