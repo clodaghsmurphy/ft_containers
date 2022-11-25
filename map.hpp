@@ -27,13 +27,13 @@ namespace ft
 
         private:
            _node *current; //the rb tree of map
-            tree_type   _tree;
+            const tree_type   *_tree;
            _node *null_node;
            Compare          _comp;
         public:
   public:
         map_iterator_base() : current(), _tree() , null_node(), _comp() {}
-        map_iterator_base(_node *n, const tree_type base_tree) : current(n), _tree(base_tree), null_node(base_tree.get_null_node()), _comp() {}
+        map_iterator_base(_node *n, const tree_type *base_tree) : current(n), _tree(base_tree), null_node(base_tree->get_null_node()), _comp() {}
         map_iterator_base<value, key_type, Node, Compare>(const iterator& other) : current(other.current), _tree(other._tree), null_node(other.null_node), _comp(other._comp)  {}
         ~map_iterator_base() {}
 
@@ -61,11 +61,11 @@ namespace ft
 
         iterator    &operator++()
         {
-            if (current == null_node)
+            if (current == NULL)
                 return *this;
-            if (current == _tree.tree_max())
+            if (current == _tree->tree_max())
             {
-                current = null_node;
+                current = NULL;
                 return *this;
             }
             if (current->right != null_node)
@@ -76,30 +76,34 @@ namespace ft
             }
             else
             {
-               _node    *parent = current->parent;
-               if (parent == null_node)
-                    current = null_node ;
-                else if (current == parent->left)
-                     current = parent ;
+          
+                _node    *parent = current->parent;
+               while (current == parent->right)
+               {
+                    current = parent;
+                    parent = parent->parent;
+               }
+               if (current->right != parent)
+                current = parent;
             }
             return *this ;
         }
         iterator    operator++(int)
         {
-            map_iterator_base tmp = *this;
+            map_iterator_base tmp(*this);
             operator++();
             return tmp;
         }
         iterator    &operator--()
         {
-            if (current == null_node)
+            if (current == NULL)
             {
-                current = _tree.tree_max();
+                current = _tree->tree_max();
 
             }
-            else if (current == _tree.tree_min())
+            else if (current == _tree->tree_min())
             {
-                current = _tree.tree_min();
+               return *this;
   
             }
             else if (current->left != null_node)
@@ -110,11 +114,14 @@ namespace ft
             }
             else
             {
-               _node    *parent = current->parent;
-               if (parent == null_node)
-                    current = null_node ;
-                else if (current == parent->right)
-                     current = parent ;
+                _node    *parent = current->parent;
+               while (current == parent->left)
+               {
+                    current = parent;
+                    parent = parent->parent;
+               }
+               if (current->left != parent)
+                current = parent;
             }
             return *this ;
         }
@@ -126,13 +133,19 @@ namespace ft
         }
         bool operator==(const iterator& x)
         {
-       
+            if (!x.current && !current)
+                return true;
+            if ((!x.current && current) || (!current && x.current))
+                return false;
             return !(_comp(current->value, x.current->value) || _comp(x.current->value, current->value));
         }       
 
         bool operator!=(const iterator& x)
         {
-           
+            if (!x.current && !current)
+                return false;
+            if ((!x.current && current) || (!current && x.current))
+                    return true;  
             return (_comp(current->value, x.current->value) || _comp(x.current->value, current->value));
         }
 
@@ -155,7 +168,7 @@ namespace ft
             typedef std::size_t         size_type;
         
          private:
-           map_iterator_base<value, key_type, Node, Compare>    base;
+           map_iterator_base<value, key_type, Node, Compare>    _base;
            Compare          _comp;
            //value_type   node_pair;
       
@@ -163,14 +176,20 @@ namespace ft
     
         /*--------------CANONICAL--------------------*/
         public:
-        map_iterator() : base(), _comp() {}
-        map_iterator(_node *n, tree_type base_tree) : base(n, base_tree), _comp() {}
-        map_iterator<value, key_type, Node, Compare>(const iterator& other) : base(other.base), _comp(other._comp)  {}
+        map_iterator() : _base(), _comp() {}
+        map_iterator(_node *n, const tree_type *base_tree) : _base(n, base_tree), _comp() {}
+        map_iterator(map_iterator_base<value, key_type, Node, Compare>& o_base) : _base(o_base) {}
+        map_iterator<value, key_type, Node, Compare>(const iterator& other) : _base(other._base), _comp(other._comp)  {}
         ~map_iterator() {}
 
+         map_iterator_base<value_type, key_type, Node, Compare> base() const
+        {
+            return _base;
+        }   
         iterator    &operator=(const iterator &rhs)
         {
-            this->base = rhs.base;
+
+            this->_base = rhs._base;
             return *this;
         }
         // reference   operator[](const Key& key)
@@ -179,7 +198,7 @@ namespace ft
         // }
         reference   operator*() const
         {
-            return *base;
+            return *_base;
         }
         
        pointer  operator->() const
@@ -188,7 +207,7 @@ namespace ft
         }
         iterator    &operator++()
         {
-            base++;
+            _base++;
             return *this;
         }
         iterator    operator++(int)
@@ -199,7 +218,7 @@ namespace ft
         }
         iterator    &operator--()
         {
-            base--;
+            _base--;
             return *this;
         }
         iterator    operator--(int)
@@ -211,16 +230,16 @@ namespace ft
 
         bool operator==(const iterator& x)
         {
-            return (base == x.base);
+            return (_base == x._base);
         }       
 
         bool operator!=(const iterator& x)
         {
-            return !(base == x.base);
+            return !(_base == x._base);
         }
         map_iterator_base<value, key_type, Node, Compare> get_base() const 
         {
-            return this->base;
+            return this->_base;
         }
 
         Compare get_comp() const
@@ -244,11 +263,11 @@ namespace ft
             typedef value_type          &reference;
             typedef value_type          *pointer;
             typedef std::ptrdiff_t      difference_type;
-            typedef rb_tree<value_type, key_type, Compare>   tree_type;
+            typedef rb_tree<value_type, key_type, Compare>   *tree_type;
             typedef std::size_t         size_type;
         
            private:
-           map_iterator_base<value, key_type, Node, Compare>    base;
+           map_iterator_base<value, key_type, Node, Compare>    _base;
            Compare          _comp;
            //value_type   node_pair;
       
@@ -256,15 +275,17 @@ namespace ft
     
         /*--------------CANONICAL--------------------*/
         public:
-        const_map_iterator() : base(), _comp() {}
-        const_map_iterator(_node *n, const rb_tree<value, key_type, Compare> base_tree) : base(n, base_tree), _comp() {}
-        const_map_iterator<value, key_type, Node, Compare>(const iterator& other) : base(other.get_base()), _comp(other._comp)  {}
-        const_map_iterator<value, key_type, Node, Compare>(const normal_iterator& other) : base(other.get_base()), _comp(other.get_comp())  {}
+        const_map_iterator() : _base(), _comp() {}
+        const_map_iterator(_node *n, const rb_tree<value, key_type, Compare> *base_tree) : _base(n, base_tree), _comp() {}
+        const_map_iterator(const const_map_iterator& other) : _base(other._base), _comp(other._comp)  {}
+        const_map_iterator(const map_iterator_base<value, key_type, Node, Compare>& o_base) : _base(o_base) {}
+        const_map_iterator<value, key_type, Node, Compare>(const normal_iterator& other) : _base(other.base()), _comp(other.get_comp())  {}
         ~const_map_iterator() {}
 
+   
         iterator    &operator=(const iterator &rhs)
         {
-            this->base = rhs.base;
+            this->_base = rhs._base;
             return *this;
         }
         // reference   operator[](const Key& key)
@@ -273,7 +294,7 @@ namespace ft
         // }
         reference   operator*() const
         {
-            return *base;
+            return *_base;
         }
         
        pointer  operator->() const
@@ -282,7 +303,7 @@ namespace ft
         }
         iterator    &operator++()
         {
-            base++;
+            _base++;
             return *this;
         }
         iterator    operator++(int)
@@ -291,9 +312,10 @@ namespace ft
             operator++();
             return tmp;
         }
-        iterator    operator--()
+        iterator    &operator--()
         {
-            base--;
+            _base--;
+            return *this;
         }
         iterator    operator--(int)
         {
@@ -304,16 +326,16 @@ namespace ft
 
         bool operator==(const iterator& x)
         {
-            return (base == x.base);
+            return (_base == x._base);
         }       
 
         bool operator!=(const iterator& x)
         {
-            return (base != x.base);
+            return (_base != x._base);
         }
            map_iterator_base<value, key_type, Node, Compare> get_base() const 
         {
-            return this->base;
+            return this->_base;
         }
               Compare get_comp() const
         {
@@ -329,7 +351,7 @@ namespace ft
         
         public:
         /*--------------------------------------TYPEDEFS----------------------------------*/
-            typedef pair<const Key, T>                          value_type;
+            typedef ft::pair<const Key, T>                          value_type;
             typedef const Key                                         key_type;
             typedef T                                           mapped_type;
             typedef Compare                                     key_compare;
@@ -355,6 +377,18 @@ namespace ft
                     value_compare() : comp() {}
                 protected:
                     value_compare(Compare pred) : comp(pred){}
+                    key_compare comp;
+            };
+            class map_compare : public binary_function<value_type, value_type, bool>
+            {
+                public:
+                    bool operator()(const value_type& left, const value_type& right) const
+                    {
+                        return comp(left.second, right.second);
+                    }
+                    map_compare() : comp() {}
+                protected:
+                    map_compare(Compare pred) : comp(pred){}
                     key_compare comp;
             };
 
@@ -383,12 +417,10 @@ namespace ft
                 tree(), _compare(comp), _alloc(alloc)
             {
                 insert(first,last);
-                tree.print();
             }
-            map (const Self& x) : tree(x.tree), _compare(x._compare), _alloc(x._alloc)
+            map (const Self& x) : tree(), _compare(x._compare), _alloc(x._alloc)
             {
-                
-               insert(x.begin(), x.end()); 
+               // insert(x.begin(), x.end());
             }
            Self   &operator=(const Self &rhs)
             {
@@ -398,7 +430,7 @@ namespace ft
                this->_alloc = _alloc;
                 return *this;
             }
-          
+      
             allocator_type  get_allocator() const
             {
                 return this->_alloc;
@@ -409,17 +441,17 @@ namespace ft
             value_compare   value_comp() const { return value_compare(); }
 
             /*---------------ITERATOR POS------------------*/
-            iterator                begin() { return iterator(tree.begin(), tree);}
-            const_iterator          begin() const { return const_iterator(tree.begin(), tree);}
-            iterator                end() { return iterator(tree.get_null_node(), tree);}
-            const_iterator         end() const { return const_iterator(tree.get_null_node(), tree);}
+            iterator                begin() { return iterator(tree.begin(), &tree);}
+            const_iterator          begin() const { return const_iterator(tree.begin(), &tree);}
+            iterator                end() { return iterator(NULL, &tree);}
+            const_iterator         end() const { return const_iterator(NULL, &tree);}
 
-            reverse_iterator        rbegin() { return reverse_iterator(iterator(tree.end(), tree));  }
-            const_reverse_iterator  rbegin() const { return const_reverse_iterator(const_iterator(tree.end(), tree));}
-            reverse_iterator        rend() { reverse_iterator(iterator(tree.begin(), tree));}
-            const_reverse_iterator  rend() const { const_reverse_iterator(const_iterator(tree.begin(), tree));}
+            reverse_iterator        rbegin() { return reverse_iterator(end());  }
+            const_reverse_iterator  rbegin() const { return const_reverse_iterator(const_iterator(end()));}
+            reverse_iterator        rend() { return reverse_iterator(iterator(begin()));}
+            const_reverse_iterator  rend() const { return const_reverse_iterator(const_iterator(begin()));}
 
-            bool    empty()
+            bool    empty() const
             {
                 return (tree.is_empty());
             }
@@ -444,26 +476,26 @@ namespace ft
             T&          at(const    key_type&   k);
             const T&   at(const    key_type&   k) const;
 
-            void    swap(Self& x)
+            void    swap(map<Key, T, Compare>& x)
             {
                 Self tmp;
 
-                tmp._alloc = x._alloc;
-                tmp._compare = x._compare;
-                tmp.tree = x.tree;
+                Allocator tmp_alloc = x._alloc;
+                Compare tmp_compare = x._compare;
+                RB_tree tmp_tree = x.tree;
 
                 x._alloc = _alloc;
                 x._compare = _compare;
                 x.tree = tree;
 
-                _alloc = tmp._alloc;
-                _compare = x._compare;
-                x.tree = x.tree;
+                _alloc = tmp_alloc;
+                _compare = tmp_compare;
+                tree = tmp_tree;
             }
 
             /*---------------------INSERT / ERASE -----------------------*/
 
-            pair<iterator, bool> insert(const value_type& x)
+            ft::pair<iterator, bool> insert(const value_type& x)
             {
                 bool res = tree.insert(x);
                 iterator it;
@@ -477,8 +509,14 @@ namespace ft
             iterator    insert(iterator position, const value_type& x)
             {
                 (void)position;
-                //need to finish this
-                iterator it = iterator(tree.insert(Node<value_type>(x)));
+                 bool res = tree.insert(x);
+                 iterator it;
+                if (res)
+                {
+                    iterator it = find(x.first);
+                    return it;
+                }
+                return end();
             }
 
             template <class InputIterator>
@@ -486,20 +524,23 @@ namespace ft
                 {
                     InputIterator save_first = first;
                     for(; save_first != last; save_first++)
+                    {
                         insert(value_type((*save_first).first, (*save_first).second));
+                    }
                 }
             void    erase(iterator position)
             {
-                tree.delete_node((*position).first);
+                tree.delete_node((*position));
             }
             size_type   erase(const key_type& x)
             {
-                tree.delete_node(x);
+                tree.delete_node(value_type(x, mapped_type()));
+                return 1;
             }
             void        erase(iterator first, iterator last)
             {
                 for(; first != last; first++)
-                    tree.delete_node((*first).first);
+                    tree.delete_node((*first));
             }
             void        clear()
             {
@@ -522,26 +563,32 @@ namespace ft
             }
             const_iterator find(const key_type& x) const
             {
-                _node *res = tree.find_node( ft::pair<key_type, mapped_type>(x, mapped_type()));
-                if (res == NULL)
-                    return end();
-                return iterator(res, tree);
+                const_iterator it = begin();
+                const_iterator ite = end();
+
+                while (it != ite)
+                {
+                    if ((*it).first == x)
+                        return it;
+                    it++;
+                }
+                return it;
             }
 
-            // size_type   count(const value_type& x)
-            // {
-            //     size_t count = 0;
-            //     iterator it = begin();
-            //     iterator ite = end();
+            size_type   count(const key_type& x) const
+            {
+                size_t count = 0;
+                const_iterator it = begin();
+                const_iterator ite = end();
 
-            //     while (it != ite)
-            //     {
-            //         if (it.current.first == x)
-            //             count++;
-            //         it++;
-            //     }
-            //     return count;
-            // }
+                while (it != ite)
+                {
+                    if (!(_compare((*it).first, x) || _compare(x, (*it).first)))
+                        count++;
+                    it++;
+                }
+                return count;
+            }
 
             iterator    lower_bound(const key_type& x)
             {
@@ -578,26 +625,28 @@ namespace ft
                 iterator it = begin();
                 iterator ite = end();
 
-                while (it != ite)
+                for(; it != ite; it++)
                 {
-                    if (_compare((*it).first, x))
+                    if (_compare(x, (*it).first ))
                         return it;
-                    it++;
+
                 }
+                   
                 return end();
             }
 
             const_iterator    upper_bound(const key_type& x) const
             {
                 const_iterator it = begin();
-                const_iterator ite = end();
+                const_iterator ite =end();
 
-                while (it != ite)
+                for(; it != ite; it++)
                 {
-                    if (_compare((*it).first, x))
+                    if (_compare(x, (*it).first ))
                         return it;
-                    it++;
+
                 }
+                  
                 return end();
             }
 
@@ -609,8 +658,30 @@ namespace ft
         {
             return ft::pair<const_iterator, const_iterator>(lower_bound(x), upper_bound(x));
         }
-
-            
+        bool operator==(const  map<Key, T, Compare >& rhs) const
+        {
+            return ft::equal(this->begin(), this->end(), rhs.begin(), rhs.end());
+        }
+        bool operator!=(const  map<Key, T, Compare >& rhs) const
+        {
+            return !(*this == rhs);
+        }
+        bool operator<(const  map<Key, T, Compare >& rhs) const
+        {
+            return ft::lexicographical_compare<const_iterator, const_iterator, map_compare>(this->begin(), this->end(), rhs.begin(), rhs.end(), map_compare());
+        }
+        bool operator<=(const  map<Key, T, Compare >& rhs) const
+        {
+            return (!(rhs < *this));
+        }
+        bool operator>(const map<Key, T, Compare >& rhs) const
+        {
+            return (rhs < *this);
+        }
+        bool operator>=(const map<Key, T, Compare >& rhs) const
+        {
+            return !(*this < rhs);
+        }
     };
 
     

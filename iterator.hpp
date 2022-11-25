@@ -84,7 +84,7 @@ namespace ft
         Reverse_iterator(const Reverse_iterator &obj) : m_iterator(obj.m_iterator) {}
 
         template <typename OtherIterator>
-            Reverse_iterator(const OtherIterator &obj) : m_iterator(obj.base()) {}
+        Reverse_iterator(const OtherIterator &obj) : m_iterator(obj.base()) {}
 
         typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
         typedef typename iterator_traits<Iterator>::value_type value_type;
@@ -93,7 +93,7 @@ namespace ft
         typedef typename iterator_traits<Iterator>::pointer pointer;
         typedef typename iterator_traits<Iterator>::reference reference;
 
-        iterator_type base() const { return m_iterator; }
+        Iterator base() const { return m_iterator; }
         Reverse_iterator &operator=(const Reverse_iterator &rhs)
         {
             m_iterator = rhs.base();

@@ -1196,6 +1196,27 @@ void copy_test()
             std::cout << std::endl;
         }
         {
+            ft::vector<int> vct;
+            ft::vector<int>::iterator it = vct.begin();
+            ft::vector<int>::const_iterator cit = vct.begin();
+
+            ft::vector<int>::reverse_iterator rit(it);
+
+            ft::vector<int>::const_reverse_iterator crit(rit);
+            ft::vector<int>::const_reverse_iterator crit_(it);
+            ft::vector<int>::const_reverse_iterator crit_2(cit);
+
+            /* error expected
+            ft::vector<int>::reverse_iterator rit_(crit);
+            ft::vector<int>::reverse_iterator rit2(cit);
+            ft::vector<int>::iterator it2(rit);
+            ft::vector<int>::const_iterator cit2(crit);
+            */
+
+            std::cout << "OK" << std::endl;
+
+        }
+        {
             std::string                     arr2[3] = {"bonjour", "je", "suis"};
 
             ft::vector<std::string>         v1_duplicated(arr2, arr2 + 3);

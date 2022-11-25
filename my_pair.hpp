@@ -51,7 +51,7 @@ namespace ft
         template <class T1, class T2>
         bool operator<(pair<T1, T2> rhs, pair<T1, T2> lhs)
         {
-            return (rhs.first < lhs.first && rhs.second < lhs.second);
+            return ((rhs.first < lhs.first) || (rhs.first < lhs.first && rhs.second < lhs.second));
         }
 
         template <class T1, class T2>

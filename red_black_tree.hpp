@@ -24,6 +24,8 @@ namespace ft{
         Node        *right;
         int         colour;
 
+   
+
     };
 
 
@@ -44,8 +46,12 @@ namespace ft{
 
             rb_tree() 
             {
+                std::allocator<value_type> val_alloc;
+                value_type  val;
+    
                 null_node = _alloc.allocate(1);
                 root = null_node;
+                val_alloc.construct(&null_node->value, val);
                 null_node->left = NULL;
                 null_node->right = NULL ;
                 null_node->colour = BLACK ;
@@ -53,21 +59,79 @@ namespace ft{
             }
             rb_tree(const Compare comp, const Allocator alloc) : _alloc(alloc), _comp(comp), _size(0)
             {
+                std::allocator<value_type> val_alloc;
+
+                value_type  val;
+
                 null_node = _alloc.allocate(1);
                 root = null_node;
+                val_alloc.construct(&null_node->value, val);
                 null_node->left = NULL;
                 null_node->right = NULL ;
                 null_node->colour = BLACK ;
             }
-            rb_tree(const  Self &rhs) : _alloc(rhs._alloc), _comp(rhs._comp), root(rhs.root), null_node(rhs.null_node), _size(rhs._size)
-            {}
+            rb_tree(const  Self &rhs) : _alloc(rhs._alloc), _comp(rhs._comp), _size(0)
+            {
+               null_node = _alloc.allocate(1);
+               root = null_node;
+               NodePtr *nd = rhs.tree_min();
+
+               while (nd != rhs.get_null_node())
+               {
+                    insert(nd->value);
+                    nd = rhs.next(nd);
+               }
+
+            }
+            ~rb_tree()
+            {
+                clear(root);
+                _alloc.destroy(null_node);
+                _alloc.deallocate(null_node, 1);
+            }
+
+            NodePtr *next(NodePtr *node) const
+        {
+            NodePtr *current = node;
+            if (current == null_node)
+                return null_node;
+            if (current == tree_max())
+            {
+                return null_node;
+            }
+            if (current->right != null_node)
+            {
+                current = current->right;
+                while (current && current->left != null_node)
+                    current = current->left;
+            }
+            else
+            {
+          
+                NodePtr   *parent = current->parent;
+               while (current == parent->right)
+               {
+                    current = parent;
+                    parent = parent->parent;
+               }
+               if (current->right != parent)
+                current = parent;
+            }
+            return current ;
+        }
             Self    &operator=(const Self &rhs)
             {
-                this->_alloc = rhs._alloc;
-                this->_comp = rhs._comp;
-                this->root = rhs.root;
-                this->null_node = rhs.null_node;
-                this->_size = rhs._size;
+                null_node = _alloc.allocate(1);
+                root = null_node;
+                _size = 0;
+                NodePtr *nd = rhs.tree_min();
+
+                while (nd != rhs.get_null_node())
+                {
+                    insert(nd->value);
+                    nd = rhs.next(nd);
+                }
+
                 return *this;
 
             }
@@ -113,9 +177,10 @@ namespace ft{
                 node->left = null_node;
                 node->right = null_node;
                 node->parent = null_node;
+                node->colour = RED;
                 val_alloc.construct(&node->value, value);
             }
-
+       
             bool    insert(value_type value)
             {
                 NodePtr *y = null_node;
@@ -123,16 +188,18 @@ namespace ft{
                 NodePtr *new_node = _alloc.allocate(1);
                 init_null_node(new_node, value);
 
-             
+
                 while (x && x != null_node)   //Traverse the tree until you reach a null_node pointer
                 {
                     y = x;              //Saving the x parent into y for when we exit the loop when x = null_node
-                    if (value.first > x->value.first)
-                        x = x->right;
-                    else if (value.first < x->value.first)
-                        x = x->left;
-                    else
+                    
+                    if (!(_comp(value, x->value) || _comp(x->value, value)))
                         return 0 ;
+                    if (!_comp(value, x->value))
+                        x = x->right;
+                    else if (_comp(value, x->value))
+                        x = x->left;
+                    
                 }
                 new_node->parent = y;   // y is the parent of the last NIL leaf we found be traversing tree
                 if (y == null_node) // parent of root is null_node so set y to Black and declare as root
@@ -142,13 +209,13 @@ namespace ft{
                     _size++;
                     return 1;
                 }
-                else if (value.first < y->value.first)      // if we're not at root, need to assign the new node to either left or right of y
+                else if (_comp(value, y->value))      // if we're not at root, need to assign the new node to either left or right of y
                     y->left = new_node;
                 else
                     y->right = new_node;
                 if (new_node->parent == null_node)
                 {
-                    new_ginode->colour =BLACK;
+                    new_node->colour =BLACK;
                     return 1;
                 }
                 if (new_node->parent->parent == null_node) // if the parent is root, pretty straight forward insertion and no rearranging/ recoloring to be done
@@ -240,7 +307,7 @@ namespace ft{
                 
             }
 
-            void    delete_node(key_type key)
+            void    delete_node(value_type key)
             {
                 NodePtr *del_node = find_node(key);
                 NodePtr *x, *y;
@@ -248,7 +315,8 @@ namespace ft{
                 
                 if (del_node == NULL)
                     return  ;
-                og_colour = del_node->colour;
+                y = del_node;
+                og_colour = y->colour;
                  if (del_node->left == null_node)
                 {
                     x = del_node->right;
@@ -267,10 +335,19 @@ namespace ft{
                     if (y->parent == del_node)
                         x->parent = y;
                     else
+                    {
                         rb_transplant_node(y, y->right);
-                    rb_transplant_node(y, del_node);
-                    y->colour = og_colour;
+                        y->right = del_node->right;
+                        y->right->parent = y;
+
+                    }
+                    rb_transplant_node(del_node, y);
+                    y->left =del_node->left;
+                    y->left->parent = y;
+                    y->colour = del_node->colour;
                 }
+                
+               // _alloc.deallocate(del_node, 1);
                 if (og_colour == BLACK)
                     delete_fix(x);
                 
@@ -295,36 +372,36 @@ namespace ft{
                             x->parent->colour = RED;
                             // left rotate and then assign sibling as right child of xs parent to be sure
                             left_rotate(x->parent);
-                            x->parent->right = sibling ;
+                            sibling = x->parent->right ;
                         }
                         //CASE II : BOTH CHILDREN OF SIBLING ARE BLACK
                         if (sibling->left->colour == BLACK && sibling->right->colour == BLACK)
                         {
                             sibling->colour = RED;
-                            x->parent = x;
+                             x = x->parent;
                         } 
-                        else if(sibling->right->colour == BLACK) //CASE III :  RIGHT CHILD IS BLACK
+                        else  //CASE III :  RIGHT CHILD IS BLACK
                         {
-                            sibling->left->colour = BLACK;
-                            sibling->colour = RED;
-                            right_rotate(sibling);
-                            sibling->parent->right = sibling;
-                        }                   
-                        else  //CASE IV LEFT CHILD
-                        {
-                            sibling->colour = x->parent->colour;
+                            if(sibling->right->colour == BLACK)
+                            {
+                                sibling->left->colour = BLACK;
+                                sibling->colour = RED;
+                                right_rotate(sibling);
+                                sibling->parent->right = sibling;
+                            }
+                             sibling->colour = x->parent->colour;  //CASE IV LEFT CHILD
                             x->parent->parent = BLACK;
                             sibling->right = BLACK;
                             left_rotate(x->parent);
                             x = root;
-                        }
+                        }                   
                         
                     }
                     else // SAME PROCESS BUT IF THE DELETED IS ON THE  RGIHT
                     {
                         sibling = x->parent->left;
                         // CASE I
-                        if (sibling->colour == BLACK)
+                        if (sibling && sibling->colour == RED)
                         {
                             sibling->left->colour = BLACK;
                             sibling->colour = RED;
@@ -332,23 +409,24 @@ namespace ft{
                             sibling = x->parent->left;
                         }
                         //  CASE II
-                        if (sibling->right->colour == BLACK && sibling->left->colour == BLACK)
+                        if (sibling && sibling->colour == BLACK && sibling->right->colour == BLACK)
                         {
                             sibling->colour = RED;
                             x = x->parent;
                         }
                         // CASE III
-                        else
+                        else 
                         {
-                            if (sibling->left->colour == BLACK)
+                            if (sibling && sibling->left->colour == BLACK)
                             {
-                                sibling->right->colour == BLACK;
-                                sibling->colour == RED;
+                                sibling->right->colour = BLACK;
+                                sibling->colour = RED;
                                 left_rotate(sibling);
                                 sibling = x->parent->left;
                             }
                             sibling->colour = x->parent->colour;
                             x->parent->colour = BLACK;
+                            sibling->left->colour = BLACK;
                             right_rotate(x->parent);
                             x = root;
                         }
@@ -367,7 +445,7 @@ namespace ft{
                 return node;
             }
 
-            NodePtr *tree_min()
+            NodePtr *tree_min()const
             {
                 NodePtr    *node = root;
                 if (node == null_node)
@@ -377,7 +455,7 @@ namespace ft{
                 return node;
             }
 
-            NodePtr *max(NodePtr    *node)
+            NodePtr *max(NodePtr    *node) const
             {
                 if (node == null_node)
                     return null_node;
@@ -386,10 +464,10 @@ namespace ft{
                 return node;
             }
 
-            NodePtr *tree_max()
+            NodePtr *tree_max() const
             {
                 NodePtr    *node = root;
-                if (node == null_node)
+                if (!node || node == null_node)
                     return null_node;
                 while (node->right != null_node)
                     node = node->right;
@@ -398,16 +476,23 @@ namespace ft{
             void clear(NodePtr  *node)
             {
                 _size = 0;
-                if (node->left != null_node)
+                if (!node ||node == null_node)
+                    return ;
+                if (node->left && node->left != null_node)
                     clear(node->left);
-                if (node->right != null_node)
+                if (node->right && node->right != null_node)
                     clear(node->right);
-                if (node != tree_max())
-                    _alloc.deallocate(node, 1);
+                if (node != null_node)
+                {
+                    _alloc.destroy(node);
+                    _alloc.deallocate(node,1);
+
+                }
             }
             void    tree_clear()
             {
                 clear(root);
+                root = null_node;
             }
             NodePtr *increment_tree(NodePtr *current)
             {
@@ -433,9 +518,9 @@ namespace ft{
                 return null_node ;
             }
 
-            bool is_empty()
+            bool is_empty() const
             {
-                return (root == null_node);
+                return (_size == 0);
             }
 
             size_t size() const 
@@ -472,7 +557,8 @@ namespace ft{
             NodePtr *begin() 
             {
                 NodePtr *res = root;
-
+                if(_size == 0)
+                    return NULL;
                 if (res->left == NULL)
                     return res ;
                 while (res && res->left != null_node)
@@ -495,6 +581,8 @@ namespace ft{
             {
                 NodePtr *res = root;
 
+                if(_size == 0)
+                    return NULL;
                 if (res->left == NULL)
                     return res ;
                 while (res && res->left != null_node)
@@ -536,15 +624,15 @@ namespace ft{
                 // getwchar();
             }
 
-            void    print()
-            {
+            // void    print()
+            // {
                //int levels = count_levels() * 2;
 
                 // std::cout
                 //     << (root->colour == BLACK ? "\033[90m" : "\033[31m") << std::setw(levels)
                 //     << root->value << "\033[0m" << std::endl;
                //real_print(root, levels);
-               prt(root);
+               //prt(root);
             //    std::cout << "LEVELS  " << levels << std::endl;
             //    int space  = (levels * 4);
             //    NodePtr ptr = root;
@@ -553,114 +641,114 @@ namespace ft{
             //   print_left(ptr->left, space - 1, levels);
             //   print_right(ptr->right, space , levels);
 
-            }
+            //}
 
-            void print_left(NodePtr *ptr, int space, int levels)
-            {
-                if (!ptr || ptr == NULL)
-                    return;
-                NodePtr *tmp;
-                int         i = 0;
+            // void print_left(NodePtr *ptr, int space, int levels)
+            // {
+            //     if (!ptr || ptr == NULL)
+            //         return;
+            //     NodePtr *tmp;
+            //     int         i = 0;
                 
 
-                tmp = ptr;
-                while (i < levels)
-                {
-                    space -= 2;
-                    std::cout << (ptr->colour == BLACK ? "\033[90m" : "\033[31m");
-                    std::cout << std::setw(space) << ptr->value << "\033[0m" << std::endl;
-                    i++;
-                }
-            }
+            //     tmp = ptr;
+            //     while (i < levels)
+            //     {
+            //         space -= 2;
+            //         std::cout << (ptr->colour == BLACK ? "\033[90m" : "\033[31m");
+            //         std::cout << std::setw(space) << ptr->value << "\033[0m" << std::endl;
+            //         i++;
+            //     }
+            // }
 
-            int count_levels()
-            {
-                NodePtr *ptr = root;
-                int i = 0;
-                int j = 0;
-                int res = 0;
-                //NodePtr *tmp = NULL;
+            // int count_levels()
+            // {
+            //     NodePtr *ptr = root;
+            //     int i = 0;
+            //     int j = 0;
+            //     int res = 0;
+            //     //NodePtr *tmp = NULL;
                 
-                while (ptr != NULL)
-                {
-                    //tmp = ptr;
-                    i++;
-                    ptr = ptr->right;
-                }
-                ptr = root;
-                while (ptr != NULL)
-                {
-                    //tmp = ptr;
-                    j++;
-                    ptr = ptr->left;
-                }
-                if (i > j)
-                    res = i;
-                else
-                    res = j;
-                return (res);
-            }
+            //     while (ptr != NULL)
+            //     {
+            //         //tmp = ptr;
+            //         i++;
+            //         ptr = ptr->right;
+            //     }
+            //     ptr = root;
+            //     while (ptr != NULL)
+            //     {
+            //         //tmp = ptr;
+            //         j++;
+            //         ptr = ptr->left;
+            //     }
+            //     if (i > j)
+            //         res = i;
+            //     else
+            //         res = j;
+            //     return (res);
+            // }
      
 
-                int max_depth(NodePtr* n)
-                {
-                if (!n) return 0;
-                return 1 + std::max(max_depth(n->left), max_depth(n->right));
-                }
+            //     int max_depth(NodePtr* n)
+            //     {
+            //     if (!n) return 0;
+            //     return 1 + std::max(max_depth(n->left), max_depth(n->right));
+            //     }
 
-                void prt(NodePtr* n)
-                {
-                    struct node_depth
-                    {
-                        NodePtr* n;
-                        int lvl;
-                        node_depth(NodePtr* n_, int lvl_) : n(n_), lvl(lvl_) {}
-                    };
+            //     void prt(NodePtr* n)
+            //     {
+            //         struct node_depth
+            //         {
+            //             NodePtr* n;
+            //             int lvl;
+            //             node_depth(NodePtr* n_, int lvl_) : n(n_), lvl(lvl_) {}
+            //         };
 
-                    int depth = max_depth(n);
+            //         int depth = max_depth(n);
 
-                    char buf[1024];
-                    int last_lvl = 0;
-                    int offset = (1 << depth) - 1;
+            //         char buf[1024];
+            //         int last_lvl = 0;
+            //         int offset = (1 << depth) - 1;
 
-                    // using a queue means we perform a breadth first iteration through the tree
-                    std::list<node_depth> q;
+            //         // using a queue means we perform a breadth first iteration through the tree
+            //         std::list<node_depth> q;
 
-                    q.push_back(node_depth(n, last_lvl));
-                    while (q.size())
-                    {
-                        const node_depth& nd = *q.begin();
+            //         q.push_back(node_depth(n, last_lvl));
+            //         while (q.size())
+            //         {
+            //             const node_depth& nd = *q.begin();
 
-                        // moving to a new level in the tree, output a new line and calculate new offset
-                        if (last_lvl != nd.lvl)
-                        {
-                        std::cout << "\n";
+            //             // moving to a new level in the tree, output a new line and calculate new offset
+            //             if (last_lvl != nd.lvl)
+            //             {
+            //             std::cout << "\n";
 
-                        last_lvl = nd.lvl;
-                        offset = (1 << (depth - nd.lvl)) - 1;
-                        }
+            //             last_lvl = nd.lvl;
+            //             offset = (1 << (depth - nd.lvl)) - 1;
+            //             }
 
-                        // output <offset><data><offset>
-                        if (nd.n)
-                        {
-                            std::cout << (nd.n->colour == BLACK ? "\033[90m" : "\033[31m");
-                        sprintf(buf, " %*s%d%*s", offset, " ", nd.n->value.first, offset, " ");
-                        }
+            //             // output <offset><data><offset>
+            //             if (nd.n)
+            //             {
+            //                 std::cout << (nd.n->colour == BLACK ? "\033[90m" : "\033[31m");
+            //             sprintf(buf, " %*s%d%*s", offset, " ", nd.n->value.first, offset, " ");
+            //             }
                         
-                        else
-                        sprintf(buf, " %*s", offset << 1, " ");
-                        std::cout << buf;
+            //             else
+            //             sprintf(buf, " %*s", offset << 1, " ");
+            //             std::cout << buf;
 
-                        if (nd.n)
-                        {
-                        q.push_back(node_depth(nd.n->left, last_lvl + 1));
-                        q.push_back(node_depth(nd.n->right, last_lvl + 1));
-                        }
+            //             if (nd.n)
+            //             {
+            //             q.push_back(node_depth(nd.n->left, last_lvl + 1));
+            //             q.push_back(node_depth(nd.n->right, last_lvl + 1));
+            //             }
 
-                        q.pop_front();
-                    }
-                    std::cout << "\n";
-                }
+            //             q.pop_front();
+            //         }
+            //         std::cout << "\n";
+            //     }
 
             };
 }
