@@ -8,5 +8,7 @@ int main()
     //vector_constructors();
     //iterator_category();
     //modifiers();
-    rb_tester();
+    // rb_tester();
+    // insert_map_test();
+    erase_map_test();
 }

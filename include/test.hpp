@@ -107,8 +107,8 @@ void	printReverse(ft::map<T1, T2> &mp, std::map<T1, T2> &mp2)
 template <typename T_MAP, typename U_MAP>
 void printSize(T_MAP const &mp, U_MAP const &mp2,  bool print_content = 1)
 {
-    std::cout << "size: " << mp.size() << std::endl;
-    std::cout << "max_size: " << mp.max_size() << std::endl;
+    if ((mp.size() == mp2.size()) && (mp.max_size() == mp2.max_size()))
+        std::cout << "\033[1m\033[32m ✅ SIZE/MX_SIZE OK \033[0m" << std::endl;
     if (print_content)
     {
         typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
@@ -188,5 +188,7 @@ void    rev_it_construct();
 void    swap_insert();
 void    tricky_construct();
 void    map_find_count();
+void    insert_map_test();
+void    erase_map_test();
 
 #endif

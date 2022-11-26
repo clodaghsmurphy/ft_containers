@@ -143,7 +143,7 @@ namespace ft{
                 if (pt_right->left != null_node)
                     pt_right->left->parent = x;
                 pt_right->parent = x->parent;
-                if (x->parent == null_node)
+                if (x->parent == NULL)
                     this->root = pt_right;
                 else if (x->parent->left == x)
                     x->parent->left = pt_right;
@@ -161,7 +161,7 @@ namespace ft{
                 if (pt_left->right != null_node)
                     pt_left->right->parent = x;
                 pt_left->parent = x->parent;
-                if (x->parent == null_node)
+                if (x->parent == NULL)
                    root = pt_left;
                 else if (x->parent->right == x)
                     x->parent->right = pt_left;
@@ -176,14 +176,14 @@ namespace ft{
                 std::allocator<value_type>  val_alloc;
                 node->left = null_node;
                 node->right = null_node;
-                node->parent = null_node;
+                node->parent = NULL;
                 node->colour = RED;
                 val_alloc.construct(&node->value, value);
             }
        
             bool    insert(value_type value)
             {
-                NodePtr *y = null_node;
+                NodePtr *y = NULL;
                 NodePtr *x = this->root;
                 NodePtr *new_node = _alloc.allocate(1);
                 init_null_node(new_node, value);
@@ -202,7 +202,7 @@ namespace ft{
                     
                 }
                 new_node->parent = y;   // y is the parent of the last NIL leaf we found be traversing tree
-                if (y == null_node) // parent of root is null_node so set y to Black and declare as root
+                if (y == NULL) // parent of root is null_node so set y to Black and declare as root
                 {
                     this->root = new_node;
                     new_node->colour = BLACK;
@@ -291,7 +291,7 @@ namespace ft{
 
             void    rb_transplant_node(NodePtr  *original, NodePtr *replace)
             {
-                if (original->parent == null_node)
+                if (original->parent == NULL)
                 {
                     root = replace;
                 }
@@ -309,11 +309,11 @@ namespace ft{
 
             void    delete_node(value_type key)
             {
-                NodePtr *del_node = find_node(key);
+                NodePtr *del_node = find_node(root, key);
                 NodePtr *x, *y;
                 bool og_colour ;
                 
-                if (del_node == NULL)
+                if (del_node == NULL || del_node == null_node)
                     return  ;
                 y = del_node;
                 og_colour = y->colour;
@@ -347,7 +347,8 @@ namespace ft{
                     y->colour = del_node->colour;
                 }
                 
-               // _alloc.deallocate(del_node, 1);
+               _alloc.deallocate(del_node, 1);
+               _size--;
                 if (og_colour == BLACK)
                     delete_fix(x);
                 
@@ -387,11 +388,11 @@ namespace ft{
                                 sibling->left->colour = BLACK;
                                 sibling->colour = RED;
                                 right_rotate(sibling);
-                                sibling->parent->right = sibling;
+                                sibling = sibling->parent->right;
                             }
                              sibling->colour = x->parent->colour;  //CASE IV LEFT CHILD
                             x->parent->parent = BLACK;
-                            sibling->right = BLACK;
+                            sibling->right->colour = BLACK;
                             left_rotate(x->parent);
                             x = root;
                         }                   
@@ -403,13 +404,13 @@ namespace ft{
                         // CASE I
                         if (sibling && sibling->colour == RED)
                         {
-                            sibling->left->colour = BLACK;
-                            sibling->colour = RED;
+                            sibling->colour = BLACK;
+                            x->parent->colour = RED;
                             right_rotate(x->parent);
                             sibling = x->parent->left;
                         }
                         //  CASE II
-                        if (sibling && sibling->colour == BLACK && sibling->right->colour == BLACK)
+                        if (sibling && sibling->right->colour == BLACK && sibling->right->colour == BLACK)
                         {
                             sibling->colour = RED;
                             x = x->parent;
@@ -534,24 +535,17 @@ namespace ft{
                 return (1 + tree_size(root->left) + tree_size(root->right));
             }
 
-            NodePtr *find_node(value_type value) const
+            NodePtr *find_node(NodePtr *node, value_type value) const
             {
-                NodePtr *node = root;
-                while (node != null_node)
+                if (node == null_node || (!(_comp(value, node->value) || _comp(node->value, value))))
                 {
-                    int res = _comp(value, node->value);
-                    if (res == 0)
-                        return node;
-                    else if (res < 0)
-                    {
-                        node = node->left ;
-                    }
-                    else
-                    {
-                        node= node->right;
-                    }
+                    return node;
                 }
-                return NULL;
+                if (_comp(value, node->value))
+                {
+                    return find_node(node->left, value);
+                }
+                return find_node(node->right, value);
             } 
 
             NodePtr *begin() 

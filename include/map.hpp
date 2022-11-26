@@ -78,7 +78,7 @@ namespace ft
             {
           
                 _node    *parent = current->parent;
-               while (current == parent->right)
+               while (parent->right && current == parent->right)
                {
                     current = parent;
                     parent = parent->parent;
@@ -498,12 +498,8 @@ namespace ft
             ft::pair<iterator, bool> insert(const value_type& x)
             {
                 bool res = tree.insert(x);
-                iterator it;
-                if (res)
-                {
-                    iterator it = find(x.first);
-                    return ft::pair<iterator, bool>(it, 1);
-                }
+                iterator it = find(x.first);
+
                 return ft::pair<iterator, bool>(it, res);
             }
             iterator    insert(iterator position, const value_type& x)
@@ -559,7 +555,7 @@ namespace ft
                         return it;
                     it++;
                 }
-                return it;
+                return end();
             }
             const_iterator find(const key_type& x) const
             {
@@ -572,7 +568,7 @@ namespace ft
                         return it;
                     it++;
                 }
-                return it;
+                return end();
             }
 
             size_type   count(const key_type& x) const
