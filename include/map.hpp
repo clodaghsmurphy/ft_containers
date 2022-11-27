@@ -61,6 +61,7 @@ namespace ft
 
         iterator    &operator++()
         {
+            
             if (current == NULL)
                 return *this;
             if (current == _tree->tree_max())
@@ -420,7 +421,7 @@ namespace ft
             }
             map (const Self& x) : tree(), _compare(x._compare), _alloc(x._alloc)
             {
-               // insert(x.begin(), x.end());
+            
             }
            Self   &operator=(const Self &rhs)
             {
@@ -478,19 +479,10 @@ namespace ft
 
             void    swap(map<Key, T, Compare>& x)
             {
-                Self tmp;
+               
 
-                Allocator tmp_alloc = x._alloc;
-                Compare tmp_compare = x._compare;
-                RB_tree tmp_tree = x.tree;
-
-                x._alloc = _alloc;
-                x._compare = _compare;
-                x.tree = tree;
-
-                _alloc = tmp_alloc;
-                _compare = tmp_compare;
-                tree = tmp_tree;
+                
+                tree.tree_swap(x.tree);
             }
 
             /*---------------------INSERT / ERASE -----------------------*/
@@ -530,13 +522,23 @@ namespace ft
             }
             size_type   erase(const key_type& x)
             {
+                iterator it = find(x);
+
+                if (it == end())
+                    return 0;
                 tree.delete_node(value_type(x, mapped_type()));
                 return 1;
             }
             void        erase(iterator first, iterator last)
             {
-                for(; first != last; first++)
-                    tree.delete_node((*first));
+                iterator save_first;
+                while(first != last)
+                {
+                    save_first= first;
+                    first++;
+                    //std::cout << (*first).first << std::endl;
+                    tree.delete_node(*save_first);
+                }
             }
             void        clear()
             {

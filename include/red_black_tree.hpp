@@ -85,7 +85,11 @@ namespace ft{
             }
             ~rb_tree()
             {
+               
                 clear(root);
+                
+                std::allocator<value_type> val_alloc;
+                val_alloc.destroy(&null_node->value);
                 _alloc.destroy(null_node);
                 _alloc.deallocate(null_node, 1);
             }
@@ -181,11 +185,12 @@ namespace ft{
                 val_alloc.construct(&node->value, value);
             }
        
-            bool    insert(value_type value)
+            bool    insert(const value_type &value)
             {
                 NodePtr *y = NULL;
                 NodePtr *x = this->root;
                 NodePtr *new_node = _alloc.allocate(1);
+                std::allocator<value_type>  val_alloc;
                 init_null_node(new_node, value);
 
 
@@ -194,7 +199,11 @@ namespace ft{
                     y = x;              //Saving the x parent into y for when we exit the loop when x = null_node
                     
                     if (!(_comp(value, x->value) || _comp(x->value, value)))
+                    {
+                        val_alloc.destroy(&new_node->value);
+                        _alloc.deallocate(new_node, 1);
                         return 0 ;
+                    }
                     if (!_comp(value, x->value))
                         x = x->right;
                     else if (_comp(value, x->value))
@@ -233,12 +242,12 @@ namespace ft{
             {
                 NodePtr *uncle;
                 
-                while (new_node->parent && new_node->parent->colour == RED) // if my parent is red it means double red and we have to fix things
+                while (new_node->parent->colour == RED) // if my parent is red it means double red and we have to fix things
                 {
                     if (new_node->parent == new_node->parent->parent->left)
                     {
                         uncle = new_node->parent->parent->right;
-                        if (uncle != null_node && uncle->colour == RED) //if uncle is red and parent is red
+                        if (uncle->colour == RED) //if uncle is red and parent is red
                         {
                             uncle->colour = BLACK;
                             new_node->parent->colour = BLACK;
@@ -260,7 +269,7 @@ namespace ft{
                     else
                     {
                         uncle = new_node->parent->parent->left;
-                        if (uncle != null_node && uncle->colour == RED)
+                        if (uncle->colour == RED)
                         {
                             uncle->colour = BLACK;
                             new_node->parent->colour = BLACK;
@@ -310,19 +319,20 @@ namespace ft{
             void    delete_node(value_type key)
             {
                 NodePtr *del_node = find_node(root, key);
-                NodePtr *x, *y;
+                std::allocator<value_type> val_alloc;
+                NodePtr *x, *y ;
                 bool og_colour ;
                 
                 if (del_node == NULL || del_node == null_node)
                     return  ;
+                og_colour = del_node->colour;
                 y = del_node;
-                og_colour = y->colour;
-                 if (del_node->left == null_node)
+                 if (!del_node->left || del_node->left == null_node)
                 {
                     x = del_node->right;
                     rb_transplant_node(del_node, del_node->right);
                 }
-                else if (del_node->right == null_node)
+                else if (!del_node->right || del_node->right == null_node)
                 {
                     x = del_node->left;
                     rb_transplant_node(del_node, del_node->left);
@@ -346,7 +356,7 @@ namespace ft{
                     y->left->parent = y;
                     y->colour = del_node->colour;
                 }
-                
+                val_alloc.destroy(&del_node->value);
                _alloc.deallocate(del_node, 1);
                _size--;
                 if (og_colour == BLACK)
@@ -369,14 +379,14 @@ namespace ft{
                         //if the sib is red switch colours with the parent
                         if (sibling->colour == RED)
                         {
-                            sibling->colour = 0;
+                            sibling->colour = BLACK;
                             x->parent->colour = RED;
                             // left rotate and then assign sibling as right child of xs parent to be sure
                             left_rotate(x->parent);
                             sibling = x->parent->right ;
                         }
                         //CASE II : BOTH CHILDREN OF SIBLING ARE BLACK
-                        if (sibling->left->colour == BLACK && sibling->right->colour == BLACK)
+                        if ( sibling->left->colour == BLACK && sibling->right->colour == BLACK)
                         {
                             sibling->colour = RED;
                              x = x->parent;
@@ -390,8 +400,8 @@ namespace ft{
                                 right_rotate(sibling);
                                 sibling = sibling->parent->right;
                             }
-                             sibling->colour = x->parent->colour;  //CASE IV LEFT CHILD
-                            x->parent->parent = BLACK;
+                            sibling->colour = x->parent->colour;  //CASE IV LEFT CHILD
+                            x->parent->colour = BLACK;
                             sibling->right->colour = BLACK;
                             left_rotate(x->parent);
                             x = root;
@@ -476,15 +486,17 @@ namespace ft{
             }
             void clear(NodePtr  *node)
             {
+                 std::allocator<value_type> val_alloc;
                 _size = 0;
-                if (!node ||node == null_node)
+                if (!node || node == null_node)
                     return ;
                 if (node->left && node->left != null_node)
                     clear(node->left);
                 if (node->right && node->right != null_node)
                     clear(node->right);
-                if (node != null_node)
+                if (node || node != null_node)
                 {
+                    val_alloc.destroy(&node->value);
                     _alloc.destroy(node);
                     _alloc.deallocate(node,1);
 
@@ -494,6 +506,19 @@ namespace ft{
             {
                 clear(root);
                 root = null_node;
+            }
+            void    tree_swap(Self& swp)
+            {
+                NodePtr *save_null, *save_root;
+                size_t save_size;
+
+                save_null = swp.null_node;
+                save_root = swp.root;
+                save_size = swp._size;
+
+                this->null_node = save_null;
+                this->root = save_root;
+                this->_size = save_size;
             }
             NodePtr *increment_tree(NodePtr *current)
             {

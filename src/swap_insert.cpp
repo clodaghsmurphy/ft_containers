@@ -10,20 +10,20 @@ typedef std::pair<const T2, T5> T8;
 
 void    swap_insert()
 {
-    // std::list<T3> lst;
+    std::list<T3> lst;
 
-	// unsigned int lst_size = 7;
-	// for (unsigned int i = 0; i < lst_size; ++i)
-	// 	lst.push_back(T3('a' + i, lst_size - i));
-	// ft::map<T1, T2> foo(lst.begin(), lst.end());
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3('a' + i, lst_size - i));
+	ft::map<T1, T2> foo(lst.begin(), lst.end());
 
-	// lst.clear(); lst_size = 4;
-	// for (unsigned int i = 0; i < lst_size; ++i)
-	// 	lst.push_back(T3('z' - i, i * 5));
-	// ft::map<T1, T2> bar(lst.begin(), lst.end());
+	lst.clear(); lst_size = 4;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T3('z' - i, i * 5));
+	ft::map<T1, T2> bar(lst.begin(), lst.end());
 
-	// ft::map<T1, T2>::const_iterator it_foo = foo.begin();
-	// ft::map<T1, T2>::const_iterator it_bar = bar.begin();
+	ft::map<T1, T2>::const_iterator it_foo = foo.begin();
+	ft::map<T1, T2>::const_iterator it_bar = bar.begin();
 
     // std::list<T4> lst1;
 
@@ -48,7 +48,7 @@ void    swap_insert()
 	// printSize(bar, bar1);
 
 	// foo1.swap(bar1);
-	// foo.swap(bar);
+	foo.swap(bar);
 
 	// std::cout << "AFTER SWAP" << std::endl;
 
@@ -73,10 +73,10 @@ void    swap_insert()
     //     std::cout <<"\033[1m\033[31m iterator invalid " << std::endl;
     // }
 
-        tricky_construct();
-        {
+    //     tricky_construct();
+    //     {
             
-        }
+    //     }
 }
 
 void    tricky_construct()
@@ -85,8 +85,8 @@ void    tricky_construct()
             std::list<T7>::iterator itlst;
 
             lst.push_back(T7(42, "lol"));
-            lst.push_back(T7(50, "mdr"));
-            lst.push_back(T7(35, "funny"));
+             lst.push_back(T7(50, "mdr"));
+             lst.push_back(T7(35, "funny"));
             lst.push_back(T7(45, "bunny"));
             lst.push_back(T7(21, "fizz"));
             lst.push_back(T7(35, "this key is already inside"));
@@ -116,8 +116,8 @@ void    tricky_construct()
                 printPair(itlst1);
             std::cout << "---------------------------------------------" << std::endl;
 
-            ft::map<T2, T5> mp(lst.begin(), lst.end());
-            std::map<T2, T5> mp2(lst1.begin(), lst1.end());
+             ft::map<T2, T5> mp(lst.begin(), lst.end());
+             std::map<T2, T5> mp2(lst1.begin(), lst1.end());
             lst.clear();
             lst1.clear();
             printSize(mp);

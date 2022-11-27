@@ -350,7 +350,7 @@ void	ft_erase(MAP &mp, U param, V param2)
         //     ft_erase(mp, mp.begin(), mp.end());
         // }
         {
-            std::list<std::pair<T1,T6>> lst;
+            std::list<std::pair<T1,T6> > lst;
             unsigned int lst_size = 6;
             for (unsigned int i = 0; i < lst_size; ++i)
                 lst.push_back(std::pair<T1,T6>(i, std::string((lst_size - i), i + 65)));
@@ -578,16 +578,16 @@ void rb_tester()
         // std::cout << it->first << std::endl;
 
     }
-    //bounds();
-    // comp_test();
-     //copy_map_test();
-     //map_empty_test();
-     //map_erase_test();
-    //  ite_arrow();
-    //  reverse_it();
-   //relational_ope();
-    //rev_it_construct();
-   //swap_insert();
-   map_find_count();
+//     bounds();
+//     comp_test();
+//      copy_map_test();
+//      map_empty_test();
+//      map_erase_test();
+//      ite_arrow();
+//      reverse_it();
+//    relational_ope();
+//     rev_it_construct();
+   swap_insert();
+  // map_find_count();
 
 }

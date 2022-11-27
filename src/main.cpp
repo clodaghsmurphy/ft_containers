@@ -4,11 +4,10 @@
 
 int main()
 {
-    //test_vector_size();
-    //vector_constructors();
-    //iterator_category();
-    //modifiers();
-    // rb_tester();
-    // insert_map_test();
-    erase_map_test();
+    // test_vector_size();
+    // vector_constructors();
+    // modifiers();
+    rb_tester();
+    //insert_map_test();
+    //erase_map_test();
 }
