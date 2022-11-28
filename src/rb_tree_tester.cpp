@@ -554,40 +554,17 @@ void    find_count()
 }
 void rb_tester()
 {
-  
-    {
-        // std::cout << "\n      REAL        \n";
-        //  std::map<int, std::string> test;
-        // std::map<const int, std::string>::iterator it;
 
-        // test.insert(std::pair<int, std::string>(1, "hello"));
-        // test.insert(std::pair<int, std::string>(2, "hello"));
-
-        // it = test.begin();
-        // it++;
-        // it++;
-        // std::cout << (*it).first << std::endl;
-        // it--;
-        // std::cout << (*it).first << std::endl;
-
-        // it = test.find(1);
-        // std::cout << (*it).first << std::endl;
-        //  it = test.end();
-        // std::cout << it->first << std::endl;
-        //   it = test.find(9);
-        // std::cout << it->first << std::endl;
-
-    }
-//     bounds();
-//     comp_test();
-//      copy_map_test();
-//      map_empty_test();
-//      map_erase_test();
-//      ite_arrow();
-//      reverse_it();
-//    relational_ope();
-//     rev_it_construct();
+     bounds();
+     comp_test();
+      copy_map_test();
+     map_empty_test();
+      map_erase_test();
+      ite_arrow();
+     reverse_it();
+    relational_ope();
+     rev_it_construct();
    swap_insert();
-  // map_find_count();
+   map_find_count();
 
 }

@@ -70,17 +70,23 @@ namespace ft{
                 null_node->right = NULL ;
                 null_node->colour = BLACK ;
             }
+  
             rb_tree(const  Self &rhs) : _alloc(rhs._alloc), _comp(rhs._comp), _size(0)
             {
                null_node = _alloc.allocate(1);
-               root = null_node;
-               NodePtr *nd = rhs.tree_min();
+                null_node->left = 0;
+                null_node->right = 0;
+                null_node->parent = 0;
+                null_node->colour = BLACK;
+                root = null_node;
+                _size = 0;
+                NodePtr *nd = rhs.tree_min();
 
-               while (nd != rhs.get_null_node())
-               {
+                while (nd != rhs.get_null_node())
+                {
                     insert(nd->value);
                     nd = rhs.next(nd);
-               }
+                }
 
             }
             ~rb_tree()
@@ -125,7 +131,8 @@ namespace ft{
         }
             Self    &operator=(const Self &rhs)
             {
-                null_node = _alloc.allocate(1);
+                clear(root);
+
                 root = null_node;
                 _size = 0;
                 NodePtr *nd = rhs.tree_min();
@@ -490,17 +497,13 @@ namespace ft{
                 _size = 0;
                 if (!node || node == null_node)
                     return ;
-                if (node->left && node->left != null_node)
-                    clear(node->left);
-                if (node->right && node->right != null_node)
-                    clear(node->right);
-                if (node || node != null_node)
-                {
-                    val_alloc.destroy(&node->value);
-                    _alloc.destroy(node);
-                    _alloc.deallocate(node,1);
-
-                }
+                clear(node->left);
+                clear(node->right);
+                val_alloc.destroy(&node->value);
+                _alloc.deallocate(node,1);
+                node = 0;
+                _size--;
+                
             }
             void    tree_clear()
             {
@@ -516,9 +519,13 @@ namespace ft{
                 save_root = swp.root;
                 save_size = swp._size;
 
+                swp.null_node = this->null_node;
+                swp.root = this->root;
+                swp._size = this->_size;
                 this->null_node = save_null;
                 this->root = save_root;
                 this->_size = save_size;
+
             }
             NodePtr *increment_tree(NodePtr *current)
             {

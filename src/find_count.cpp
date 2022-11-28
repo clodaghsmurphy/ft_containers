@@ -60,17 +60,17 @@ void map_find_count(void)
 	ft_count(100);
 
 	mp.find(27)->second = "newly inserted mapped_value";
-	mp2.find(27)->second = "newly inserted mapped_value";
+	//mp2.find(27)->second = "newly inserted mapped_value";
 
-	printSize(mp);
-	printSize(mp2);
+	// printSize(mp);
+	// printSize(mp2);
 
-	ft::map<T1, T2> const c_map(mp.begin(), mp.end());
-	std::map<T1, T2> const c_map2(mp2.begin(), mp2.end());
-    printSize(c_map);
-	printSize(c_map2);
-	std::cout << "const map.find(" << 42 << ")->second: [" << c_map.find(42)->second << "]" << std::endl;
-	std::cout << "const map.find(" << 42 << ")->second: [" << c_map2.find(42)->second << "]" << std::endl;
-	std::cout << "const map.count(" << 80 << "): [" << c_map.count(80) << "]" << std::endl;
-	std::cout << "const map.count(" << 80 << "): [" << c_map2.count(80) << "]" << std::endl;
+	// ft::map<T1, T2> const c_map(mp.begin(), mp.end());
+	// std::map<T1, T2> const c_map2(mp2.begin(), mp2.end());
+    // printSize(c_map);
+	// printSize(c_map2);
+	// std::cout << "const map.find(" << 42 << ")->second: [" << c_map.find(42)->second << "]" << std::endl;
+	// std::cout << "const map.find(" << 42 << ")->second: [" << c_map2.find(42)->second << "]" << std::endl;
+	// std::cout << "const map.count(" << 80 << "): [" << c_map.count(80) << "]" << std::endl;
+	// std::cout << "const map.count(" << 80 << "): [" << c_map2.count(80) << "]" << std::endl;
 }
