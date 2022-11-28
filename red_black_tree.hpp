@@ -502,7 +502,6 @@ namespace ft{
                 val_alloc.destroy(&node->value);
                 _alloc.deallocate(node,1);
                 node = 0;
-                _size--;
                 
             }
             void    tree_clear()

@@ -6,7 +6,7 @@
 #    By: clmurphy <clmurphy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/16 15:42:20 by nguiard           #+#    #+#              #
-#    Updated: 2022/11/27 12:55:13 by clmurphy         ###   ########.fr        #
+#    Updated: 2022/11/28 12:06:07 by clmurphy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,10 @@ SRC =	$(addsuffix .cpp, 	\
 		$(addprefix src/,	\
 		main				\
 		modifiers				\
+		set_test				\
 		rb_tree_tester				\
 		insert_test			\
+		stack_test			\
 		erase_test				\
 		swap_insert				\
 		find_count				\
@@ -53,7 +55,7 @@ INCLUDE = -Iinclude/
 
 DEP		= ${SRC:%.cpp=%.d}
 
-CFLAGS	=  -Wall -Werror -Wextra -MMD ${INCLUDE} -g  -std=c++98 -fsanitize=address 
+CFLAGS	=  -Wall -Werror -Wextra -MMD ${INCLUDE} -g  -std=c++98 #-fsanitize=address 
 
 NAME	= ft_containers
 

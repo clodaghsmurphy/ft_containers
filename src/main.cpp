@@ -7,7 +7,9 @@ int main()
     // test_vector_size();
     // vector_constructors();
     // modifiers();
-    rb_tester();
-    //insert_map_test();
-    //erase_map_test();
+    // rb_tester();
+    // insert_map_test();
+    // erase_map_test();
+    stack_test();
+    set_test();
 }

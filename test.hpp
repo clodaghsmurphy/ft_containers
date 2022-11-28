@@ -5,6 +5,8 @@
 #include "iterator.hpp"
 #include "vector.hpp"
 # include "map.hpp"
+# include "set.hpp"
+# include <set>
 # include <list>
 # include <map>
 /* 
@@ -72,6 +74,22 @@ std::string printPair(const T &iterator, bool nl = true, std::ostream &o = std::
         o << std::endl;
     return ("");
 }
+template <typename T_SET>
+void	printSize(T_SET const &st, bool print_content = 1)
+{
+	std::cout << "size: " << st.size() << std::endl;
+	std::cout << "max_size: " << st.max_size() << std::endl;
+	if (print_content)
+	{
+		typename T_SET::const_iterator it = st.begin(), ite = st.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << printPair(it, false) << std::endl;
+	}
+	std::cout << "###############################################" << std::endl;
+}
+
+
 
 template <typename T, typename U>
 std::string printPair2(const T &iterator, const U &iterator2, bool nl = true, std::ostream &o = std::cout)
@@ -88,6 +106,23 @@ std::string printPair2(const T &iterator, const U &iterator2, bool nl = true, st
         o << std::endl;
     return ("");
 }
+
+template <typename T, typename U>
+std::string printPair2_set(const T &iterator, const U &iterator2, bool nl = true, std::ostream &o = std::cout)
+{
+    if ((*iterator) == (*iterator2))
+        o << "\033[1m\033[32m ✅ OK \033[0m";
+    else
+    {
+         o << "\033[1m\033[31m MINE : ❌ key: " << *iterator << std::endl;
+        o  << "\033[1m\033[31m REAL : ❌ key: " << *iterator2 <<std::endl;
+
+    }
+    if (nl)
+        o << std::endl;
+    return ("");
+}
+
 
 template <typename T1, typename T2>
 void	printReverse(ft::map<T1, T2> &mp, std::map<T1, T2> &mp2)
@@ -125,20 +160,21 @@ void printSize(T_MAP const &mp, U_MAP const &mp2,  bool print_content = 1)
     std::cout << "###############################################" << std::endl;
 }
 
-template <typename T_MAP>
-void printSize(T_MAP const &mp, bool print_content = 1)
+template <typename T_SET, typename U_SET>
+void printSize_set(T_SET const &set, U_SET const &set2,  bool print_content = 1)
 {
-    std::cout << "size: " << mp.size() << std::endl;
-    std::cout << "max_size: " << mp.max_size() << std::endl;
+    std::cout << "size: " << set.size() << std::endl;
+    std::cout << "max_size: " << set.max_size() << std::endl;
     if (print_content)
     {
-        typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();
+        typename T_SET::const_iterator it = set.begin(), ite = set.end();
+        typename U_SET::const_iterator it2 = set2.begin(), ite2 = set2.end();
         std::cout << std::endl
                   << "Content is:" << std::endl;
-        for (; it != ite; ++it)
+        for (; it != ite || it2 != ite2; ++it, it++)
         {
            
-            std::cout << "- " << printPair(it, false) << std::endl;
+            std::cout << "- " << printPair2_set(it, it2) << std::endl;
 
         }
     }
@@ -190,5 +226,7 @@ void    tricky_construct();
 void    map_find_count();
 void    insert_map_test();
 void    erase_map_test();
+void    stack_test();
+void    set_test();
 
 #endif

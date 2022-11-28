@@ -718,9 +718,9 @@ namespace ft
                 void                clear()
                 {
                     size_type end = size();
-                    for (size_type i = 0; i < _size; i++, end--)
+                    for (size_type i = 1; i < _size; i++, end--)
                     {
-                        _alloc.destroy(_data + end);
+                        _alloc.destroy(_data + end - 1);
                     
                     }
                     _size = 0;

@@ -6,15 +6,15 @@ template <typename Ite_1, typename Ite_2>
 void ft_eq_ope(const Ite_1 &first, const Ite_2 &second)
 {
 	if (!(first < second))
-        std::cout << "\033[1m\033[31m ❌ WRONG \033[0m" << std::endl;
-	else if (!(first <= second))
-        std::cout << "\033[1m\033[31m ❌ WRONG \033[0m" << std::endl;
-	else if (!(first > second)) 
-        std::cout << "\033[1m\033[31m ❌ WRONG \033[0m" << std::endl;
-	else if (!(first >= second)) 
-        std::cout << "\033[1m\033[31m ❌ WRONG \033[0m" << std::endl;
-    else
         std::cout << "\033[1m\033[32m ✅ OK \033[0m" << std::endl;
+	else if (!(first <= second))
+        std::cout << "\033[1m\033[32m ✅ OK \033[0m" << std::endl;
+	else if (!(first > second)) 
+        std::cout << "\033[1m\033[32m ✅ OK \033[0m" << std::endl;
+	else if (!(first >= second)) 
+        std::cout << "\033[1m\033[32m ✅ OK \033[0m" << std::endl;
+    else
+        std::cout << "\033[1m\033[31m ❌ WRONG \033[0m" << std::endl;
 }
 
 template <typename T, typename U>
