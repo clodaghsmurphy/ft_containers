@@ -36,6 +36,8 @@ void		set_copy_test(void)
 	std::set<T1> st_copy2(st2);
 	for (int i = 0; i < 7; ++i)
 		st.insert(i * 7);
+	for (int i = 0; i < 7; ++i)
+		st2.insert(i * 7);
 
 	std::cout << "\t-- PART ONE --" << std::endl;
 	printSize_set(st, st2);
